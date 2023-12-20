@@ -1,6 +1,6 @@
 {
-    "name": "join_me",
-    "short_name": "join_me",
+    "name": "template",
+    "short_name": "template",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

@@ -1,6 +1,7 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <application
-        android:label="join_me"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.keith.seejoy">
+   <application
+        android:label="${appName}"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
