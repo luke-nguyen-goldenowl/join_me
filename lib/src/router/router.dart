@@ -21,7 +21,7 @@ import 'route_name.dart';
 class AppRouter {
   late final router = GoRouter(
     navigatorKey: AppCoordinator.navigatorKey,
-    initialLocation: AppRouteNames.home.path,
+    initialLocation: AppRouteNames.signIn.path,
     debugLogDiagnostics: kDebugMode,
     observers: [BotToastNavigatorObserver()],
     routes: <RouteBase>[
@@ -70,8 +70,8 @@ class AppRouter {
                     path: AppRouteNames.sampleDetails.buildSubPathParam,
                     name: AppRouteNames.sampleDetails.name,
                     builder: (_, state) {
-                      final id =
-                          state.pathParameters[AppRouteNames.sampleDetails.paramName]!;
+                      final id = state.pathParameters[
+                          AppRouteNames.sampleDetails.paramName]!;
                       return SampleItemDetailsView(id: id);
                     },
                   )

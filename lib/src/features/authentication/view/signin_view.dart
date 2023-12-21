@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,7 +45,14 @@ class SigninView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        const SignTitle('Login'),
+        const SizedBox(height: 30),
+        // const SignTitle('Login'),
+        Image.asset(
+          "assets/images/images/logo2.png",
+          height: 150,
+          width: 150,
+        ),
+        _buildTitle(context),
         const SizedBox(height: 24.0),
         XInput(
           key: const Key('loginForm_emailAndPhoneInput_textField'),
@@ -71,7 +80,7 @@ class SigninView extends StatelessWidget {
           busy:
               state.status.isInProgress && state.loginType == MSocialType.email,
           enabled: state.isValidated,
-          title: S.of(context).common_next,
+          title: "Login", //S.of(context).common_next,
           onPressed: () async {
             context.read<SigninBloc>().loginWithEmail(context);
           },
@@ -82,6 +91,27 @@ class SigninView extends StatelessWidget {
         _buildNoAccount(context),
       ],
     );
+  }
+
+  Widget _buildTitle(BuildContext context) {
+    return RichText(
+        textAlign: TextAlign.center,
+        text: const TextSpan(children: [
+          TextSpan(
+            text: "Welcome to ",
+            style: TextStyle(
+              color: AppColors.black,
+              fontSize: 30,
+            ),
+          ),
+          TextSpan(
+            text: "SeeJoy!",
+            style: TextStyle(
+                color: AppColors.rosyPink,
+                fontSize: 40,
+                fontWeight: FontWeight.bold),
+          )
+        ]));
   }
 
   Widget _buildNoAccount(BuildContext context) {
@@ -103,7 +133,7 @@ class SigninView extends StatelessWidget {
             style: const TextStyle(
               fontWeight: FontWeight.w500,
               fontSize: 16,
-              color: AppColors.link,
+              color: AppColors.rosyPink,
               letterSpacing: 0.24,
             ),
             recognizer: TapGestureRecognizer()

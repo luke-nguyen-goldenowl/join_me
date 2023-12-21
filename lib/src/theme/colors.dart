@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 class AppColors {
@@ -24,4 +26,13 @@ class AppColors {
   static const grey4 = Color(0xFFD1D1D1);
   static const grey5 = Color(0xFFE5E5E5);
   static const grey6 = Color(0xFFF2F2F2);
+
+  static const rosyPink = Color.fromARGB(255, 255, 84, 131);
+  static const paleGrey = Color.fromARGB(255, 249, 250, 255);
+  static const iceBlue = Color.fromARGB(255, 229, 233, 253);
+  static const gradient = [
+    Color.fromARGB(255, 69, 94, 253),
+    Color.fromARGB(255, 255, 84, 131),
+    Color.fromARGB(255, 274, 110, 75),
+  ];
 }
