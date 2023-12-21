@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "826001615661",
+    "project_id": "see-joy-3f334",
+    "storage_bucket": "see-joy-3f334.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:826001615661:android:e75bc039e6e313c89d01a4",
+        "android_client_info": {
+          "package_name": "com.keith.seejoy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_DU2Squ6viX4VdgtwBkkxRugPxysgVM4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:826001615661:android:b2691071f451f2ff9d01a4",
+        "android_client_info": {
+          "package_name": "com.keith.seejoy.stg"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_DU2Squ6viX4VdgtwBkkxRugPxysgVM4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
