@@ -28,6 +28,7 @@ class AppCoordinator {
   static void showHomeScreen() => context.goNamed(AppRouteNames.home.name);
   static void showAccountScreen() =>
       context.goNamed(AppRouteNames.account.name);
+  static void showEventScreen() => context.goNamed(AppRouteNames.event.name);
 
   // static Future<T?> showSignInScreen<T extends Object?>() =>
   //     context.pushNamed<T>(AppRouteNames.signIn.name);
@@ -38,6 +39,9 @@ class AppCoordinator {
     }
     context.pushReplacementNamed(AppRouteNames.signIn.name);
   }
+
+  static Future<T?> showAddEventScreen<T extends Object?>() =>
+      context.pushNamed<T>(AppRouteNames.addEvent.name);
 
   static Future<T?> showSignUpScreen<T extends Object?>() =>
       context.pushNamed<T>(AppRouteNames.signUp.name);

@@ -12,7 +12,34 @@ enum AppRouteNames {
   ),
   profile(path: '/profile'),
   settings(path: '/settings'),
-  photoView(path: '/photoView');
+  photoView(path: '/photoView'),
+
+  event(path: '/event'),
+  detailEvent(
+    path: '/detail-event',
+    paramName: 'id_event',
+  ),
+  addEvent(path: '/add-event'),
+  followed(path: '/followed'),
+  upcomingFollowed(path: '/upcoming'),
+  pastFollowed(path: '/past'),
+  manageEvent(path: '/manageEvent'),
+  manageEventDetail(
+    path: 'detail_manage_event',
+    paramName: 'id_manage_event',
+  ),
+  editEvent(
+    path: 'edit_event',
+    paramName: 'id_edit_event',
+  ),
+  notify(path: '/notify'),
+  profileOtherUser(
+    path: '/profile_other_user',
+    paramName: 'id_profile',
+  ),
+  search(path: '/search'),
+  story(path: 'story', paramName: 'id_story'),
+  addStory(path: '/add_story');
 
   const AppRouteNames({
     required this.path,
