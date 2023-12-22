@@ -36,9 +36,11 @@ class HomeView extends StatelessWidget {
             onPressed: () {
               AppCoordinator.showNotifyScreen();
             },
-            icon: const Icon(
-              Icons.notifications_none_rounded,
-              size: 30,
+            icon: const Badge(
+              child: Icon(
+                Icons.notifications_none_rounded,
+                size: 30,
+              ),
             ),
           ),
         ],
