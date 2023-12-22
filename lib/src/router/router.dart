@@ -1,7 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
-// import 'package:myapp/src/_dev/dev_screen.dart';
+import 'package:myapp/src/_dev/dev_screen.dart';
 import 'package:myapp/src/features/add_event/view/add_event_view.dart';
 import 'package:myapp/src/features/dashboard/logic/navigation_bar_item.dart';
 import 'package:myapp/src/features/account/profile/view/profile_view.dart';
@@ -90,6 +90,7 @@ class AppRouter {
                   )
                 ],
               ),
+
               // _detailEventRoute,
               GoRoute(
                 parentNavigatorKey: AppCoordinator.navigatorKey,
@@ -106,20 +107,6 @@ class AppRouter {
                 path: AppRouteNames.addStory.buildSubPathParam,
                 name: AppRouteNames.addStory.name,
                 builder: (_, __) => const AddStoryView(),
-              )
-            ],
-          ),
-          GoRoute(
-            path: AppRouteNames.account.path,
-            name: AppRouteNames.account.name,
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: AccountHomeView(),
-            ),
-            routes: <RouteBase>[
-              GoRoute(
-                path: AppRouteNames.profile.subPath,
-                name: AppRouteNames.profile.name,
-                builder: (_, __) => const ProfileView(),
               )
             ],
           ),
@@ -180,13 +167,28 @@ class AppRouter {
               ),
             ],
           ),
-          // GoRoute(
-          //   path: AppRouteNames.dev.path,
-          //   name: AppRouteNames.dev.name,
-          //   builder: (_, __) => const DevScreen(),
-          // ),
+          GoRoute(
+            path: AppRouteNames.dev.path,
+            name: AppRouteNames.dev.name,
+            builder: (_, __) => const DevScreen(),
+          ),
         ],
       ),
+
+      GoRoute(
+        parentNavigatorKey: AppCoordinator.navigatorKey,
+        path: AppRouteNames.account.path,
+        name: AppRouteNames.account.name,
+        builder: (_, __) => const AccountHomeView(),
+        routes: <RouteBase>[
+          GoRoute(
+            path: AppRouteNames.profile.subPath,
+            name: AppRouteNames.profile.name,
+            builder: (_, __) => const ProfileView(),
+          )
+        ],
+      ),
+
       GoRoute(
         parentNavigatorKey: AppCoordinator.navigatorKey,
         path: AppRouteNames.addEvent.path,
