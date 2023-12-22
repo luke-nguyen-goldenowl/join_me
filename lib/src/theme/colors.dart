@@ -33,6 +33,6 @@ class AppColors {
   static const gradient = [
     Color.fromARGB(255, 69, 94, 253),
     Color.fromARGB(255, 255, 84, 131),
-    Color.fromARGB(255, 274, 110, 75),
+    Color.fromARGB(255, 244, 110, 75),
   ];
 }

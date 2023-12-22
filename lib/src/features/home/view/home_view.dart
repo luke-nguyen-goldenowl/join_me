@@ -1,71 +1,91 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:myapp/src/_dev/widget/dev_wrap_button.dart';
-import 'package:myapp/src/dialogs/toast_wrapper.dart';
+// import 'package:myapp/src/dialogs/toast_wrapper.dart';
+import 'package:myapp/src/features/account/logic/account_bloc.dart';
+import 'package:myapp/src/features/home/widget/list_event_home.dart';
+import 'package:myapp/src/features/home/widget/list_story_home.dart';
 import 'package:myapp/src/router/coordinator.dart';
+import 'package:myapp/src/theme/colors.dart';
 import 'package:myapp/widgets/appbar/app_bar_custom.dart';
-import 'package:myapp/widgets/button/text_button.dart';
+// import 'package:myapp/widgets/button/text_button.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarCustom(
-        leading: IconButton(
-          onPressed: () {
-            AppCoordinator.showAccountScreen();
-          },
-          icon: ClipRRect(
-            borderRadius: BorderRadius.circular(5.0),
-            child: Image.asset("assets/images/images/avatar.png"),
-          ),
-          iconSize: 50,
-        ),
-        actions: [
-          IconButton(
+    return BlocBuilder<AccountBloc, AccountState>(builder: (context, state) {
+      return Scaffold(
+        backgroundColor: AppColors.white,
+        appBar: AppBarCustom(
+          leading: IconButton(
             onPressed: () {
-              AppCoordinator.showSearchScreen();
+              AppCoordinator.showAccountScreen();
             },
-            icon: const Icon(
-              Icons.search,
-              size: 30,
+            icon: ClipRRect(
+              borderRadius: BorderRadius.circular(5.0),
+              child: Image.asset("assets/images/images/avatar.png"),
             ),
+            iconSize: 50,
           ),
-          IconButton(
-            onPressed: () {
-              AppCoordinator.showNotifyScreen();
-            },
-            icon: const Badge(
-              child: Icon(
-                Icons.notifications_none_rounded,
+          actions: [
+            IconButton(
+              onPressed: () {
+                AppCoordinator.showSearchScreen();
+              },
+              icon: const Icon(
+                Icons.search,
                 size: 30,
               ),
             ),
-          ),
-        ],
-      ),
-      // AppBar(
-      //   title: const DevWrapButton(child: Text('Welcome')),
-      // ),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            XTextButton(
-              title: 'Show Toast',
+            IconButton(
               onPressed: () {
-                XToast.show('Clicked');
+                AppCoordinator.showNotifyScreen();
               },
-            ),
-            const XTextButton(
-              title: 'Show sample view',
-              onPressed: AppCoordinator.showSampleScreen,
+              icon: const Badge(
+                child: Icon(
+                  Icons.notifications_none_rounded,
+                  size: 30,
+                ),
+              ),
             ),
           ],
         ),
-      ),
-    );
+        // AppBar(
+        //   title: const DevWrapButton(child: Text('Welcome')),
+        // ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Text(
+                  "Hi, ${state.user.name.toString()}!",
+                  style: const TextStyle(
+                    color: AppColors.black,
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const ListStoryHome(),
+                const SizedBox(height: 10),
+                const ListEventHome(title: "Popular"),
+                const SizedBox(height: 10),
+                const ListEventHome(title: "Upcoming"),
+                const SizedBox(height: 10),
+                const ListEventHome(title: "Users"),
+                const SizedBox(height: 10),
+                const ListEventHome(title: "Followed"),
+              ],
+            ),
+          ),
+        ),
+      );
+    });
   }
 }

@@ -23,6 +23,7 @@ import 'package:myapp/src/features/notification/view/notification_view.dart';
 import 'package:myapp/src/features/profile_other_user/view/profile_other_user_view.dart';
 import 'package:myapp/src/features/sample/view/sample_detail_view.dart';
 import 'package:myapp/src/features/sample/view/sample_list_view.dart';
+import 'package:myapp/src/features/search/view/search_view.dart';
 import 'package:myapp/src/features/story/add_story/view/add_story_view.dart';
 import 'package:myapp/src/features/story/view/story_view.dart';
 import '../features/common/view/not_found_view.dart';
@@ -104,7 +105,7 @@ class AppRouter {
               ),
               GoRoute(
                 parentNavigatorKey: AppCoordinator.navigatorKey,
-                path: AppRouteNames.addStory.buildSubPathParam,
+                path: AppRouteNames.addStory.subPath,
                 name: AppRouteNames.addStory.name,
                 builder: (_, __) => const AddStoryView(),
               )
@@ -205,7 +206,7 @@ class AppRouter {
         parentNavigatorKey: AppCoordinator.navigatorKey,
         path: AppRouteNames.search.path,
         name: AppRouteNames.search.name,
-        builder: (_, __) => const NotificationView(),
+        builder: (_, __) => const SearchView(),
       ),
       GoRoute(
         parentNavigatorKey: AppCoordinator.navigatorKey,
