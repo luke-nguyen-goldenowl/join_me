@@ -5,8 +5,8 @@ import 'package:myapp/src/features/common/logic/lifecycle_mixin.dart';
 import 'package:myapp/src/features/dashboard/widget/bottom_navigation_bar.dart';
 import 'package:myapp/src/features/dashboard/logic/dashboard_bloc.dart';
 import 'package:myapp/src/features/dashboard/widget/floating_action_button.dart';
-import 'package:myapp/src/router/coordinator.dart';
-import 'package:myapp/src/theme/colors.dart';
+// import 'package:myapp/src/router/coordinator.dart';
+// import 'package:myapp/src/theme/colors.dart';
 
 class DashBoardScreen extends StatefulWidget {
   const DashBoardScreen({

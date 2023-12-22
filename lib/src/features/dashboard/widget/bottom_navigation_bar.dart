@@ -12,6 +12,7 @@ class XBottomNavigationBar extends StatelessWidget {
     return BlocBuilder<DashboardBloc, XNavigationBarItems>(
       builder: (context, state) {
         return BottomNavigationBar(
+          elevation: 20,
           type: BottomNavigationBarType.fixed,
           showSelectedLabels: false,
           showUnselectedLabels: false,
