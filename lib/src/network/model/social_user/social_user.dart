@@ -1,3 +1,4 @@
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:myapp/src/network/model/social_type.dart';
@@ -54,14 +55,15 @@ class MSocialUser with _$MSocialUser {
   //   );
   // }
 
-  // factory NSocialUser.fromFacebookAccount(Map<String, dynamic> userData, AccessToken token) {
-  //   return NSocialUser(
-  //     type: NSocialType.facebook,
-  //     fullName: userData['name'],
-  //     email: userData['email'],
-  //     userID: token.userId,
-  //     fbAccessToken: token.token,
-  //     avatar: ((userData['picture'] ?? {})['data'] ?? {})['url'] ?? '',
-  //   );
-  // }
+  factory MSocialUser.fromFacebookAccount(
+      Map<String, dynamic> userData, AccessToken token) {
+    return MSocialUser(
+      type: MSocialType.facebook,
+      fullName: userData['name'],
+      email: userData['email'],
+      userID: token.userId,
+      accessToken: token.token,
+      avatar: ((userData['picture'] ?? {})['data'] ?? {})['url'] ?? '',
+    );
+  }
 }

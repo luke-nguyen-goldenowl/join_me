@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:myapp/src/network/data/sign/sign_repository.dart';
 import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/model/common/error_code.dart';
+import 'package:myapp/src/network/model/social_type.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 import 'package:myapp/src/network/model/social_user/social_user.dart';
 
@@ -16,9 +18,25 @@ class SignRepositoryImpl extends SignRepository {
   }
 
   @override
-  Future<MResult<MUser>> connectBEWithFacebook(MSocialUser user) {
-    // TODO: implement connectBEWithFacebook
-    throw UnimplementedError();
+  Future<MResult<MUser>> connectBEWithFacebook(MSocialUser user) async {
+    try {
+      final OAuthCredential facebookAuthCredential =
+          FacebookAuthProvider.credential(user.accessToken!);
+      final UserCredential result = await FirebaseAuth.instance
+          .signInWithCredential(facebookAuthCredential);
+      final firebaseUser = result.user;
+
+      final newUser = MUser(
+          id: firebaseUser?.uid ?? '',
+          email: firebaseUser?.email,
+          name: firebaseUser?.displayName,
+          avatar: firebaseUser?.photoURL);
+      final userResult = await DomainManager().user.getOrAddUser(newUser);
+
+      return MResult.success(userResult.data ?? newUser);
+    } catch (e) {
+      return MResult.exception(e);
+    }
   }
 
   @override
@@ -92,9 +110,15 @@ class SignRepositoryImpl extends SignRepository {
   }
 
   @override
-  Future<MResult<MSocialUser>> loginWithFacebook() {
-    // TODO: implement loginWithFacebook
-    throw UnimplementedError();
+  Future<MResult<MSocialUser>> loginWithFacebook() async {
+    try {
+      final LoginResult loginResult =
+          await FacebookAuth.instance.login(permissions: ['email']);
+      return MResult.success(
+          MSocialUser.fromFacebookAccount({}, loginResult.accessToken!));
+    } catch (e) {
+      return MResult.exception(e);
+    }
   }
 
   @override
