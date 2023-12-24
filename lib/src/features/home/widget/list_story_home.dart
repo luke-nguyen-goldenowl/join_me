@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:myapp/src/features/home/data/users.dart';
 import 'package:myapp/src/features/home/logic/story_item_bloc.dart';
 import 'package:myapp/src/features/home/widget/story_item.dart';
 import 'package:myapp/src/features/home/widget/title_home.dart';
@@ -20,11 +21,10 @@ class ListStoryHome extends StatelessWidget {
           height: 60,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: 20,
+            itemCount: users.length + 1,
             itemBuilder: (context, index) {
               return BlocProvider(
-                create: (_) =>
-                    StoryItemBloc()..initState(isView: index % 2 == 0),
+                create: (_) => StoryItemBloc(),
                 child: Row(
                   children: [
                     index == 0
@@ -44,7 +44,7 @@ class ListStoryHome extends StatelessWidget {
                             ),
                           )
                         : StoryItem(
-                            id: index.toString(),
+                            id: users[index - 1].id,
                           ),
                     const SizedBox(width: 15)
                   ],

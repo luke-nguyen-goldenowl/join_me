@@ -19,7 +19,7 @@ class StoryItem extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(18),
           color: AppColors.white,
-          border: state.isView
+          border: !state.isView
               ? const GradientBoxBorder(
                   gradient: LinearGradient(colors: AppColors.gradient),
                   width: 3,
@@ -28,7 +28,7 @@ class StoryItem extends StatelessWidget {
         ),
         child: InkWell(
           onTap: () {
-            if (state.isView) context.read<StoryItemBloc>().setIsView();
+            if (!state.isView) context.read<StoryItemBloc>().setIsView();
             AppCoordinator.showStoryScreen(id: id);
           },
           child: ClipRRect(

@@ -24,8 +24,8 @@ import 'package:myapp/src/features/profile_other_user/view/profile_other_user_vi
 import 'package:myapp/src/features/sample/view/sample_detail_view.dart';
 import 'package:myapp/src/features/sample/view/sample_list_view.dart';
 import 'package:myapp/src/features/search/view/search_view.dart';
-import 'package:myapp/src/features/story/add_story/view/add_story_view.dart';
-import 'package:myapp/src/features/story/view/story_view.dart';
+import 'package:myapp/src/features/home/story/view/add_story_view.dart';
+import 'package:myapp/src/features/home/story/view/story_view.dart';
 import '../features/common/view/not_found_view.dart';
 // import '../features/photo_view/photo_view_page.dart';
 import 'coordinator.dart';
