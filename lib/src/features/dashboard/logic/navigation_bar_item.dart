@@ -8,12 +8,31 @@ enum XNavigationBarItems {
     icon: Icons.home_outlined,
     selectedIcon: Icons.home,
   ),
-  account(
-    label: 'Account',
-    route: AppRouteNames.account,
-    icon: Icons.people_outline,
-    selectedIcon: Icons.people,
-  );
+  event(
+    label: 'Event',
+    route: AppRouteNames.event,
+    icon: Icons.calendar_today_outlined,
+    selectedIcon: Icons.calendar_month_sharp,
+  ),
+  followed(
+    label: 'Followed',
+    route: AppRouteNames.followed,
+    icon: Icons.local_activity_outlined,
+    selectedIcon: Icons.local_activity,
+  ),
+  manageEvent(
+    label: 'Manage',
+    route: AppRouteNames.manageEvent,
+    icon: Icons.dns_outlined,
+    selectedIcon: Icons.dns_rounded,
+  ),
+  // account(
+  //   label: 'Account',
+  //   route: AppRouteNames.account,
+  //   icon: Icons.people_outline,
+  //   selectedIcon: Icons.people,
+  // ),
+  ;
 
   const XNavigationBarItems({
     required this.label,

@@ -4,6 +4,8 @@ import 'package:myapp/src/features/dashboard/logic/navigation_bar_item.dart';
 import 'package:myapp/src/features/common/logic/lifecycle_mixin.dart';
 import 'package:myapp/src/features/dashboard/widget/bottom_navigation_bar.dart';
 import 'package:myapp/src/features/dashboard/logic/dashboard_bloc.dart';
+import 'package:myapp/src/router/coordinator.dart';
+import 'package:myapp/src/theme/colors.dart';
 
 class DashBoardScreen extends StatefulWidget {
   const DashBoardScreen({
@@ -34,6 +36,22 @@ class _DashBoardScreenState extends State<DashBoardScreen> with LifecycleMixin {
             child: Scaffold(
               body: widget.body,
               bottomNavigationBar: const XBottomNavigationBar(),
+              floatingActionButton: IconButton.filled(
+                onPressed: () {
+                  AppCoordinator.showAddEventScreen();
+                },
+                style: IconButton.styleFrom(
+                  backgroundColor: AppColors.rosyPink,
+                  foregroundColor: AppColors.white,
+                ),
+                icon: const Icon(
+                  Icons.add,
+                  size: 30,
+                  // color: AppColors.white,
+                ),
+              ),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerDocked,
             ),
           );
         },
