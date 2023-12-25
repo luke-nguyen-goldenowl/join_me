@@ -6,7 +6,7 @@ enum XNavigationBarItems {
     label: 'Home',
     route: AppRouteNames.home,
     icon: Icons.home_outlined,
-    selectedIcon: Icons.home,
+    selectedIcon: Icons.home_rounded,
   ),
   event(
     label: 'Event',

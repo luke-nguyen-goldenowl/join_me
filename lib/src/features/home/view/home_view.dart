@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/src/_dev/widget/dev_wrap_button.dart';
+import 'package:myapp/gen/assets.gen.dart';
 import 'package:myapp/src/router/coordinator.dart';
+import 'package:myapp/widgets/appbar/app_bar_custom.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -8,28 +9,37 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const DevWrapButton(
-          child: Text('Welcome'),
-        ),
+      appBar: AppBarCustom(
         leading: IconButton(
-          icon: const Icon(Icons.account_circle),
-          onPressed: (() {
+          onPressed: () {
             AppCoordinator.showAccountScreen();
-          }),
+          },
+          icon: ClipRRect(
+            borderRadius: BorderRadius.circular(5.0),
+            child: Assets.images.images.avatar.image(),
+          ),
+          iconSize: 50,
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: (() {
+            onPressed: () {
               AppCoordinator.showSearchScreen();
-            }),
+            },
+            icon: const Icon(
+              Icons.search,
+              size: 30,
+            ),
           ),
           IconButton(
-            icon: const Icon(Icons.notifications),
-            onPressed: (() {
+            onPressed: () {
               AppCoordinator.showNotifyScreen();
-            }),
+            },
+            icon: const Badge(
+              child: Icon(
+                Icons.notifications_none_rounded,
+                size: 30,
+              ),
+            ),
           ),
         ],
       ),
