@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/src/router/coordinator.dart';
 
 class DetailEventView extends StatelessWidget {
   const DetailEventView({super.key, required this.id});
@@ -7,10 +8,18 @@ class DetailEventView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Event view"),
+        title: const Text("Event detail view"),
       ),
       body: Center(
-        child: Text(id),
+        child: Column(
+          children: [
+            ElevatedButton(
+                onPressed: () {
+                  AppCoordinator.showProfileOtherUser(id: '1');
+                },
+                child: const Text("go profile other user"))
+          ],
+        ),
       ),
     );
   }

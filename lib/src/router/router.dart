@@ -145,6 +145,7 @@ class AppRouter {
             ),
             routes: <RouteBase>[
               GoRoute(
+                parentNavigatorKey: AppCoordinator.navigatorKey,
                 path: AppRouteNames.manageEventDetail.buildSubPathParam,
                 name: AppRouteNames.manageEventDetail.name,
                 builder: (_, state) {
@@ -156,6 +157,7 @@ class AppRouter {
                 },
               ),
               GoRoute(
+                parentNavigatorKey: AppCoordinator.navigatorKey,
                 path: AppRouteNames.editEvent.buildSubPathParam,
                 name: AppRouteNames.editEvent.name,
                 builder: (_, state) {
@@ -183,6 +185,7 @@ class AppRouter {
         builder: (_, __) => const AccountHomeView(),
         routes: <RouteBase>[
           GoRoute(
+            parentNavigatorKey: AppCoordinator.navigatorKey,
             path: AppRouteNames.profile.subPath,
             name: AppRouteNames.profile.name,
             builder: (_, __) => const ProfileView(),

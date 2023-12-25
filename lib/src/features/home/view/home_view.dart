@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:myapp/src/_dev/widget/dev_wrap_button.dart';
-// import 'package:myapp/src/dialogs/toast_wrapper.dart';
 import 'package:myapp/src/features/account/logic/account_bloc.dart';
 import 'package:myapp/src/features/home/widget/list_event_home.dart';
 import 'package:myapp/src/features/home/widget/list_story_home.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
 import 'package:myapp/widgets/appbar/app_bar_custom.dart';
-// import 'package:myapp/widgets/button/text_button.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -50,6 +47,12 @@ class HomeView extends StatelessWidget {
                 ),
               ),
             ),
+            ElevatedButton(
+              onPressed: () {
+                AppCoordinator.showAddStoryScreen();
+              },
+              child: const Text("go add story screen"),
+            )
           ],
         ),
         // AppBar(
