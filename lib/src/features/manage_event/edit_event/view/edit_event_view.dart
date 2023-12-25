@@ -5,6 +5,15 @@ class EditEvent extends StatelessWidget {
   final String id;
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("edit Event view"),
+      ),
+      body: const Center(
+        child: Column(
+          children: [],
+        ),
+      ),
+    );
   }
 }
