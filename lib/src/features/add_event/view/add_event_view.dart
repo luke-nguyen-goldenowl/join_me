@@ -7,6 +7,7 @@ import 'package:myapp/src/features/add_event/widget/detail_page.dart';
 import 'package:myapp/src/features/add_event/widget/upload_image_page.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
+import 'package:myapp/widgets/appbar/app_bar_custom.dart';
 
 class AddEventView extends StatelessWidget {
   const AddEventView({super.key});
@@ -32,15 +33,8 @@ class AddEventPage extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           backgroundColor: AppColors.white,
-          appBar: AppBar(
-            title: const Text(
-              "Create New Event",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            backgroundColor: AppColors.white,
-            centerTitle: true,
+          appBar: const AppBarCustom(
+            title: "Create New Event",
           ),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
