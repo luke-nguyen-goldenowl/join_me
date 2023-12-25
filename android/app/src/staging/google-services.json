@@ -12,7 +12,20 @@
           "package_name": "com.keith.seejoy"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "826001615661-nfqrs0i8v9cqjv4pq0l04t1vjosmep18.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.keith.seejoy",
+            "certificate_hash": "946f771f8176a5c3544cf9e2cfe290c676bb5b45"
+          }
+        },
+        {
+          "client_id": "826001615661-amt7pm0sglabkrikbit7too5mck2fkg6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyC_DU2Squ6viX4VdgtwBkkxRugPxysgVM4"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "826001615661-amt7pm0sglabkrikbit7too5mck2fkg6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "826001615661-rokjfh76te1lfbpqi1ikrfeb0etq4lmh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.keith.seejoy.stg"
+              }
+            }
+          ]
         }
       }
     },
@@ -31,7 +56,20 @@
           "package_name": "com.keith.seejoy.stg"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "826001615661-r51qigvmbftv4btsmf5gtf0drij7atn5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.keith.seejoy.stg",
+            "certificate_hash": "946f771f8176a5c3544cf9e2cfe290c676bb5b45"
+          }
+        },
+        {
+          "client_id": "826001615661-amt7pm0sglabkrikbit7too5mck2fkg6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyC_DU2Squ6viX4VdgtwBkkxRugPxysgVM4"
@@ -39,7 +77,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "826001615661-amt7pm0sglabkrikbit7too5mck2fkg6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "826001615661-rokjfh76te1lfbpqi1ikrfeb0etq4lmh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.keith.seejoy.stg"
+              }
+            }
+          ]
         }
       }
     }
