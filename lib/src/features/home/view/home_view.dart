@@ -16,7 +16,7 @@ class HomeView extends StatelessWidget {
           },
           icon: ClipRRect(
             borderRadius: BorderRadius.circular(5.0),
-            child: Assets.images.images.logo2.image(),
+            child: Assets.images.images.avatar.image(),
           ),
           iconSize: 50,
         ),
