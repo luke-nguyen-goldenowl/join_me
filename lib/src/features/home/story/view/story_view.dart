@@ -5,6 +5,12 @@ class StoryView extends StatelessWidget {
   final String id;
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const Scaffold(
+      body: Center(
+        child: Text(
+          "story View",
+        ),
+      ),
+    );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
-// import 'package:myapp/src/_dev/dev_screen.dart';
+import 'package:myapp/src/_dev/dev_screen.dart';
 import 'package:myapp/src/features/add_event/view/add_event_view.dart';
 import 'package:myapp/src/features/dashboard/logic/navigation_bar_item.dart';
 import 'package:myapp/src/features/account/profile/view/profile_view.dart';
@@ -23,8 +23,9 @@ import 'package:myapp/src/features/notification/view/notification_view.dart';
 import 'package:myapp/src/features/profile_other_user/view/profile_other_user_view.dart';
 import 'package:myapp/src/features/sample/view/sample_detail_view.dart';
 import 'package:myapp/src/features/sample/view/sample_list_view.dart';
-import 'package:myapp/src/features/story/add_story/view/add_story_view.dart';
-import 'package:myapp/src/features/story/view/story_view.dart';
+import 'package:myapp/src/features/search/view/search_view.dart';
+import 'package:myapp/src/features/home/story/view/add_story_view.dart';
+import 'package:myapp/src/features/home/story/view/story_view.dart';
 import '../features/common/view/not_found_view.dart';
 // import '../features/photo_view/photo_view_page.dart';
 import 'coordinator.dart';
@@ -90,6 +91,7 @@ class AppRouter {
                   )
                 ],
               ),
+
               // _detailEventRoute,
               GoRoute(
                 parentNavigatorKey: AppCoordinator.navigatorKey,
@@ -103,23 +105,9 @@ class AppRouter {
               ),
               GoRoute(
                 parentNavigatorKey: AppCoordinator.navigatorKey,
-                path: AppRouteNames.addStory.buildSubPathParam,
+                path: AppRouteNames.addStory.subPath,
                 name: AppRouteNames.addStory.name,
                 builder: (_, __) => const AddStoryView(),
-              )
-            ],
-          ),
-          GoRoute(
-            path: AppRouteNames.account.path,
-            name: AppRouteNames.account.name,
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: AccountHomeView(),
-            ),
-            routes: <RouteBase>[
-              GoRoute(
-                path: AppRouteNames.profile.subPath,
-                name: AppRouteNames.profile.name,
-                builder: (_, __) => const ProfileView(),
               )
             ],
           ),
@@ -157,6 +145,7 @@ class AppRouter {
             ),
             routes: <RouteBase>[
               GoRoute(
+                parentNavigatorKey: AppCoordinator.navigatorKey,
                 path: AppRouteNames.manageEventDetail.buildSubPathParam,
                 name: AppRouteNames.manageEventDetail.name,
                 builder: (_, state) {
@@ -168,6 +157,7 @@ class AppRouter {
                 },
               ),
               GoRoute(
+                parentNavigatorKey: AppCoordinator.navigatorKey,
                 path: AppRouteNames.editEvent.buildSubPathParam,
                 name: AppRouteNames.editEvent.name,
                 builder: (_, state) {
@@ -180,13 +170,29 @@ class AppRouter {
               ),
             ],
           ),
-          // GoRoute(
-          //   path: AppRouteNames.dev.path,
-          //   name: AppRouteNames.dev.name,
-          //   builder: (_, __) => const DevScreen(),
-          // ),
+          GoRoute(
+            path: AppRouteNames.dev.path,
+            name: AppRouteNames.dev.name,
+            builder: (_, __) => const DevScreen(),
+          ),
         ],
       ),
+
+      GoRoute(
+        parentNavigatorKey: AppCoordinator.navigatorKey,
+        path: AppRouteNames.account.path,
+        name: AppRouteNames.account.name,
+        builder: (_, __) => const AccountHomeView(),
+        routes: <RouteBase>[
+          GoRoute(
+            parentNavigatorKey: AppCoordinator.navigatorKey,
+            path: AppRouteNames.profile.subPath,
+            name: AppRouteNames.profile.name,
+            builder: (_, __) => const ProfileView(),
+          )
+        ],
+      ),
+
       GoRoute(
         parentNavigatorKey: AppCoordinator.navigatorKey,
         path: AppRouteNames.addEvent.path,
@@ -203,7 +209,7 @@ class AppRouter {
         parentNavigatorKey: AppCoordinator.navigatorKey,
         path: AppRouteNames.search.path,
         name: AppRouteNames.search.name,
-        builder: (_, __) => const NotificationView(),
+        builder: (_, __) => const SearchView(),
       ),
       GoRoute(
         parentNavigatorKey: AppCoordinator.navigatorKey,
