@@ -44,9 +44,7 @@ class SignupView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
-        // const SignTitle('Signup'),
-        Image.asset(
-          Assets.images.images.logo2.path,
+        Assets.images.images.logo2.image(
           height: 100,
           width: 100,
         ),

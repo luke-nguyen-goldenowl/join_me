@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,9 +44,7 @@ class SigninView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const SizedBox(height: 30),
-        // const SignTitle('Login'),
-        Image.asset(
-          Assets.images.images.logo2.path,
+        Assets.images.images.logo2.image(
           height: 150,
           width: 150,
         ),
