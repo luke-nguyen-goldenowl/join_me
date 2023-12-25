@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/gen/assets.gen.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/widgets/appbar/app_bar_custom.dart';
 
@@ -15,7 +16,7 @@ class HomeView extends StatelessWidget {
           },
           icon: ClipRRect(
             borderRadius: BorderRadius.circular(5.0),
-            child: Image.asset("assets/images/images/avatar.png"),
+            child: Assets.images.images.avatar.image(),
           ),
           iconSize: 50,
         ),
@@ -42,9 +43,6 @@ class HomeView extends StatelessWidget {
           ),
         ],
       ),
-      // AppBar(
-      //   title: const DevWrapButton(child: Text('Welcome')),
-      // ),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.max,
