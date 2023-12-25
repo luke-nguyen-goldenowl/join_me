@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:myapp/gen/assets.gen.dart';
 import 'package:myapp/src/features/home/logic/event_item_bloc.dart';
 import 'package:myapp/src/features/home/logic/event_item_state.dart';
 import 'package:myapp/src/router/coordinator.dart';
@@ -17,12 +18,12 @@ class EventItemHome extends StatelessWidget {
       child: Container(
         width: 300,
         padding: const EdgeInsets.all(10),
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("assets/images/images/bg-event.jpg"),
+              image: Assets.images.images.bgEvent.provider(),
               fit: BoxFit.cover,
             ),
-            borderRadius: BorderRadius.all(Radius.circular(20))),
+            borderRadius: const BorderRadius.all(Radius.circular(20))),
         child: const Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gradient_borders/gradient_borders.dart';
+import 'package:myapp/gen/assets.gen.dart';
 import 'package:myapp/src/features/home/logic/story_item_bloc.dart';
 import 'package:myapp/src/features/home/logic/story_item_state.dart';
 import 'package:myapp/src/router/coordinator.dart';
@@ -33,7 +34,7 @@ class StoryItem extends StatelessWidget {
           },
           child: ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.asset("assets/images/images/avatar.png"),
+            child: Assets.images.images.avatar.image(),
           ),
         ),
       );

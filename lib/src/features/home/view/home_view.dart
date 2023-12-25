@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:myapp/gen/assets.gen.dart';
 import 'package:myapp/src/features/account/logic/account_bloc.dart';
 import 'package:myapp/src/features/home/widget/list_event_home.dart';
 import 'package:myapp/src/features/home/widget/list_story_home.dart';
@@ -22,7 +23,7 @@ class HomeView extends StatelessWidget {
             },
             icon: ClipRRect(
               borderRadius: BorderRadius.circular(5.0),
-              child: Image.asset("assets/images/images/avatar.png"),
+              child: Assets.images.images.avatar.image(),
             ),
             iconSize: 50,
           ),
@@ -47,17 +48,8 @@ class HomeView extends StatelessWidget {
                 ),
               ),
             ),
-            ElevatedButton(
-              onPressed: () {
-                AppCoordinator.showAddStoryScreen();
-              },
-              child: const Text("go add story screen"),
-            )
           ],
         ),
-        // AppBar(
-        //   title: const DevWrapButton(child: Text('Welcome')),
-        // ),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(15.0),
