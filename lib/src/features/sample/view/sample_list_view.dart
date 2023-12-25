@@ -17,7 +17,7 @@ class SampleItemListView extends StatelessWidget {
           return ListTile(
             title: Text('SampleItem $index'),
             leading: CircleAvatar(
-              foregroundImage: AssetImage(Assets.images.images.logo.path),
+              foregroundImage: AssetImage(Assets.images.images.logo2.path),
             ),
             onTap: () => AppCoordinator.showSampleDetails(id: '$index'),
           );

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-// import 'package:myapp/src/_dev/widget/dev_wrap_button.dart';
-import 'package:myapp/src/dialogs/toast_wrapper.dart';
+import 'package:myapp/gen/assets.gen.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/widgets/appbar/app_bar_custom.dart';
-import 'package:myapp/widgets/button/text_button.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -18,7 +16,7 @@ class HomeView extends StatelessWidget {
           },
           icon: ClipRRect(
             borderRadius: BorderRadius.circular(5.0),
-            child: Image.asset("assets/images/images/avatar.png"),
+            child: Assets.images.images.logo2.image(),
           ),
           iconSize: 50,
         ),
@@ -45,24 +43,29 @@ class HomeView extends StatelessWidget {
           ),
         ],
       ),
-      // AppBar(
-      //   title: const DevWrapButton(child: Text('Welcome')),
-      // ),
       body: Center(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            XTextButton(
-              title: 'Show Toast',
+            ElevatedButton(
               onPressed: () {
-                XToast.show('Clicked');
+                AppCoordinator.showEventDetails(id: '1');
               },
+              child: const Text("go event detail screen"),
             ),
-            const XTextButton(
-              title: 'Show sample view',
-              onPressed: AppCoordinator.showSampleScreen,
+            ElevatedButton(
+              onPressed: () {
+                AppCoordinator.showStoryScreen(id: '1');
+              },
+              child: const Text("go story detail screen"),
             ),
+            ElevatedButton(
+              onPressed: () {
+                AppCoordinator.showAddStoryScreen();
+              },
+              child: const Text("go add story screen"),
+            )
           ],
         ),
       ),
