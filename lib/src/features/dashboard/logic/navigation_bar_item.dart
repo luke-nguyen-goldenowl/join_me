@@ -26,12 +26,12 @@ enum XNavigationBarItems {
     icon: Icons.dns_outlined,
     selectedIcon: Icons.dns_rounded,
   ),
-  account(
-    label: 'Account',
-    route: AppRouteNames.account,
-    icon: Icons.people_outline,
-    selectedIcon: Icons.people,
-  ),
+  // account(
+  //   label: 'Account',
+  //   route: AppRouteNames.account,
+  //   icon: Icons.people_outline,
+  //   selectedIcon: Icons.people,
+  // ),
   ;
 
   const XNavigationBarItems({

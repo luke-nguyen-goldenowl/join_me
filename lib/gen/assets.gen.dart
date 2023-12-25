@@ -73,12 +73,12 @@ class $AssetsSvgsGen {
 class $AssetsImagesImagesGen {
   const $AssetsImagesImagesGen();
 
-  /// File path: assets/images/images/logo.png
-  AssetGenImage get logo =>
-      const AssetGenImage('assets/images/images/logo.png');
+  /// File path: assets/images/images/logo2.png
+  AssetGenImage get logo2 =>
+      const AssetGenImage('assets/images/images/logo2.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [logo];
+  List<AssetGenImage> get values => [logo2];
 }
 
 class $AssetsImagesLocaleGen {
