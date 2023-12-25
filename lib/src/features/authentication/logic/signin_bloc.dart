@@ -107,7 +107,7 @@ class SigninBloc extends Cubit<SigninState> {
     if (result.isSuccess) {
       emit(state.copyWith(status: FormzSubmissionStatus.success));
       GetIt.I<AccountBloc>().onLoginSuccess(result.data!);
-      AppCoordinator.pop(true);
+      AppCoordinator.showHomeScreen();
     } else {
       emit(state.copyWith(status: FormzSubmissionStatus.failure));
       XAlert.show(title: 'Login Error', body: result.error);

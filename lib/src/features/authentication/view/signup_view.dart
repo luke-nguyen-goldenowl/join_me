@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:myapp/gen/assets.gen.dart';
 import 'package:myapp/src/features/authentication/logic/signup_bloc.dart';
-import 'package:myapp/src/features/authentication/widget/sign_title.dart';
 import 'package:myapp/src/localization/localization_utils.dart';
+import 'package:myapp/src/theme/colors.dart';
 import 'package:myapp/widgets/button/button.dart';
 import 'package:myapp/widgets/forms/input.dart';
 
@@ -16,13 +17,20 @@ class SignupView extends StatelessWidget {
       create: (_) => SignupBloc(),
       child: BlocBuilder<SignupBloc, SignupState>(
         builder: (context, SignupState state) {
-          return Scaffold(
-            body: Container(
-              padding: const EdgeInsets.fromLTRB(24, 0, 24, 20),
-              child: SingleChildScrollView(
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
-                child: _builder(context, state),
+          return SafeArea(
+            child: Scaffold(
+              appBar: AppBar(
+                foregroundColor: AppColors.rosyPink,
+                backgroundColor: AppColors.white,
+              ),
+              backgroundColor: AppColors.white,
+              body: Container(
+                padding: const EdgeInsets.fromLTRB(24, 0, 24, 20),
+                child: SingleChildScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  child: _builder(context, state),
+                ),
               ),
             ),
           );
@@ -36,7 +44,18 @@ class SignupView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SignTitle('Sigup'),
+        Assets.images.images.logo2.image(
+          height: 100,
+          width: 100,
+        ),
+        const Text(
+          "SIGN UP",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 40,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         const SizedBox(height: 24.0),
         XInput(
           key: const Key('loginForm_NameInput_textField'),

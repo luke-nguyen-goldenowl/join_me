@@ -44,7 +44,7 @@ class ProfileView extends StatelessWidget {
                     await context.read<AccountBloc>().onLogOut(context);
                 if (result == true) {
                   // ignore: use_build_context_synchronously
-                  AppCoordinator.pop();
+                  AppCoordinator.showSignInScreen();
                 }
               },
               child: const XCard(

@@ -29,8 +29,15 @@ class AppCoordinator {
   static void showAccountScreen() =>
       context.goNamed(AppRouteNames.account.name);
 
-  static Future<T?> showSignInScreen<T extends Object?>() =>
-      context.pushNamed<T>(AppRouteNames.signIn.name);
+  // static Future<T?> showSignInScreen<T extends Object?>() =>
+  //     context.pushNamed<T>(AppRouteNames.signIn.name);
+
+  static void showSignInScreen<T extends Object?>() {
+    while (context.canPop()) {
+      context.pop();
+    }
+    context.pushReplacementNamed(AppRouteNames.signIn.name);
+  }
 
   static Future<T?> showSignUpScreen<T extends Object?>() =>
       context.pushNamed<T>(AppRouteNames.signUp.name);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/src/theme/colors.dart';
 import 'package:myapp/widgets/common/indicator.dart';
 
 import 'model/button_size.dart';
@@ -42,6 +43,7 @@ class XButton extends StatelessWidget {
       child: ElevatedButtonTheme(
         data: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.rosyPink,
             foregroundColor: foregroundColor,
             textStyle: size.style.copyWith(),
             minimumSize: Size(size.minWidth, size.height),

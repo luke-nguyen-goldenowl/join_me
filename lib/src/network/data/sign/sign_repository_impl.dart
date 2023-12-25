@@ -68,9 +68,27 @@ class SignRepositoryImpl extends SignRepository {
 
   @override
   Future<MResult<MUser>> loginWithEmail(
-      {required String email, required String password}) {
-    // TODO: implement loginWithEmail
-    throw UnimplementedError();
+      {required String email, required String password}) async {
+    try {
+      final credential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+
+      final firebaseUser = credential.user;
+
+      final newUser = MUser(
+        id: firebaseUser?.uid ?? '',
+        email: firebaseUser?.email,
+        name: firebaseUser?.displayName,
+      );
+      return MResult.success(newUser);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
+      return MResult.exception(e.code);
+    }
   }
 
   @override
@@ -114,8 +132,36 @@ class SignRepositoryImpl extends SignRepository {
 
   @override
   Future<MResult<MUser>> signUpWithEmail(
-      {required String email, required String password, required String name}) {
+      {required String email,
+      required String password,
+      required String name}) async {
     // TODO: implement signUpWithEmail
-    throw UnimplementedError();
+    try {
+      final credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      await credential.user?.updateDisplayName(name);
+
+      final firebaseUser = credential.user;
+      final newUser = MUser(
+        id: firebaseUser?.uid ?? '',
+        email: firebaseUser?.email,
+        name: firebaseUser?.displayName,
+      );
+
+      return MResult.success(newUser);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
+      return MResult.exception(e.code);
+    } catch (e) {
+      print(e);
+      return MResult.exception(e);
+    }
   }
 }

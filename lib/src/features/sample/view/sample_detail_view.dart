@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/src/router/coordinator.dart';
 
 class SampleItemDetailsView extends StatelessWidget {
   const SampleItemDetailsView({required this.id, super.key});
@@ -9,8 +10,12 @@ class SampleItemDetailsView extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Item Details'),
       ),
-      body: const Center(
-        child: Text('More Information Here'),
+      body: Center(
+        child: TextButton(
+            onPressed: () {
+              AppCoordinator.pop(true);
+            },
+            child: const Text("Back")),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/src/theme/colors.dart';
 
 import '../common/indicator.dart';
 import 'model/button_size.dart';
@@ -41,7 +42,7 @@ class XTextButton extends StatelessWidget {
       child: TextButtonTheme(
         data: TextButtonThemeData(
           style: TextButton.styleFrom(
-            foregroundColor: foregroundColor,
+            foregroundColor: AppColors.rosyPink,
             textStyle: size.style,
             minimumSize: Size(size.minWidth, size.height),
             padding: EdgeInsets.symmetric(horizontal: size.padding),
