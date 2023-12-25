@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:myapp/gen/assets.gen.dart';
 import 'package:myapp/src/features/authentication/logic/signup_bloc.dart';
-import 'package:myapp/src/features/authentication/widget/sign_title.dart';
 import 'package:myapp/src/localization/localization_utils.dart';
 import 'package:myapp/src/theme/colors.dart';
 import 'package:myapp/widgets/button/button.dart';
@@ -46,7 +46,7 @@ class SignupView extends StatelessWidget {
       children: [
         // const SignTitle('Signup'),
         Image.asset(
-          "assets/images/images/logo2.png",
+          Assets.images.images.logo2.path,
           height: 100,
           width: 100,
         ),
