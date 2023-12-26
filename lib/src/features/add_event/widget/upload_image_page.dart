@@ -64,7 +64,7 @@ class UploadImagePage extends StatelessWidget {
                                 size: 50,
                                 color: AppColors.rosyPink,
                               ),
-                              Text("Click or drop image and video")
+                              Text("Click or drop image")
                             ],
                           ),
                         ),

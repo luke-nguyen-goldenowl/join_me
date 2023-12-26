@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:myapp/src/features/add_event/logic/add_event_bloc.dart';
 import 'package:myapp/src/features/add_event/logic/add_event_state.dart';
+import 'package:myapp/src/theme/colors.dart';
 
 class DetailPage extends StatelessWidget {
   const DetailPage({super.key});
@@ -31,11 +32,13 @@ class DetailPage extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 15,
                       ),
-                      // maxLength: 500,
                       decoration: const InputDecoration(
                         labelText: 'Name event',
                         labelStyle: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.grey,
+                        ),
                       ),
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -46,7 +49,6 @@ class DetailPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 16.0),
                     TextFormField(
-                      // expands: true,
                       controller: state.descriptionController,
                       minLines: 1,
                       maxLines: 5,
@@ -56,7 +58,10 @@ class DetailPage extends StatelessWidget {
                       decoration: const InputDecoration(
                         labelText: 'Description',
                         labelStyle: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.grey,
+                        ),
                       ),
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -74,14 +79,16 @@ class DetailPage extends StatelessWidget {
                       decoration: const InputDecoration(
                         labelText: 'Maximum number of attendees',
                         labelStyle: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.grey,
+                        ),
                       ),
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Please enter the maximum number of members';
                         }
-                        // Kiểm tra nếu không phải là số
                         if (int.tryParse(value) == null) {
                           return 'Please enter a valid number';
                         }
@@ -98,7 +105,10 @@ class DetailPage extends StatelessWidget {
                       decoration: const InputDecoration(
                         labelText: 'Start day',
                         labelStyle: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.grey,
+                        ),
                       ),
                       onTap: () async {
                         DateTime? selectedDate = await showDatePicker(
@@ -124,7 +134,10 @@ class DetailPage extends StatelessWidget {
                       decoration: const InputDecoration(
                         labelText: 'Time',
                         labelStyle: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.grey,
+                        ),
                       ),
                       onTap: () async {
                         TimeOfDay? selectedTime = await showTimePicker(
@@ -134,6 +147,7 @@ class DetailPage extends StatelessWidget {
                         if (selectedTime != null &&
                             selectedTime != TimeOfDay.now()) {
                           state.timeController.text =
+                              // ignore: use_build_context_synchronously
                               selectedTime.format(context);
                         }
                       },
@@ -150,10 +164,7 @@ class DetailPage extends StatelessWidget {
                         labelStyle: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
-                        ),
-                        counterStyle: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
+                          color: AppColors.grey,
                         ),
                       ),
                       onTap: () async {
