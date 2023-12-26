@@ -13,7 +13,9 @@ class StoryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<StoryItemBloc, StoryItemState>(
-        builder: (context, state) {
+        buildWhen: (previousState, currentState) {
+      return previousState.isView != currentState.isView;
+    }, builder: (context, state) {
       return Container(
         // width: 60,
         padding: const EdgeInsets.all(2),

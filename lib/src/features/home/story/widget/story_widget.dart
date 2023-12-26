@@ -1,83 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/src/features/home/data/users.dart';
-import 'package:myapp/src/features/home/model/story.dart';
 import 'package:myapp/src/features/home/model/user.dart';
+import 'package:myapp/src/features/home/story/logic/story_widget_bloc.dart';
+import 'package:myapp/src/features/home/story/logic/story_widget_state.dart';
 import 'package:myapp/src/features/home/story/widget/profile_widget.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
 import 'package:story_view/story_view.dart';
 
-class StoryWidget extends StatefulWidget {
+class StoryWidget extends StatelessWidget {
   final User user;
   final PageController controller;
 
   const StoryWidget({
+    super.key,
     required this.user,
     required this.controller,
   });
 
-  @override
-  _StoryWidgetState createState() => _StoryWidgetState();
-}
-
-class _StoryWidgetState extends State<StoryWidget> {
-  final storyItems = <StoryItem>[];
-  late StoryController controller;
-  String date = '';
-  int indexStory = 0;
-  late String storyId;
-
-  void addStoryItems() {
-    for (final story in widget.user.stories) {
-      switch (story.mediaType) {
-        case MediaType.image:
-          storyItems.add(StoryItem.pageImage(
-            url: story.url,
-            controller: controller,
-            caption: story.caption,
-            duration: Duration(
-              milliseconds: (story.duration * 1000).toInt(),
-            ),
-          ));
-          break;
-        case MediaType.text:
-          storyItems.add(
-            StoryItem.text(
-              title: story.caption,
-              backgroundColor: story.color,
-              duration: Duration(
-                milliseconds: (story.duration * 1000).toInt(),
-              ),
-            ),
-          );
-          break;
-      }
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    controller = StoryController();
-    addStoryItems();
-    date = widget.user.stories[0].date;
-    storyId = widget.user.stories[0].id;
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  void handleCompleted() {
-    widget.controller.nextPage(
-      duration: Duration(milliseconds: 300),
+  void _handleCompleted() {
+    controller.nextPage(
+      duration: const Duration(milliseconds: 300),
       curve: Curves.easeIn,
     );
 
-    final currentIndex = users.indexOf(widget.user);
+    final currentIndex = users.indexOf(user);
     final isLastPage = users.length - 1 == currentIndex;
 
     if (isLastPage) {
@@ -86,69 +34,90 @@ class _StoryWidgetState extends State<StoryWidget> {
   }
 
   @override
-  Widget build(BuildContext context) => Stack(
-        children: <Widget>[
-          Material(
-            type: MaterialType.transparency,
-            child: StoryView(
-              storyItems: storyItems,
-              controller: controller,
-              onComplete: handleCompleted,
-              onVerticalSwipeComplete: (direction) {
-                if (direction == Direction.down) {
-                  AppCoordinator.pop();
-                }
-              },
-              onStoryShow: (storyItem) {
-                final index = storyItems.indexOf(storyItem);
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => StoryWidgetBloc()..initState(user),
+      child: BlocBuilder<StoryWidgetBloc, StoryWidgetState>(
+        builder: (context, state) {
+          return Stack(
+            children: <Widget>[
+              Material(
+                type: MaterialType.transparency,
+                child: StoryView(
+                  storyItems: state.storyItems,
+                  controller: state.controller,
+                  onComplete: _handleCompleted,
+                  onVerticalSwipeComplete: (direction) {
+                    if (direction == Direction.down) {
+                      AppCoordinator.pop();
+                    }
+                  },
+                  onStoryShow: (storyItem) {
+                    final index = state.storyItems.indexOf(storyItem);
 
-                if (index > 0) {
-                  setState(() {
-                    date = widget.user.stories[index].date;
-                    storyId = widget.user.stories[index].id;
-                    indexStory = index;
-                  });
-                }
-              },
-            ),
-          ),
-          ProfileWidget(
-            user: widget.user,
-            date: date,
-          ),
-          EventItem(storyId: storyId, indexStory: indexStory, date: date),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Container(
-              margin: const EdgeInsets.all(20),
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: AppColors.black.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(15),
+                    if (index > 0) {
+                      context
+                          .read<StoryWidgetBloc>()
+                          .handleOnStoryShow(user, index);
+                    }
+                  },
+                ),
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.favorite_border_outlined,
-                        color: AppColors.white),
-                    iconSize: 30,
-                  ),
-                  const Text(
-                    '20',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: AppColors.white,
-                      decoration: TextDecoration.none,
-                    ),
-                  )
-                ],
+              ProfileWidget(
+                user: user,
+                date: state.date,
               ),
+              EventItem(
+                  storyId: state.storyId,
+                  indexStory: state.indexStory,
+                  date: state.date),
+              const LikeStory()
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class LikeStory extends StatelessWidget {
+  const LikeStory({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.centerRight,
+      child: Container(
+        margin: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: AppColors.black.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.favorite_border_outlined,
+                  color: AppColors.white),
+              iconSize: 30,
             ),
-          )
-        ],
-      );
+            const Text(
+              '20',
+              style: TextStyle(
+                fontSize: 18,
+                color: AppColors.white,
+                decoration: TextDecoration.none,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class EventItem extends StatelessWidget {
