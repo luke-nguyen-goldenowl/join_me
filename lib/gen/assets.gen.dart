@@ -77,12 +77,16 @@ class $AssetsImagesImagesGen {
   AssetGenImage get avatar =>
       const AssetGenImage('assets/images/images/avatar.png');
 
+  /// File path: assets/images/images/bg-event.jpg
+  AssetGenImage get bgEvent =>
+      const AssetGenImage('assets/images/images/bg-event.jpg');
+
   /// File path: assets/images/images/logo2.png
   AssetGenImage get logo2 =>
       const AssetGenImage('assets/images/images/logo2.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [avatar, logo2];
+  List<AssetGenImage> get values => [avatar, bgEvent, logo2];
 }
 
 class $AssetsImagesLocaleGen {
