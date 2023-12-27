@@ -22,7 +22,7 @@ class BackgroundWidget extends StatelessWidget {
               context.read<DetailEventBloc>().setIndexPageImage(value);
             }),
             itemCount: listImage.length,
-            controller: state.controller,
+            controller: context.read<DetailEventBloc>().controller,
             itemBuilder: ((context, index) {
               return Stack(
                 fit: StackFit.expand,
