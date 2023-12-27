@@ -20,7 +20,7 @@ class AddEventBloc extends Cubit<AddEventState> {
     List<XFile> pickMedias = await picker.pickMultiImage(imageQuality: 5);
 
     if (state.medias.length < 5) {
-      List<XFile?> newMedias = [...state.medias, ...pickMedias];
+      List<XFile?> newMedias = [...pickMedias, ...state.medias];
       if (newMedias.length > 5) {
         newMedias = [...newMedias.sublist(0, 5)];
       }
