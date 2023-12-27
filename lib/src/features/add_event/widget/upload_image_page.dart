@@ -40,15 +40,15 @@ class UploadImagePage extends StatelessWidget {
                       style: BorderStyle.solid,
                     ),
                   ),
-                  child: state.medias.length == 5 && state.medias[4] != null
+                  child: state.medias.isNotEmpty && state.medias[0] != null
                       ? InkWell(
                           onTap: (() {
-                            context.read<AddEventBloc>().removeImage(4);
+                            context.read<AddEventBloc>().removeImage(0);
                           }),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(15),
                             child: Image.file(
-                              File(state.medias[4]!.path),
+                              File(state.medias[0]!.path),
                               width: double.infinity,
                               height: double.infinity,
                               fit: BoxFit.cover,
@@ -72,7 +72,7 @@ class UploadImagePage extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Row(
-                textDirection: TextDirection.rtl,
+                // textDirection: TextDirection.rtl,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: List.generate(4, (index) {
                   return Container(
@@ -86,16 +86,18 @@ class UploadImagePage extends StatelessWidget {
                         style: BorderStyle.solid,
                       ),
                     ),
-                    child: state.medias.length > index &&
-                            state.medias[index] != null
+                    child: state.medias.length - 1 > index &&
+                            state.medias[index + 1] != null
                         ? InkWell(
                             onTap: () {
-                              context.read<AddEventBloc>().removeImage(index);
+                              context
+                                  .read<AddEventBloc>()
+                                  .removeImage(index + 1);
                             },
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(15),
                               child: Image.file(
-                                File(state.medias[index]!.path),
+                                File(state.medias[index + 1]!.path),
                                 width: double.infinity,
                                 height: double.infinity,
                                 fit: BoxFit.cover,
