@@ -7,7 +7,7 @@ class NotificationView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("notify view"),
+        title: const Text("Notify view"),
       ),
     );
   }
