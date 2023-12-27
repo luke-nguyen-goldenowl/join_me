@@ -82,7 +82,9 @@ class HeaderEvent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<EventItemBloc, EventItemState>(
-        builder: (context, state) {
+        buildWhen: (previous, current) {
+      return previous.isLiked != current.isLiked;
+    }, builder: (context, state) {
       return Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

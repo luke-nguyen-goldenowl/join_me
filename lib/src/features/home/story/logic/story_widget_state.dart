@@ -2,13 +2,12 @@ import 'package:story_view/story_view.dart';
 
 class StoryWidgetState {
   List<StoryItem> storyItems;
-  StoryController controller;
+
   String date;
   int indexStory;
   String storyId;
 
   StoryWidgetState({
-    required this.controller,
     required this.date,
     required this.indexStory,
     required this.storyId,
@@ -17,7 +16,6 @@ class StoryWidgetState {
 
   factory StoryWidgetState.ds() {
     return StoryWidgetState(
-      controller: StoryController(),
       date: '',
       indexStory: 0,
       storyId: '',
@@ -32,7 +30,6 @@ class StoryWidgetState {
     storyItems,
   }) {
     return StoryWidgetState(
-      controller: controller,
       indexStory: indexStory ?? this.indexStory,
       date: date ?? this.date,
       storyId: storyId ?? this.storyId,

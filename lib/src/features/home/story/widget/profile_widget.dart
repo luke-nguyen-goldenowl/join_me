@@ -15,7 +15,7 @@ class ProfileWidget extends StatelessWidget {
   Widget build(BuildContext context) => Material(
         type: MaterialType.transparency,
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 16, vertical: 48),
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 48),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -23,14 +23,14 @@ class ProfileWidget extends StatelessWidget {
                 radius: 24,
                 backgroundImage: AssetImage(user.imgUrl),
               ),
-              SizedBox(width: 16),
+              const SizedBox(width: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
                       user.name,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -38,7 +38,7 @@ class ProfileWidget extends StatelessWidget {
                     ),
                     Text(
                       date,
-                      style: TextStyle(color: Colors.white38),
+                      style: const TextStyle(color: Colors.white38),
                     )
                   ],
                 ),

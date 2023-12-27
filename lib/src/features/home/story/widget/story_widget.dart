@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/src/features/home/data/users.dart';
@@ -38,6 +39,12 @@ class StoryWidget extends StatelessWidget {
     return BlocProvider(
       create: (_) => StoryWidgetBloc()..initState(user),
       child: BlocBuilder<StoryWidgetBloc, StoryWidgetState>(
+        buildWhen: (previous, current) {
+          return previous.date != current.date ||
+              previous.indexStory != current.indexStory ||
+              previous.storyId != current.storyId ||
+              !listEquals(previous.storyItems, current.storyItems);
+        },
         builder: (context, state) {
           return Stack(
             children: <Widget>[
@@ -45,7 +52,7 @@ class StoryWidget extends StatelessWidget {
                 type: MaterialType.transparency,
                 child: StoryView(
                   storyItems: state.storyItems,
-                  controller: state.controller,
+                  controller: context.read<StoryWidgetBloc>().controller,
                   onComplete: _handleCompleted,
                   onVerticalSwipeComplete: (direction) {
                     if (direction == Direction.down) {

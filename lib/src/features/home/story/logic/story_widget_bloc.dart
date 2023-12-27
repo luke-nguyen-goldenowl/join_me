@@ -6,7 +6,7 @@ import 'package:story_view/story_view.dart';
 
 class StoryWidgetBloc extends Cubit<StoryWidgetState> {
   StoryWidgetBloc() : super(StoryWidgetState.ds());
-
+  StoryController controller = StoryController();
   List<StoryItem> _addStoryItems(User user) {
     final storyItems = <StoryItem>[];
     for (final story in user.stories) {
@@ -15,7 +15,7 @@ class StoryWidgetBloc extends Cubit<StoryWidgetState> {
           storyItems.add(
             StoryItem.pageImage(
               url: story.url,
-              controller: state.controller,
+              controller: controller,
               caption: story.caption,
               duration: Duration(
                 milliseconds: (story.duration * 1000).toInt(),
@@ -60,7 +60,7 @@ class StoryWidgetBloc extends Cubit<StoryWidgetState> {
 
   @override
   Future<void> close() {
-    state.controller.dispose();
+    controller.dispose();
     return super.close();
   }
 }
