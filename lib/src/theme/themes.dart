@@ -9,6 +9,7 @@ class AppTheme {
   static ThemeData light() => ThemeData(
         fontFamily: fontFamily,
         scaffoldBackgroundColor: AppColors.scaffoldBackgroundColor,
+
         /// dialog
         dialogTheme: DialogTheme(
           backgroundColor: Colors.white,
@@ -18,7 +19,7 @@ class AppTheme {
         ),
 
         /// Colors
-        primaryColor: AppColors.primary,
+        primaryColor: AppColors.rosyPink,
         brightness: Brightness.light,
 
         /// Text
@@ -26,13 +27,13 @@ class AppTheme {
 
         /// ColorScheme
         colorScheme: const ColorScheme.light(
-          primary: AppColors.primary,
+          primary: AppColors.rosyPink,
         ),
 
         // Appbar
         appBarTheme: const AppBarTheme(
           // default system appbar icon is white
-          backgroundColor: AppColors.primary,
+          backgroundColor: AppColors.rosyPink,
         ),
 
         /// input
