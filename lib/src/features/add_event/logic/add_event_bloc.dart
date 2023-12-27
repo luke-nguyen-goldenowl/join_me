@@ -1,10 +1,15 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
+
 import 'package:myapp/src/features/add_event/logic/add_event_state.dart';
 
 class AddEventBloc extends Cubit<AddEventState> {
   AddEventBloc() : super(AddEventState.ds());
+
+  PageController controller = PageController(initialPage: 0);
+  MapController mapController = MapController();
 
   void setCurrentPage(int index) {
     emit(state.copyWith(currentPage: index));
@@ -38,28 +43,34 @@ class AddEventBloc extends Cubit<AddEventState> {
     emit(state.copyWith(selectedLocation: point));
   }
 
-  void setFormDetailEvent() {
-    emit(state.copyWith(
-      nameEvent: state.nameController.text,
-      description: state.descriptionController.text,
-      numberMember: int.tryParse(state.numberMemberController.text),
-      startDate: DateFormat("dd/MM/yyyy hh:mm a")
-          .parse("${state.dateController.text} ${state.timeController.text}"),
-      deadlineDate:
-          DateFormat("dd/MM/yyyy").parse(state.deadlineController.text),
-    ));
+  void setNameEvent(value) {
+    emit(state.copyWith(nameEvent: value));
+  }
+
+  void setDescriptionEvent(value) {
+    emit(state.copyWith(description: value));
+  }
+
+  void setNumberMemberEvent(value) {
+    emit(state.copyWith(numberMember: value));
+  }
+
+  void setStartDateEvent(value) {
+    emit(state.copyWith(startDate: value));
+  }
+
+  void setDeadlineEvent(value) {
+    emit(state.copyWith(deadlineDate: value));
+  }
+
+  void setTimeEvent(value) {
+    emit(state.copyWith(time: value));
   }
 
   @override
   Future<void> close() {
-    state.controller.dispose();
-    state.mapController.dispose();
-    state.dateController.dispose();
-    state.timeController.dispose();
-    state.deadlineController.dispose();
-    state.descriptionController.dispose();
-    state.nameController.dispose();
-    state.numberMemberController.dispose();
+    mapController.dispose();
+    controller.dispose();
     return super.close();
   }
 }

@@ -53,7 +53,7 @@ class AddEventPage extends StatelessWidget {
                     context.read<AddEventBloc>().setCurrentPage(value);
                   },
                   physics: const NeverScrollableScrollPhysics(),
-                  controller: state.controller,
+                  controller: context.read<AddEventBloc>().controller,
                   children: const [
                     UploadImagePage(),
                     AddressPage(),
@@ -61,8 +61,8 @@ class AddEventPage extends StatelessWidget {
                   ],
                 ),
               ),
-              _buildBottomEvent(
-                  context, state.controller, state.currentPage, state.formKey)
+              _buildBottomEvent(context,
+                  context.read<AddEventBloc>().controller, state.currentPage)
             ],
           ),
         );
@@ -70,8 +70,8 @@ class AddEventPage extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomEvent(BuildContext context, PageController controller,
-      int currentPage, GlobalKey<FormState> formKey) {
+  Widget _buildBottomEvent(
+      BuildContext context, PageController controller, int currentPage) {
     return Container(
       padding: const EdgeInsets.all(20),
       color: AppColors.white,
@@ -107,8 +107,7 @@ class AddEventPage extends StatelessWidget {
                   duration: const Duration(milliseconds: 250),
                   curve: Curves.easeInOut,
                 );
-              } else if (formKey.currentState!.validate()) {
-                context.read<AddEventBloc>().setFormDetailEvent();
+              } else {
                 AppCoordinator.pop();
               }
             },

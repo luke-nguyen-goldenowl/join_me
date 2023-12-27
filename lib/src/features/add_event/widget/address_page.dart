@@ -26,7 +26,7 @@ class AddressPage extends StatelessWidget {
             const SizedBox(height: 10),
             Expanded(
               child: FlutterMap(
-                mapController: state.mapController,
+                mapController: context.read<AddEventBloc>().mapController,
                 options: MapOptions(
                   center: LatLng(10.790159, 106.6557574),
                   zoom: 10.0,
