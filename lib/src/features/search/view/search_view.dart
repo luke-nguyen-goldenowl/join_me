@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/src/features/search/logic/search_bloc.dart';
 import 'package:myapp/src/features/search/logic/search_state.dart';
+import 'package:myapp/src/features/search/widget/event_tab_search.dart';
 import 'package:myapp/src/theme/colors.dart';
 import 'package:myapp/widgets/appbar/app_bar_custom.dart';
 import 'package:myapp/widgets/forms/input.dart';
@@ -15,7 +16,7 @@ class SearchView extends StatelessWidget {
         create: (_) => SearchBloc(),
         child: BlocBuilder<SearchBloc, SearchState>(
           buildWhen: (previous, current) {
-            return previous.searchValue != current.searchValue;
+            return true;
           },
           builder: (context, state) {
             return DefaultTabController(
@@ -34,13 +35,16 @@ class SearchView extends StatelessWidget {
                       border: InputBorder.none,
                     ),
                   ),
-                  bottom: const TabBar(
-                    labelStyle: TextStyle(
+                  bottom: TabBar(
+                    labelStyle: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
                     ),
+                    onTap: (value) {
+                      print('$value');
+                    },
                     unselectedLabelColor: AppColors.grey,
-                    tabs: [
+                    tabs: const [
                       Tab(
                         text: "Event",
                       ),
@@ -52,7 +56,7 @@ class SearchView extends StatelessWidget {
                 ),
                 body: const TabBarView(
                   children: [
-                    Icon(Icons.search),
+                    EventTabSearch(),
                     Icon(Icons.add),
                   ],
                 ),
