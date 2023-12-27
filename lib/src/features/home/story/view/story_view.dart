@@ -16,6 +16,7 @@ class StoryView extends StatelessWidget {
         (StoryViewState(user: users.firstWhere((element) => element.id == id))),
       ),
       child: BlocBuilder<StoryViewBloc, StoryViewState>(
+        buildWhen: (previous, current) => previous.user != current.user,
         builder: (context, state) {
           return PageView(
             controller: context.read<StoryViewBloc>().controller,
