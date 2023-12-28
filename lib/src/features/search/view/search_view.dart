@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/src/features/search/logic/search_bloc.dart';
@@ -17,7 +18,10 @@ class SearchView extends StatelessWidget {
         create: (_) => SearchBloc(),
         child: BlocBuilder<SearchBloc, SearchState>(
           buildWhen: (previous, current) {
-            return true;
+            return previous.searchValue != current.searchValue ||
+                previous.type != current.type ||
+                !listEquals(current.resultEvent, previous.resultEvent) ||
+                !listEquals(current.resultPerson, previous.resultPerson);
           },
           builder: (context, state) {
             return DefaultTabController(
