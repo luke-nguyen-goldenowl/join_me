@@ -92,13 +92,17 @@ class $AssetsImagesImagesGen {
   AssetGenImage get landscape4 =>
       const AssetGenImage('assets/images/images/landscape4.webp');
 
+  /// File path: assets/images/images/bg-event.jpg
+  AssetGenImage get bgEvent =>
+      const AssetGenImage('assets/images/images/bg-event.jpg');
+
   /// File path: assets/images/images/logo2.png
   AssetGenImage get logo2 =>
       const AssetGenImage('assets/images/images/logo2.png');
 
   /// List of all assets
   List<dynamic> get values =>
-      [avatar, landscape1, landscape2, landscape3, landscape4, logo2];
+      [avatar, landscape1, landscape2, landscape3, landscape4, logo2, bgEvent];
 }
 
 class $AssetsImagesLocaleGen {
