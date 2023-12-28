@@ -7,29 +7,29 @@ class SearchBloc extends Cubit<SearchState> {
   SearchBloc() : super(SearchState.ds());
 
   void _search() {
-    List<dynamic>? result;
     if (state.searchValue != "") {
       switch (state.type) {
         case TypeSearch.event:
-          result = events
+          final result = events
               .where((element) => element.name
                   .toLowerCase()
                   .contains(state.searchValue.toLowerCase()))
               .toList();
+          emit(state.copyWith(resultEvent: result));
           break;
         case TypeSearch.people:
-          result = persons
+          final result = persons
               .where((element) => element.name
                   .toLowerCase()
                   .contains(state.searchValue.toLowerCase()))
               .toList();
+          emit(state.copyWith(resultPerson: result));
           break;
         default:
       }
     } else {
-      result = [];
+      emit(state.copyWith(resultPerson: [], resultEvent: []));
     }
-    emit(state.copyWith(result: result));
   }
 
   void setSearchValue(String value) {
@@ -39,9 +39,9 @@ class SearchBloc extends Cubit<SearchState> {
 
   void setType(int page) {
     if (page == 0) {
-      emit(state.copyWith(type: TypeSearch.event));
+      emit(state.copyWith(type: TypeSearch.event, resultEvent: []));
     } else {
-      emit(state.copyWith(type: TypeSearch.people));
+      emit(state.copyWith(type: TypeSearch.people, resultPerson: []));
     }
     _search();
   }

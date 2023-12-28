@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/src/features/search/logic/search_bloc.dart';
 import 'package:myapp/src/features/search/logic/search_state.dart';
-import 'package:myapp/src/features/search/widget/event_search_widget.dart';
+import 'package:myapp/src/features/search/widget/person_search_widget.dart';
 
-class EventTabSearch extends StatelessWidget {
-  const EventTabSearch({super.key});
+class PeopleTabSearch extends StatelessWidget {
+  const PeopleTabSearch({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SearchBloc, SearchState>(builder: ((context, state) {
-      return state.resultEvent.isEmpty && state.searchValue.isNotEmpty
+      return state.resultPerson.isEmpty && state.searchValue.isNotEmpty
           ? const Center(
               child: Text("Not found!"),
             )
           : ListView.builder(
-              itemCount: state.resultEvent.length,
+              itemCount: state.resultPerson.length,
               itemBuilder: (context, index) {
-                return EventSearchWidget(event: state.resultEvent[index]);
+                return PersonSearchWidget(person: state.resultPerson[index]);
               },
             );
     }));

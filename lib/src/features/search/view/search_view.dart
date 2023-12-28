@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/src/features/search/logic/search_bloc.dart';
 import 'package:myapp/src/features/search/logic/search_state.dart';
 import 'package:myapp/src/features/search/widget/event_tab_search.dart';
+import 'package:myapp/src/features/search/widget/people_tab_search.dart';
 import 'package:myapp/src/theme/colors.dart';
 import 'package:myapp/widgets/appbar/app_bar_custom.dart';
 import 'package:myapp/widgets/forms/input.dart';
@@ -41,7 +42,7 @@ class SearchView extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                     onTap: (value) {
-                      print('$value');
+                      context.read<SearchBloc>().setType(value);
                     },
                     unselectedLabelColor: AppColors.grey,
                     tabs: const [
@@ -57,7 +58,7 @@ class SearchView extends StatelessWidget {
                 body: const TabBarView(
                   children: [
                     EventTabSearch(),
-                    Icon(Icons.add),
+                    PeopleTabSearch(),
                   ],
                 ),
               ),
