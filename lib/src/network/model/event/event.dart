@@ -1,5 +1,7 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/foundation.dart';
 import 'package:latlong2/latlong.dart';
+
 import 'package:myapp/src/network/model/user/user.dart';
 
 class MEvent {
@@ -13,18 +15,20 @@ class MEvent {
   LatLng? location;
   MUser host;
   int follower;
+  String type;
 
   MEvent({
     required this.id,
     required this.name,
-    required this.deadline,
     required this.description,
-    required this.follower,
-    required this.host,
     required this.images,
-    required this.location,
-    required this.province,
     required this.startDate,
+    required this.deadline,
+    required this.province,
+    required this.location,
+    required this.host,
+    required this.follower,
+    required this.type,
   });
 
   factory MEvent.ds({
@@ -42,6 +46,7 @@ class MEvent {
       location: null,
       province: "",
       startDate: null,
+      type: "",
     );
   }
 
@@ -56,6 +61,7 @@ class MEvent {
     LatLng? location,
     String? province,
     DateTime? startDate,
+    String? type,
   }) {
     return MEvent(
       id: id ?? this.id,
@@ -68,6 +74,7 @@ class MEvent {
       location: location ?? this.location,
       province: province ?? this.province,
       startDate: startDate ?? this.startDate,
+      type: type ?? this.type,
     );
   }
 
@@ -85,6 +92,7 @@ class MEvent {
           ? LatLng(map['location']['latitude'], map['location']['longitude'])
           : null,
       province: map['province'],
+      type: map['type'],
       startDate:
           map['startDate'] != null ? DateTime.parse(map['startDate']) : null,
     );
@@ -104,35 +112,39 @@ class MEvent {
           : null,
       'province': province,
       'startDate': startDate?.toIso8601String(),
+      'type': type,
     };
   }
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is MEvent &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          name == other.name &&
-          deadline == other.deadline &&
-          description == other.description &&
-          follower == other.follower &&
-          host == other.host &&
-          listEquals(images, other.images) &&
-          location == other.location &&
-          province == other.province &&
-          startDate == other.startDate;
+  bool operator ==(covariant MEvent other) {
+    if (identical(this, other)) return true;
+
+    return other.id == id &&
+        other.name == name &&
+        other.description == description &&
+        listEquals(other.images, images) &&
+        other.startDate == startDate &&
+        other.deadline == deadline &&
+        other.province == province &&
+        other.location == location &&
+        other.host == host &&
+        other.follower == follower &&
+        other.type == type;
+  }
 
   @override
-  int get hashCode =>
-      id.hashCode ^
-      name.hashCode ^
-      deadline.hashCode ^
-      description.hashCode ^
-      follower.hashCode ^
-      host.hashCode ^
-      images.hashCode ^
-      location.hashCode ^
-      province.hashCode ^
-      startDate.hashCode;
+  int get hashCode {
+    return id.hashCode ^
+        name.hashCode ^
+        description.hashCode ^
+        images.hashCode ^
+        startDate.hashCode ^
+        deadline.hashCode ^
+        province.hashCode ^
+        location.hashCode ^
+        host.hashCode ^
+        follower.hashCode ^
+        type.hashCode;
+  }
 }
