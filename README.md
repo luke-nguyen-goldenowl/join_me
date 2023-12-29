@@ -119,3 +119,10 @@
 ## Code structure
 
 ## Screenshot
+
+
+# DATABASE DIAGRAM
+
+![image](https://github.com/luke-nguyen-goldenowl/join_me/assets/152830147/a73f85f6-4c1a-48c2-a1d5-9009e637d812)
+
+- [link db diagram](https://lucid.app/lucidchart/14b8934f-1502-484d-a683-614a6b4a430c/edit?viewport_loc=-1763%2C-423%2C2994%2C1423%2C66B0pHvHshgC&invitationId=inv_1346462e-329d-48c1-b451-7678c66a60b3)
