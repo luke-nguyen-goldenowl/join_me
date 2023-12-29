@@ -123,7 +123,8 @@
 
 # DATABASE DIAGRAM
 
-![image](https://github.com/luke-nguyen-goldenowl/join_me/assets/152830147/4a306362-5f9c-4d56-b642-dd96e812a32e)
+![image](https://github.com/luke-nguyen-goldenowl/join_me/assets/152830147/a887aba3-afe5-4dad-9641-cc18bae4e983)
+
 
 
 
