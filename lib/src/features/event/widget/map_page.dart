@@ -6,6 +6,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:myapp/src/features/event/logic/map_page_bloc.dart';
 import 'package:myapp/src/features/event/logic/map_page_state.dart';
+import 'package:myapp/src/features/event/widget/event_location.dart';
 import 'package:myapp/src/theme/colors.dart';
 
 class MapPage extends StatelessWidget {
@@ -57,6 +58,16 @@ class MapPageWidget extends StatelessWidget {
                         color: AppColors.rosyPink,
                         size: 40,
                       );
+                    },
+                  ),
+                  Marker(
+                    rotate: true,
+                    width: 300.0,
+                    height: 150.0,
+                    point: LatLng((state.currentLocation?.latitude ?? 0) + 4,
+                        (state.currentLocation?.longitude ?? 0) + 4),
+                    builder: (BuildContext context) {
+                      return const EventLocation();
                     },
                   ),
                 ],
