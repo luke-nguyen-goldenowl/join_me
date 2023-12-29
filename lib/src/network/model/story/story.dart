@@ -73,7 +73,7 @@ class MStory {
       'id': id,
       'image': image,
       'time': time?.toIso8601String(),
-      // 'host': host.toMap(),
+      'host': host.toJson(),
       'event': event.toMap(),
       'liker': liker,
     };

@@ -97,7 +97,7 @@ class MEvent {
       'deadline': deadline?.toIso8601String(),
       'description': description,
       'follower': follower,
-      // 'host': host.toMap(),
+      'host': host.toJson(),
       'images': images,
       'location': location != null
           ? {'latitude': location!.latitude, 'longitude': location!.longitude}
