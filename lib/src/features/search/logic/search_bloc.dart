@@ -1,29 +1,33 @@
+import 'dart:async';
+
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:myapp/src/features/search/data/event_search_data.dart';
-import 'package:myapp/src/features/search/data/person_data.dart';
 import 'package:myapp/src/features/search/logic/search_state.dart';
+import 'package:myapp/src/network/domain_manager.dart';
 
 class SearchBloc extends Cubit<SearchState> {
   SearchBloc() : super(SearchState.ds());
+  DomainManager get domain => DomainManager();
+  final debounce = Debounce(const Duration(milliseconds: 500));
 
   void _search() {
     if (state.searchValue != "") {
       switch (state.type) {
         case TypeSearch.event:
-          final result = events
-              .where((element) => element.name
-                  .toLowerCase()
-                  .contains(state.searchValue.toLowerCase()))
-              .toList();
-          emit(state.copyWith(resultEvent: result));
+          debounce.run(
+            () {
+              final result = domain.event.getEventsSearch(state.searchValue);
+              emit(state.copyWith(resultEvent: result.data));
+            },
+          );
           break;
         case TypeSearch.people:
-          final result = persons
-              .where((element) => element.name
-                  .toLowerCase()
-                  .contains(state.searchValue.toLowerCase()))
-              .toList();
-          emit(state.copyWith(resultPerson: result));
+          debounce.run(
+            () {
+              final result = domain.userMock.getUsersSearch(state.searchValue);
+              emit(state.copyWith(resultPerson: result.data));
+            },
+          );
           break;
         default:
       }
@@ -44,5 +48,21 @@ class SearchBloc extends Cubit<SearchState> {
       emit(state.copyWith(type: TypeSearch.people, resultPerson: []));
     }
     _search();
+  }
+}
+
+class Debounce {
+  final Duration delay;
+  VoidCallback? action;
+
+  Timer? _timer;
+
+  Debounce(this.delay);
+
+  void run(VoidCallback action) {
+    if (_timer != null) {
+      _timer!.cancel();
+    }
+    _timer = Timer(delay, action);
   }
 }

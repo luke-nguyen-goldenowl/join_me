@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/src/features/search/model/event_search.dart';
+import 'package:intl/intl.dart';
+
+import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
 
 class EventSearchWidget extends StatelessWidget {
   const EventSearchWidget({super.key, required this.event});
-  final EventSearch event;
+  final MEvent event;
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +16,6 @@ class EventSearchWidget extends StatelessWidget {
         AppCoordinator.showEventDetails(id: event.id);
       },
       child: Container(
-        // height: 100,
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         decoration: BoxDecoration(
@@ -25,7 +26,7 @@ class EventSearchWidget extends StatelessWidget {
               color: AppColors.grey.withOpacity(0.5),
               spreadRadius: 5,
               blurRadius: 7,
-              offset: Offset(0, 3), // changes position of shadow
+              offset: const Offset(0, 3),
             ),
           ],
         ),
@@ -35,9 +36,10 @@ class EventSearchWidget extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.asset(
-                  event.image,
+                  event.images[0],
                   height: 70,
                   width: 70,
+                  fit: BoxFit.cover,
                 ),
               ),
               const SizedBox(width: 10),
@@ -57,7 +59,7 @@ class EventSearchWidget extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      event.date,
+                      DateFormat("dd-MM-yyyy HH:mm").format(event.startDate!),
                       style: const TextStyle(
                         fontSize: 15,
                         color: AppColors.grey,

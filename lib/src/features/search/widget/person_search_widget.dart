@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/src/features/search/model/person.dart';
+import 'package:myapp/src/network/model/user/user.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
 
 class PersonSearchWidget extends StatelessWidget {
   const PersonSearchWidget({super.key, required this.person});
-  final Person person;
+  final MUser person;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class PersonSearchWidget extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: Image.asset(
-                      person.image,
+                      person.avatar!,
                       height: 50,
                       width: 50,
                     ),
@@ -44,7 +44,7 @@ class PersonSearchWidget extends StatelessWidget {
                   const SizedBox(width: 20),
                   Expanded(
                     child: Text(
-                      person.name,
+                      person.name!,
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
