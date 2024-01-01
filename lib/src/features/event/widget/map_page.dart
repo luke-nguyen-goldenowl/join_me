@@ -18,7 +18,9 @@ class MapPage extends StatelessWidget {
       buildWhen: (previous, current) => previous != current,
       builder: ((contextEvent, stateEvent) {
         return BlocProvider(
-          create: (_) => MapPageBloc()..getCurrentLocation(),
+          create: (_) => MapPageBloc()
+            ..getCurrentLocation()
+            ..getEvent(),
           child: const MapPageWidget(),
         );
       }),
@@ -33,7 +35,7 @@ class MapPageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<MapPageBloc, MapPageState>(
       builder: ((context, state) {
-        if (state.currentLocation != null) {
+        if (!state.isLoadingCurrentLocation) {
           return FlutterMap(
             mapController: context.read<MapPageBloc>().mapController,
             options: MapOptions(
@@ -47,6 +49,7 @@ class MapPageWidget extends StatelessWidget {
               ),
               MarkerLayer(
                 markers: [
+                  //my location
                   Marker(
                     rotate: true,
                     width: 50.0,
@@ -60,16 +63,21 @@ class MapPageWidget extends StatelessWidget {
                       );
                     },
                   ),
-                  Marker(
-                    rotate: true,
-                    width: 300.0,
-                    height: 150.0,
-                    point: LatLng((state.currentLocation?.latitude ?? 0) + 4,
-                        (state.currentLocation?.longitude ?? 0) + 4),
-                    builder: (BuildContext context) {
-                      return const EventLocation();
-                    },
-                  ),
+
+                  ...state.events.map((e) => Marker(
+                        rotate: true,
+                        width: 300.0,
+                        height: 150.0,
+                        point: e,
+                        builder: (BuildContext context) {
+                          return EventLocation(
+                            myIndex: state.events.indexOf(e),
+                            currentEvent: state.currentEvent,
+                            handleSetNewEvent:
+                                context.read<MapPageBloc>().selectEvent,
+                          );
+                        },
+                      ))
                 ],
               ),
             ],
