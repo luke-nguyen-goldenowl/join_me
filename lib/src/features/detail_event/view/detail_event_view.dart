@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:myapp/src/features/detail_event/data/list_image.dart';
 import 'package:myapp/src/features/detail_event/logic/detail_event_bloc.dart';
 import 'package:myapp/src/features/detail_event/logic/detail_event_state.dart';
 import 'package:myapp/src/features/detail_event/widget/address_event.dart';
@@ -38,7 +39,13 @@ class DetailEventPage extends StatelessWidget {
                 Expanded(
                   child: CustomScrollView(
                     slivers: [
-                      const SliverAppBarCustomDetailEvent(),
+                      SliverAppBarCustomDetailEvent(
+                        indexPageImage: state.indexPageImage,
+                        images: listImage,
+                        controller: context.read<DetailEventBloc>().controller,
+                        setIndexPageImage:
+                            context.read<DetailEventBloc>().setIndexPageImage,
+                      ),
                       SliverList(
                         delegate: SliverChildListDelegate([
                           // const SizedBox(height: 10),

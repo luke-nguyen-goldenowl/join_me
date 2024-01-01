@@ -1,26 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/src/router/coordinator.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:myapp/src/features/manage_event/logic/manage_event_bloc.dart';
+import 'package:myapp/src/features/manage_event/logic/manage_event_state.dart';
+import 'package:myapp/src/features/manage_event/widget/manage_event_item.dart';
+import 'package:myapp/src/theme/colors.dart';
+import 'package:myapp/widgets/appbar/app_bar_custom.dart';
+import 'package:myapp/widgets/state/state_pagination_widget.dart';
 
 class ManageEventView extends StatelessWidget {
   const ManageEventView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Manage Event view"),
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            Text("List my event"),
-            ElevatedButton(
-                onPressed: () {
-                  AppCoordinator.showManageEventDetails(id: '1');
-                },
-                child: const Text("go manage event detail"))
-          ],
-        ),
+    return BlocProvider(
+      create: (_) => ManageEventBloc()..getData(),
+      child: BlocBuilder<ManageEventBloc, ManageEventState>(
+        buildWhen: (previous, current) => previous != current,
+        builder: (context, state) {
+          return Scaffold(
+            backgroundColor: AppColors.white,
+            appBar: const AppBarCustom(
+              title: "My Events",
+            ),
+            body: Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: state.pagination.data.length,
+                    itemBuilder: ((context, index) {
+                      return ManageEventItem(
+                          event: state.pagination.data[index]);
+                    }),
+                  ),
+                ),
+                XStatePaginationWidget(
+                  page: state.pagination,
+                  loadMore: context.read<ManageEventBloc>().loadMore,
+                  autoLoad: true,
+                )
+              ],
+            ),
+          );
+        },
       ),
     );
   }

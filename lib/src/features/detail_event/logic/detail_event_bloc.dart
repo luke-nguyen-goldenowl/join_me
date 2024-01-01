@@ -9,4 +9,10 @@ class DetailEventBloc extends Cubit<DetailEventState> {
   void setIndexPageImage(int value) {
     emit(state.copyWith(indexPageImage: value));
   }
+
+  @override
+  Future<void> close() async {
+    controller.dispose();
+    super.close();
+  }
 }
