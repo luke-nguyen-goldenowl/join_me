@@ -66,8 +66,8 @@ class MapPageWidget extends StatelessWidget {
 
                   ...state.events.map((e) => Marker(
                         rotate: true,
-                        width: 300.0,
-                        height: 150.0,
+                        width: 250.0,
+                        height: 120.0,
                         point: e,
                         builder: (BuildContext context) {
                           return EventLocation(

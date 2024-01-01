@@ -33,8 +33,8 @@ class EventLocation extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(100),
               child: Assets.images.images.bgEvent.image(
-                height: 50,
-                width: 50,
+                height: 30,
+                width: 30,
                 fit: BoxFit.cover,
               ),
             ),
@@ -43,7 +43,7 @@ class EventLocation extends StatelessWidget {
         const SizedBox(height: 10),
         if (myIndex == currentEvent)
           Container(
-            height: 80,
+            height: 60,
             padding: const EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
@@ -57,8 +57,8 @@ class EventLocation extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Assets.images.images.bgEvent.image(
-                    height: 70,
-                    width: 70,
+                    height: 50,
+                    width: 50,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -68,7 +68,7 @@ class EventLocation extends StatelessWidget {
                     "DJ Bobo final Blue tour this year in 2022",
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                   ),
                 )
               ],
