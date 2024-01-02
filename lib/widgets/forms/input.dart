@@ -15,11 +15,20 @@ class XInput extends StatefulWidget {
     this.autofocus = false,
     this.inputFormatters,
     this.onFieldSubmitted,
+    this.readOnly = false,
+    this.maxLines = 1,
+    this.minLines,
+    this.onTap,
   });
   final String value;
   final TextInputType? keyboardType;
   final bool obscureText;
 
+  final Function()? onTap;
+
+  final bool readOnly;
+  final int? minLines;
+  final int? maxLines;
   final ValueChanged<String>? onChanged;
   final InputDecoration? decoration;
   final int? maxLength;
@@ -105,6 +114,10 @@ class _XInputState extends State<XInput> {
 
     return TextFormField(
       controller: _controller,
+      onTap: widget.onTap,
+      readOnly: widget.readOnly,
+      maxLines: widget.maxLines,
+      minLines: widget.minLines,
       onChanged: widget.onChanged,
       keyboardType: widget.keyboardType,
       style: widget.style,
