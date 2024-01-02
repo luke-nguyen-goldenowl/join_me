@@ -1,3 +1,8 @@
+import 'package:latlong2/latlong.dart';
+import 'package:myapp/src/network/model/common/result.dart';
+import 'package:myapp/src/network/model/event/event.dart';
+import 'package:myapp/src/network/model/user/user.dart';
+
 List<MEvent> events = [
   MEvent(
     id: '1',
@@ -73,8 +78,8 @@ class EventRepositoryMock {
     return MResult.success(result);
   }
 
-  MResult<MUserEvent> getEventsByUser(MUser user) {
-    final MUserEvent result = MUserEvent(user: user, events: []);
+  MResult<List<MEvent>> getEventsByUser(String userId) {
+    final List<MEvent> result = events;
     return MResult.success(result);
   }
 }
