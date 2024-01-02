@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:myapp/src/features/account/logic/account_bloc.dart';
 import 'package:myapp/src/features/account/widget/info_user.dart';
 import 'package:myapp/src/features/account/widget/list_event_favorite.dart';
@@ -35,8 +36,6 @@ class AccountHomeView extends StatelessWidget {
               InfoUser(user: state.user),
               space,
               Container(
-                // padding: const EdgeInsets.only(bottom: 20, top: 10, left: 20),
-                // width: double.infinity,
                 color: AppColors.white,
                 child: const TabBar(tabs: [
                   Tab(
