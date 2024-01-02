@@ -1,31 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:myapp/src/features/common/logic/pagination_bloc.dart';
 import 'package:myapp/src/network/model/common/pagination/pagination.dart';
+import 'package:myapp/src/network/model/event/event.dart';
 
-class UpComingState {
-  MPagination<int> pagination;
-  UpComingState({
-    required this.pagination,
-  });
-
-  factory UpComingState.ds() {
-    return UpComingState(pagination: MPagination<int>());
-  }
+class UpComingState extends PaginationState<MEvent> {
+  const UpComingState({required super.data});
 
   @override
-  bool operator ==(covariant UpComingState other) {
-    if (identical(this, other)) return true;
-
-    return other.pagination == pagination;
-  }
-
-  @override
-  int get hashCode => pagination.hashCode;
-
-  UpComingState copyWith({
-    MPagination<int>? pagination,
-  }) {
-    return UpComingState(
-      pagination: pagination ?? this.pagination,
-    );
+  UpComingState copyWith({MPagination<MEvent>? data}) {
+    return UpComingState(data: data ?? this.data);
   }
 }

@@ -15,22 +15,25 @@ class UpcomingEventFollowedView extends StatelessWidget {
       child: BlocBuilder<UpcomingBloc, UpComingState>(
         buildWhen: (previous, current) => previous != current,
         builder: (context, state) {
-          return Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  itemCount: state.pagination.data.length,
-                  itemBuilder: ((context, index) {
-                    return const Ticket();
-                  }),
-                ),
-              ),
-              XStatePaginationWidget(
-                page: state.pagination,
-                loadMore: context.read<UpcomingBloc>().loadMore,
-                autoLoad: true,
-              )
-            ],
+          return Expanded(
+            child: ListView.builder(
+              itemCount: state.data.data.length + 1,
+              itemBuilder: ((context, index) {
+                return index == state.data.data.length
+                    ? Container(
+                        margin: const EdgeInsets.symmetric(vertical: 20),
+                        alignment: Alignment.center,
+                        child: XStatePaginationWidget(
+                          page: state.data,
+                          loadMore: context.read<UpcomingBloc>().getData,
+                          autoLoad: true,
+                        ),
+                      )
+                    : Ticket(
+                        event: state.data.data[index],
+                      );
+              }),
+            ),
           );
         },
       ),

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/gen/assets.gen.dart';
+import 'package:intl/intl.dart';
+import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
 
 class Ticket extends StatelessWidget {
-  const Ticket({super.key});
-
+  const Ticket({super.key, required this.event});
+  final MEvent event;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,18 +34,22 @@ class Ticket extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(10),
               color: AppColors.white,
-              child: const Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Expanded(
-                    child: HeaderTicket(),
+                    child: HeaderTicket(
+                      event: event,
+                    ),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   Expanded(
                     child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                      child: BottomTicket(),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      child: BottomTicket(
+                        event: event,
+                      ),
                     ),
                   )
                 ],
@@ -60,17 +65,19 @@ class Ticket extends StatelessWidget {
 class BottomTicket extends StatelessWidget {
   const BottomTicket({
     super.key,
+    required this.event,
   });
+  final MEvent event;
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               "Date",
               style: TextStyle(
                 fontSize: 12,
@@ -79,8 +86,8 @@ class BottomTicket extends StatelessWidget {
               ),
             ),
             Text(
-              "December 21, 2023",
-              style: TextStyle(
+              DateFormat("MMMM dd, yyyy").format(event.startDate!),
+              style: const TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
                 color: AppColors.black,
@@ -91,7 +98,7 @@ class BottomTicket extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               "Time",
               style: TextStyle(
                 fontSize: 12,
@@ -100,8 +107,8 @@ class BottomTicket extends StatelessWidget {
               ),
             ),
             Text(
-              "8:00 AM",
-              style: TextStyle(
+              TimeOfDay.fromDateTime(event.startDate!).format(context),
+              style: const TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
                 color: AppColors.black,
@@ -117,8 +124,9 @@ class BottomTicket extends StatelessWidget {
 class HeaderTicket extends StatelessWidget {
   const HeaderTicket({
     super.key,
+    required this.event,
   });
-
+  final MEvent event;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -126,17 +134,19 @@ class HeaderTicket extends StatelessWidget {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(20),
-          child: Assets.images.images.avatar.image(
+          child: Image.asset(
+            event.images[0],
             height: 60,
             width: 60,
+            fit: BoxFit.cover,
           ),
         ),
         const SizedBox(width: 10),
-        const SizedBox(
+        SizedBox(
           width: 250,
           child: Text(
-            "Let's play different festival",
-            style: TextStyle(
+            event.name,
+            style: const TextStyle(
               color: AppColors.black,
               fontWeight: FontWeight.bold,
               fontSize: 18,

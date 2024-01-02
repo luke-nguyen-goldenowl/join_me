@@ -17,15 +17,21 @@ abstract class PaginationBloc<T extends PaginationState> extends Cubit<T> {
     if (!GetIt.I<AccountBloc>().state.isLogin && state.needLogin) return;
     if (!state.data.canLoad) return;
 
-    emit(state.copyWith(data: state.data.toLoading()) as T);
+    if (!isClosed) {
+      emit(state.copyWith(data: state.data.toLoading()) as T);
+    }
 
     final result = await getDataAPI;
-    emit(state.copyWith(data: state.data.addAllFromResult(result)) as T);
+    if (!isClosed) {
+      emit(state.copyWith(data: state.data.addAllFromResult(result)) as T);
+    }
   }
 
   Future<void> refreshData() async {
     if (state.data.isLoading) return;
-    emit(state.copyWith(data: MPagination()) as T);
+    if (!isClosed) {
+      emit(state.copyWith(data: MPagination()) as T);
+    }
     getData();
   }
 }

@@ -1,4 +1,12 @@
-List<MEvent> events = [
+import 'package:latlong2/latlong.dart';
+import 'package:myapp/src/network/model/common/pagination/meta/pagination_meta.dart';
+import 'package:myapp/src/network/model/common/pagination/pagination.dart';
+import 'package:myapp/src/network/model/common/pagination/pagination_response.dart';
+import 'package:myapp/src/network/model/common/result.dart';
+import 'package:myapp/src/network/model/event/event.dart';
+import 'package:myapp/src/network/model/user/user.dart';
+
+List<MEvent> listEvent = [
   MEvent(
     id: '1',
     name: "Happy birthday",
@@ -65,7 +73,7 @@ class EventRepositoryMock {
 
   MResult<List<MEvent>> getEventsSearch(String search) {
     if (search == "") return MResult.success([]);
-    final result = events
+    final result = listEvent
         .where((element) =>
             element.name.toLowerCase().contains(search.toLowerCase()))
         .toList();
@@ -73,8 +81,17 @@ class EventRepositoryMock {
     return MResult.success(result);
   }
 
-  MResult<MUserEvent> getEventsByUser(MUser user) {
-    final MUserEvent result = MUserEvent(user: user, events: []);
+  MResult<MPaginationResponse<MEvent>> getEventsByUser(String userId) {
+    final List<MEvent> events = listEvent;
+    final result = MPaginationResponse(
+      data: events,
+      meta: const MPaginationMeta(
+        pageSize: MPagination.defaultPageLimit,
+        totalCount: 50,
+        pageNumber: 4,
+        lastPage: 5,
+      ),
+    );
     return MResult.success(result);
   }
 }

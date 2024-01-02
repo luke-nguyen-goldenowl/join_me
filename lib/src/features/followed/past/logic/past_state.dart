@@ -1,31 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:myapp/src/features/common/logic/pagination_bloc.dart';
 import 'package:myapp/src/network/model/common/pagination/pagination.dart';
+import 'package:myapp/src/network/model/event/event.dart';
 
-class PastState {
-  MPagination<int> pagination;
-  PastState({
-    required this.pagination,
-  });
-
-  factory PastState.ds() {
-    return PastState(pagination: MPagination<int>());
-  }
+class PastState extends PaginationState<MEvent> {
+  const PastState({required super.data});
 
   @override
-  bool operator ==(covariant PastState other) {
-    if (identical(this, other)) return true;
-
-    return other.pagination == pagination;
-  }
-
-  @override
-  int get hashCode => pagination.hashCode;
-
-  PastState copyWith({
-    MPagination<int>? pagination,
-  }) {
-    return PastState(
-      pagination: pagination ?? this.pagination,
-    );
+  PastState copyWith({MPagination<MEvent>? data}) {
+    return PastState(data: data ?? this.data);
   }
 }
