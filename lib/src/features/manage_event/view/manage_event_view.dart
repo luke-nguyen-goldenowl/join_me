@@ -13,7 +13,7 @@ class ManageEventView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => ManageEventBloc()..getData(),
+      create: (_) => ManageEventBloc(),
       child: BlocBuilder<ManageEventBloc, ManageEventState>(
         buildWhen: (previous, current) => previous != current,
         builder: (context, state) {
@@ -26,18 +26,20 @@ class ManageEventView extends StatelessWidget {
               children: [
                 Expanded(
                   child: ListView.builder(
-                    itemCount: state.pagination.data.length,
+                    itemCount: state.pagination.data.length + 1,
                     itemBuilder: ((context, index) {
-                      return ManageEventItem(
-                          event: state.pagination.data[index]);
+                      return index == state.pagination.data.length
+                          ? XStatePaginationWidget(
+                              page: state.pagination,
+                              loadMore:
+                                  context.read<ManageEventBloc>().loadMore,
+                              autoLoad: true,
+                            )
+                          : ManageEventItem(
+                              event: state.pagination.data[index]);
                     }),
                   ),
                 ),
-                XStatePaginationWidget(
-                  page: state.pagination,
-                  loadMore: context.read<ManageEventBloc>().loadMore,
-                  autoLoad: true,
-                )
               ],
             ),
           );

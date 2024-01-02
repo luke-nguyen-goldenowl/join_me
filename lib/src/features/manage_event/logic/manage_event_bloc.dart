@@ -13,20 +13,10 @@ class ManageEventBloc extends Cubit<ManageEventState> {
     MPagination<MEvent> pagination = MPagination<MEvent>();
 
     await Future.delayed(const Duration(seconds: 2));
-
+    print("-----------load------------------");
     pagination = pagination.addAll(
         [...state.pagination.data, ...domain.event.getEventsByUser('1').data!]);
 
-    if (!isClosed) return emit(state.copyWith(pagination: pagination));
-  }
-
-  Future<void> getData() async {
-    MPagination<MEvent> pagination = MPagination<MEvent>();
-
-    await Future.delayed(const Duration(seconds: 2));
-
-    pagination = pagination.addAll(domain.event.getEventsByUser('1').data!);
-
-    if (!isClosed) return emit(state.copyWith(pagination: pagination));
+    if (!isClosed) emit(state.copyWith(pagination: pagination));
   }
 }

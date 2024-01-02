@@ -12,7 +12,7 @@ List<MEvent> events = [
     startDate: DateTime.now(),
     deadline: DateTime.now(),
     province: 'Ho Chi Minh',
-    location: LatLng(88.00015, 85.1316546),
+    location: LatLng(10.8231, 106.6297),
     host: const MUser(
         id: '1', name: 'Keith', avatar: "assets/images/images/avatar.png"),
     follower: 122,

@@ -30,46 +30,44 @@ class ManageEventItem extends StatelessWidget {
             ),
           ],
         ),
-        child: Expanded(
-          child: Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.asset(
-                  event.images[0],
-                  height: 70,
-                  width: 70,
-                  fit: BoxFit.cover,
-                ),
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(
+                event.images[0],
+                height: 70,
+                width: 70,
+                fit: BoxFit.cover,
               ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      event.name,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    event.name,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
-                    const SizedBox(height: 20),
-                    Text(
-                      DateFormat("dd-MM-yyyy HH:mm a").format(event.startDate!),
-                      style: const TextStyle(
-                        fontSize: 15,
-                        color: AppColors.grey,
-                      ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    DateFormat("dd-MM-yyyy HH:mm a").format(event.startDate!),
+                    style: const TextStyle(
+                      fontSize: 15,
+                      color: AppColors.grey,
                     ),
-                  ],
-                ),
-              )
-            ],
-          ),
+                  ),
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );
