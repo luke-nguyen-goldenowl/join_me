@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 
 import 'package:myapp/src/features/add_event/logic/add_event_bloc.dart';
 import 'package:myapp/src/features/add_event/logic/add_event_state.dart';
+import 'package:myapp/src/network/model/event/event.dart';
+import 'package:myapp/src/theme/colors.dart';
 
 import 'package:myapp/widgets/forms/input.dart';
 
@@ -50,6 +52,35 @@ class DetailPage extends StatelessWidget {
                       labelText: "Description",
                     ),
                   ),
+                  const SizedBox(height: 10),
+                  DropdownButtonFormField(
+                    hint: const Text(
+                      "Type Event",
+                      style: TextStyle(
+                        color: Color(0xCC50555C),
+                        fontSize: 16,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: AppColors.black,
+                      fontWeight: FontWeight.normal,
+                    ),
+                    value: state.typeEvent,
+                    items: TypeEvent.values
+                        .map(
+                          (e) => DropdownMenuItem(
+                            value: e,
+                            child: Text(e.name),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: ((value) {
+                      context.read<AddEventBloc>().setType(value as TypeEvent);
+                    }),
+                  ),
+                  const SizedBox(height: 10),
                   XInput(
                     key: const Key('addEvent_numberMemberEventInput_textField'),
                     value: state.numberMember.toString(),

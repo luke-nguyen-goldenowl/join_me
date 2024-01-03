@@ -1,13 +1,22 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:myapp/src/dialogs/alert_wrapper.dart';
+import 'package:myapp/src/dialogs/toast_wrapper.dart';
+import 'package:myapp/src/features/account/logic/account_bloc.dart';
 
 import 'package:myapp/src/features/add_event/logic/add_event_state.dart';
+import 'package:myapp/src/network/domain_manager.dart';
+import 'package:myapp/src/network/model/event/event.dart';
+
+import 'package:myapp/src/router/coordinator.dart';
 
 class AddEventBloc extends Cubit<AddEventState> {
   AddEventBloc() : super(AddEventState.ds());
 
+  final DomainManager domain = DomainManager();
   PageController controller = PageController(initialPage: 0);
   MapController mapController = MapController();
 
@@ -65,6 +74,47 @@ class AddEventBloc extends Cubit<AddEventState> {
 
   void setTimeEvent(value) {
     emit(state.copyWith(time: value));
+  }
+
+  void setType(TypeEvent type) {
+    emit(state.copyWith(typeEvent: type));
+  }
+
+  void addEvent() async {
+    if (!isClosed) emit(state.copyWith(isPosting: true));
+
+    List<String> images = state.medias.map((e) => e!.path).toList();
+    DateTime startDate = DateTime(
+      state.startDate!.year,
+      state.startDate!.month,
+      state.startDate!.day,
+      state.time!.hour,
+      state.time!.minute,
+    );
+    final MEvent event = MEvent(
+      name: state.nameEvent,
+      description: state.description,
+      images: images,
+      startDate: startDate,
+      type: state.typeEvent,
+      deadline: state.deadlineDate,
+      location: state.selectedLocation,
+      maxAttendee: state.numberMember,
+      host: GetIt.I<AccountBloc>().state.user,
+      favoritesId: [],
+      followersId: [],
+    );
+
+    final result = await domain.event.addEvent(event);
+
+    if (!isClosed) emit(state.copyWith(isPosting: false));
+
+    if (result.isSuccess) {
+      AppCoordinator.pop();
+      XToast.success('Create event success');
+    } else {
+      XAlert.show(title: 'Create event fail', body: result.error);
+    }
   }
 
   @override
