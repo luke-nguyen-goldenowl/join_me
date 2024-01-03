@@ -5,8 +5,12 @@ import 'package:myapp/src/features/account/profile/logic/profile_state.dart';
 class ProfileBloc extends Cubit<ProfileState> {
   ProfileBloc() : super(ProfileState());
 
-  void setName(String name) {
+  void setName(String? name) {
     emit(state.copyWith(name: name));
+  }
+
+  void setEmail(String? email) {
+    emit(state.copyWith(email: email));
   }
 
   void setCurrentPassword(String password) {
@@ -42,5 +46,9 @@ class ProfileBloc extends Cubit<ProfileState> {
         break;
     }
     emit(state.copyWith(avatar: image));
+  }
+
+  void clearImage() {
+    emit(state.copyWith(avatar: null));
   }
 }

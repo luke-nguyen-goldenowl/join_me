@@ -5,11 +5,13 @@ class ProfileState {
   String name;
   String newPassword;
   String currentPassword;
+  String email;
   XFile? avatar;
   ProfileState({
     this.name = "",
     this.newPassword = "",
     this.currentPassword = "",
+    this.email = "undefine",
     this.avatar,
   });
 
@@ -17,12 +19,14 @@ class ProfileState {
     String? name,
     String? newPassword,
     String? currentPassword,
+    String? email,
     XFile? avatar,
   }) {
     return ProfileState(
       name: name ?? this.name,
       newPassword: newPassword ?? this.newPassword,
       currentPassword: currentPassword ?? this.currentPassword,
+      email: email ?? this.email,
       avatar: avatar ?? this.avatar,
     );
   }
@@ -34,6 +38,7 @@ class ProfileState {
     return other.name == name &&
         other.newPassword == newPassword &&
         other.currentPassword == currentPassword &&
+        other.email == email &&
         other.avatar == avatar;
   }
 
@@ -42,6 +47,7 @@ class ProfileState {
     return name.hashCode ^
         newPassword.hashCode ^
         currentPassword.hashCode ^
+        email.hashCode ^
         avatar.hashCode;
   }
 }
