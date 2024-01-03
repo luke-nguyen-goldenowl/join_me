@@ -1,7 +1,7 @@
-enum TypeNotify { followEvent, followUser, upcomingEvent, changeEvent }
+import 'package:myapp/src/network/model/notification/notification_model.dart';
 
 class NotifyState {
-  List<dynamic> notifies;
+  List<NotificationModel> notifies;
   NotifyState({
     required this.notifies,
   });
@@ -11,7 +11,7 @@ class NotifyState {
   }
 
   NotifyState copyWith({
-    List<dynamic>? notifies,
+    List<NotificationModel>? notifies,
   }) {
     return NotifyState(
       notifies: notifies ?? this.notifies,
