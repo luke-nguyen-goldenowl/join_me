@@ -4,7 +4,6 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:myapp/src/network/data/sign/sign_repository.dart';
 import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/model/common/error_code.dart';
-import 'package:myapp/src/network/model/social_type.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 import 'package:myapp/src/network/model/social_user/social_user.dart';
 
