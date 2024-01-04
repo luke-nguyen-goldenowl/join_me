@@ -34,22 +34,23 @@ class AddStoryPage extends StatelessWidget {
         return Scaffold(
             body: Stack(
           children: [
-            state.image != null
-                ? Expanded(
-                    child: Container(
-                      color: AppColors.black,
-                      alignment: Alignment.center,
-                      child: Image.file(
-                        File(state.image!.path),
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  )
-                : Container(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(colors: AppColors.gradient),
-                    ),
+            if (state.image != null)
+              Expanded(
+                child: Container(
+                  color: AppColors.black,
+                  alignment: Alignment.center,
+                  child: Image.file(
+                    File(state.image!.path),
+                    fit: BoxFit.contain,
                   ),
+                ),
+              )
+            else
+              Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(colors: AppColors.gradient),
+                ),
+              ),
             AppBar(
               backgroundColor: Colors.transparent,
               foregroundColor: AppColors.white,

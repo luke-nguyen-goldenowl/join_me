@@ -13,6 +13,6 @@ class UpcomingBloc extends PaginationBloc<UpComingState> {
   Future<MResult<MPaginationResponse>> get getDataAPI async {
     await Future.delayed(const Duration(seconds: 2));
 
-    return domain.event.getEventsByUser('1');
+    return domain.eventMock.getEventsByUser('1');
   }
 }

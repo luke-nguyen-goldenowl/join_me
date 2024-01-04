@@ -127,4 +127,20 @@ class EventReference extends BaseCollectionReference<MEvent> {
       return MResult.exception(e);
     }
   }
+
+  Future<MResult<List<MEvent>>> getEventsByUser(String userId) async {
+    try {
+      DateTime currentDate = DateTime.now();
+
+      final QuerySnapshot<MEvent> querySnapshot = await ref
+          .where('host', isEqualTo: userId)
+          .where('deadlineDate', isGreaterThan: currentDate)
+          .orderBy('startDate')
+          .get();
+      final docs = querySnapshot.docs.map((e) => e.data()).toList();
+      return MResult.success(docs);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
 }

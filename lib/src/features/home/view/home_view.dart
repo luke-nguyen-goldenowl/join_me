@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:myapp/gen/assets.gen.dart';
 import 'package:myapp/src/features/account/logic/account_bloc.dart';
 import 'package:myapp/src/features/home/widget/list_event_home.dart';
 import 'package:myapp/src/features/home/widget/list_story_home.dart';
@@ -23,7 +22,7 @@ class HomeView extends StatelessWidget {
             },
             icon: ClipRRect(
               borderRadius: BorderRadius.circular(5.0),
-              child: Assets.images.images.avatar.image(),
+              child: Image.network(state.user.avatar!),
             ),
             iconSize: 50,
           ),
