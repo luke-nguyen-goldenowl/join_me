@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:myapp/src/features/account/logic/account_bloc.dart';
+import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/theme/colors.dart';
 
 class BottomBarDetailEvent extends StatelessWidget {
   const BottomBarDetailEvent({
     super.key,
+    required this.event,
   });
+
+  final MEvent? event;
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +26,13 @@ class BottomBarDetailEvent extends StatelessWidget {
           backgroundColor: AppColors.rosyPink,
           foregroundColor: AppColors.white,
         ),
-        child: const Text(
-          "Follow Event",
-          style: TextStyle(fontSize: 15),
+        child: Text(
+          event != null &&
+                  event!.followersId!
+                      .contains(GetIt.I<AccountBloc>().state.user.id)
+              ? "Followed"
+              : "Follow Event",
+          style: const TextStyle(fontSize: 15),
         ),
       ),
     );

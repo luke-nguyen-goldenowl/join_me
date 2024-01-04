@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/gen/assets.gen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:myapp/src/features/detail_event/logic/detail_event_bloc.dart';
 import 'package:myapp/src/features/detail_event/widget/background_widget.dart';
 import 'package:myapp/src/theme/colors.dart';
 
 class SliverAppBarCustomDetailEvent extends StatelessWidget {
   const SliverAppBarCustomDetailEvent({
     super.key,
+    required this.images,
   });
+
+  final List<String> images;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +30,12 @@ class SliverAppBarCustomDetailEvent extends StatelessWidget {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                Assets.images.images.landscape2.image(fit: BoxFit.cover),
+                if (images.isNotEmpty)
+                  Image.network(
+                    images[
+                        context.watch<DetailEventBloc>().state.indexPageImage],
+                    fit: BoxFit.cover,
+                  ),
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.black.withOpacity(0.8),
@@ -35,8 +44,10 @@ class SliverAppBarCustomDetailEvent extends StatelessWidget {
               ],
             ),
           ),
-          const FlexibleSpaceBar(
-            background: BackgroundWidget(),
+          FlexibleSpaceBar(
+            background: BackgroundWidget(
+              images: images,
+            ),
           ),
         ],
       ),

@@ -24,6 +24,7 @@ mixin _$MUser {
   String? get name => throw _privateConstructorUsedError;
   String? get avatar => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
+  List<String>? get followers => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +36,12 @@ abstract class $MUserCopyWith<$Res> {
   factory $MUserCopyWith(MUser value, $Res Function(MUser) then) =
       _$MUserCopyWithImpl<$Res, MUser>;
   @useResult
-  $Res call({String id, String? name, String? avatar, String? email});
+  $Res call(
+      {String id,
+      String? name,
+      String? avatar,
+      String? email,
+      List<String>? followers});
 }
 
 /// @nodoc
@@ -55,6 +61,7 @@ class _$MUserCopyWithImpl<$Res, $Val extends MUser>
     Object? name = freezed,
     Object? avatar = freezed,
     Object? email = freezed,
+    Object? followers = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -73,6 +80,10 @@ class _$MUserCopyWithImpl<$Res, $Val extends MUser>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String?,
+      followers: freezed == followers
+          ? _value.followers
+          : followers // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ) as $Val);
   }
 }
@@ -84,7 +95,12 @@ abstract class _$$MUserImplCopyWith<$Res> implements $MUserCopyWith<$Res> {
       __$$MUserImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String id, String? name, String? avatar, String? email});
+  $Res call(
+      {String id,
+      String? name,
+      String? avatar,
+      String? email,
+      List<String>? followers});
 }
 
 /// @nodoc
@@ -102,6 +118,7 @@ class __$$MUserImplCopyWithImpl<$Res>
     Object? name = freezed,
     Object? avatar = freezed,
     Object? email = freezed,
+    Object? followers = freezed,
   }) {
     return _then(_$MUserImpl(
       id: null == id
@@ -120,6 +137,10 @@ class __$$MUserImplCopyWithImpl<$Res>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String?,
+      followers: freezed == followers
+          ? _value._followers
+          : followers // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ));
   }
 }
@@ -127,8 +148,14 @@ class __$$MUserImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$MUserImpl extends _MUser {
-  const _$MUserImpl({required this.id, this.name, this.avatar, this.email})
-      : super._();
+  const _$MUserImpl(
+      {required this.id,
+      this.name,
+      this.avatar,
+      this.email,
+      final List<String>? followers})
+      : _followers = followers,
+        super._();
 
   factory _$MUserImpl.fromJson(Map<String, dynamic> json) =>
       _$$MUserImplFromJson(json);
@@ -141,10 +168,19 @@ class _$MUserImpl extends _MUser {
   final String? avatar;
   @override
   final String? email;
+  final List<String>? _followers;
+  @override
+  List<String>? get followers {
+    final value = _followers;
+    if (value == null) return null;
+    if (_followers is EqualUnmodifiableListView) return _followers;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString() {
-    return 'MUser(id: $id, name: $name, avatar: $avatar, email: $email)';
+    return 'MUser(id: $id, name: $name, avatar: $avatar, email: $email, followers: $followers)';
   }
 
   @override
@@ -155,12 +191,15 @@ class _$MUserImpl extends _MUser {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.avatar, avatar) || other.avatar == avatar) &&
-            (identical(other.email, email) || other.email == email));
+            (identical(other.email, email) || other.email == email) &&
+            const DeepCollectionEquality()
+                .equals(other._followers, _followers));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, avatar, email);
+  int get hashCode => Object.hash(runtimeType, id, name, avatar, email,
+      const DeepCollectionEquality().hash(_followers));
 
   @JsonKey(ignore: true)
   @override
@@ -181,7 +220,8 @@ abstract class _MUser extends MUser {
       {required final String id,
       final String? name,
       final String? avatar,
-      final String? email}) = _$MUserImpl;
+      final String? email,
+      final List<String>? followers}) = _$MUserImpl;
   const _MUser._() : super._();
 
   factory _MUser.fromJson(Map<String, dynamic> json) = _$MUserImpl.fromJson;
@@ -194,6 +234,8 @@ abstract class _MUser extends MUser {
   String? get avatar;
   @override
   String? get email;
+  @override
+  List<String>? get followers;
   @override
   @JsonKey(ignore: true)
   _$$MUserImplCopyWith<_$MUserImpl> get copyWith =>

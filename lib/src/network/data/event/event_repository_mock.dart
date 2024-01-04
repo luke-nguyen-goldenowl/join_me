@@ -11,12 +11,10 @@ List<MEvent> events = [
     images: ["assets/images/images/bg-event.jpg"],
     startDate: DateTime.now(),
     deadline: DateTime.now(),
-    province: 'Ho Chi Minh',
     location: LatLng(88.00015, 85.1316546),
     host: const MUser(
         id: '1', name: 'Keith', avatar: "assets/images/images/avatar.png"),
-    follower: 122,
-    type: 'sport',
+    type: TypeEvent.sport,
   ),
   MEvent(
     id: '2',
@@ -25,12 +23,10 @@ List<MEvent> events = [
     images: ["assets/images/images/bg-event.jpg"],
     startDate: DateTime.now(),
     deadline: DateTime.now(),
-    province: 'Ho Chi Minh',
     location: LatLng(88.00015, 85.1316546),
     host: const MUser(
         id: '2', name: 'Kien Vo', avatar: "assets/images/images/avatar.png"),
-    follower: 122,
-    type: 'sport',
+    type: TypeEvent.music,
   ),
   MEvent(
     id: '3',
@@ -39,12 +35,10 @@ List<MEvent> events = [
     images: ["assets/images/images/bg-event.jpg"],
     startDate: DateTime.now(),
     deadline: DateTime.now(),
-    province: 'Ho Chi Minh',
     location: LatLng(88.00015, 85.1316546),
     host: const MUser(
         id: '2', name: 'Kien Vo', avatar: "assets/images/images/avatar.png"),
-    follower: 122,
-    type: 'sport',
+    type: TypeEvent.movie,
   ),
   MEvent(
     id: '4',
@@ -53,18 +47,16 @@ List<MEvent> events = [
     images: ["assets/images/images/bg-event.jpg"],
     startDate: DateTime.now(),
     deadline: DateTime.now(),
-    province: 'Ho Chi Minh',
     location: LatLng(88.00015, 85.1316546),
     host: const MUser(
         id: '2', name: 'Kien Vo', avatar: "assets/images/images/avatar.png"),
-    follower: 122,
-    type: 'sport',
+    type: TypeEvent.game,
   ),
 ];
 
 class EventRepositoryMock {
   MResult<MEvent> getEvent(String id) {
-    final MEvent result = MEvent.ds(id: '1', host: MUser.empty());
+    final MEvent result = MEvent(id: '1');
     return MResult.success(result);
   }
 
@@ -72,7 +64,7 @@ class EventRepositoryMock {
     if (search == "") return MResult.success([]);
     final result = events
         .where((element) =>
-            element.name.toLowerCase().contains(search.toLowerCase()))
+            element.name!.toLowerCase().contains(search.toLowerCase()))
         .toList();
 
     return MResult.success(result);

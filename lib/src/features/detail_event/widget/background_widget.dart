@@ -8,7 +8,10 @@ import 'package:myapp/src/features/detail_event/widget/indicator_image_list.dart
 class BackgroundWidget extends StatelessWidget {
   const BackgroundWidget({
     super.key,
+    required this.images,
   });
+
+  final List<String> images;
 
   @override
   Widget build(BuildContext context) {
@@ -22,13 +25,17 @@ class BackgroundWidget extends StatelessWidget {
                 onPageChanged: ((value) {
                   context.read<DetailEventBloc>().setIndexPageImage(value);
                 }),
-                itemCount: listImage.length,
+                itemCount: images.length,
                 controller: context.read<DetailEventBloc>().controller,
                 itemBuilder: ((context, index) {
                   return Stack(
                     fit: StackFit.expand,
                     children: [
-                      listImage[index],
+                      if (images.isNotEmpty)
+                        Image.network(
+                          images[index],
+                          fit: BoxFit.cover,
+                        ),
                       Container(
                         decoration: BoxDecoration(
                           gradient: LinearGradient(

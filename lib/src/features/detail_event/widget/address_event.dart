@@ -6,7 +6,10 @@ import 'package:myapp/src/theme/colors.dart';
 class AddressEvent extends StatelessWidget {
   const AddressEvent({
     super.key,
+    required this.location,
   });
+
+  final LatLng? location;
 
   @override
   Widget build(BuildContext context) {
@@ -24,42 +27,45 @@ class AddressEvent extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          SizedBox(
-            height: 500,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: FlutterMap(
-                options: MapOptions(
-                  center: LatLng(10.7857855, 106.6673794),
-                  zoom: 17,
+          if (location != null)
+            SizedBox(
+              height: 500,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: FlutterMap(
+                  options: MapOptions(
+                      center: location!,
+                      zoom: 15,
+                      onTap: ((tapPosition, point) {
+                        print(location.toString());
+                      })),
+                  children: [
+                    TileLayer(
+                      urlTemplate:
+                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                      userAgentPackageName: 'com.example.app',
+                    ),
+                    MarkerLayer(
+                      markers: [
+                        Marker(
+                          rotate: true,
+                          width: 30,
+                          height: 30,
+                          point: location!,
+                          builder: (BuildContext context) {
+                            return const Icon(
+                              Icons.location_pin,
+                              color: Colors.red,
+                              size: 50,
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                children: [
-                  TileLayer(
-                    urlTemplate:
-                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                    userAgentPackageName: 'com.example.app',
-                  ),
-                  MarkerLayer(
-                    markers: [
-                      Marker(
-                        rotate: true,
-                        width: 30,
-                        height: 30,
-                        point: LatLng(10.7857855, 106.6673794),
-                        builder: (BuildContext context) {
-                          return const Icon(
-                            Icons.location_pin,
-                            color: Colors.red,
-                            size: 50,
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ],
               ),
             ),
-          ),
           const SizedBox(height: 50),
         ],
       ),

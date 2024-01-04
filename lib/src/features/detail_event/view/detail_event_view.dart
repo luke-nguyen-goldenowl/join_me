@@ -8,6 +8,7 @@ import 'package:myapp/src/features/detail_event/widget/description_event.dart';
 import 'package:myapp/src/features/detail_event/widget/host_event.dart';
 import 'package:myapp/src/features/detail_event/widget/sliver_app_bar_custom_detail_event.dart';
 import 'package:myapp/src/features/detail_event/widget/time_event.dart';
+import 'package:myapp/src/network/model/user/user.dart';
 import 'package:myapp/src/theme/colors.dart';
 
 class DetailEventView extends StatelessWidget {
@@ -16,7 +17,7 @@ class DetailEventView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => DetailEventBloc(),
+      create: (_) => DetailEventBloc()..getEvent(id),
       child: const DetailEventPage(),
     );
   }
@@ -38,34 +39,44 @@ class DetailEventPage extends StatelessWidget {
                 Expanded(
                   child: CustomScrollView(
                     slivers: [
-                      const SliverAppBarCustomDetailEvent(),
+                      SliverAppBarCustomDetailEvent(
+                        images: state.event?.images ?? [],
+                      ),
                       SliverList(
                         delegate: SliverChildListDelegate([
-                          // const SizedBox(height: 10),
-                          const HostEvent(),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20.0),
+                          HostEvent(user: state.event?.host ?? MUser.empty()),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
                             child: Text(
-                              "Let's play different famous board games, get together every Sunday",
+                              state.event?.name ?? "",
                               textAlign: TextAlign.left,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
                           const SizedBox(height: 20),
-                          const TimeEvent(),
+                          TimeEvent(
+                            startDate: state.event?.startDate,
+                          ),
                           const SizedBox(height: 20),
-                          const DescriptionEvent(),
+                          DescriptionEvent(
+                            description: state.event?.description ?? "",
+                          ),
                           const SizedBox(height: 20),
-                          const AddressEvent()
+                          AddressEvent(
+                            location: state.event?.location,
+                          )
                         ]),
                       )
                     ],
                   ),
                 ),
-                const BottomBarDetailEvent()
+                BottomBarDetailEvent(
+                  event: state.event,
+                )
               ],
             ),
           );
