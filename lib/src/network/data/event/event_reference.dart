@@ -85,4 +85,25 @@ class EventReference extends BaseCollectionReference<MEvent> {
       return MResult.exception(e);
     }
   }
+
+  Future<MResult> updateFollowEvent(
+    String eventId,
+    String userId,
+    bool isFollowed,
+  ) async {
+    try {
+      final result = await update(eventId, {
+        'followersId': isFollowed
+            ? FieldValue.arrayRemove([userId])
+            : FieldValue.arrayUnion([userId])
+      });
+      if (result.isError == false) {
+        return result;
+      } else {
+        return MResult.success(result.data);
+      }
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
 }

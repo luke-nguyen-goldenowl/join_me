@@ -25,6 +25,13 @@ class DetailEventState {
     );
   }
 
+  bool isExpiredRegisterEvent() {
+    if (event == null) return true;
+    if (event!.deadline!.isBefore(DateTime.now()) ||
+        event!.maxAttendee < event!.favoritesId!.length) return true;
+    return false;
+  }
+
   @override
   bool operator ==(covariant DetailEventState other) {
     if (identical(this, other)) return true;

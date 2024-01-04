@@ -28,9 +28,17 @@ class UserReference extends BaseCollectionReference<MUser> {
     }
   }
 
-  Future<MResult> updateFollowers(MUser user) async {
+  Future<MResult> updateFollowers(
+    String hostId,
+    String followerId,
+    bool isFollowed,
+  ) async {
     try {
-      final result = await set(user);
+      final result = await update(hostId, {
+        'followers': isFollowed
+            ? FieldValue.arrayRemove([followerId])
+            : FieldValue.arrayUnion([followerId])
+      });
       if (result.isError == false) {
         return result;
       } else {

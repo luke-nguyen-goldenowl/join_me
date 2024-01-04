@@ -8,6 +8,14 @@ class EventRepositoryImpl {
     return eventReference.addEvent(event);
   }
 
+  Future<MResult> updateFollowEvent(
+    String eventId,
+    String userId,
+    bool isFollowed,
+  ) {
+    return eventReference.updateFollowEvent(eventId, userId, isFollowed);
+  }
+
   Future<MResult<MEvent>> getEvent(String eventId) {
     return eventReference.getEvent(eventId);
   }

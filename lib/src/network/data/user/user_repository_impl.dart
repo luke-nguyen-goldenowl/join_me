@@ -26,8 +26,12 @@ class UserRepositoryImpl extends UserRepository {
     }
   }
 
-  Future<MResult> updateFollowers(MUser user) async {
-    return usersRef.updateFollowers(user);
+  Future<MResult> updateFollowers(
+    String hostId,
+    String followerId,
+    bool isFollowed,
+  ) async {
+    return usersRef.updateFollowers(hostId, followerId, isFollowed);
   }
 
   @override

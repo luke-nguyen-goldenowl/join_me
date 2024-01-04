@@ -34,17 +34,47 @@ class DetailEventBloc extends Cubit<DetailEventState> {
   void onPressedFollowHost() async {
     try {
       List<String> newFollower = [...state.event!.host!.followers!];
-
-      if (state.event!.host!.followers!
-          .contains(GetIt.I<AccountBloc>().state.user.id)) {
-        newFollower.remove(GetIt.I<AccountBloc>().state.user.id);
+      final String userId = GetIt.I<AccountBloc>().state.user.id;
+      final bool isFollowed;
+      if (newFollower.contains(userId)) {
+        newFollower.remove(userId);
+        isFollowed = true;
       } else {
-        newFollower.add(GetIt.I<AccountBloc>().state.user.id);
+        newFollower.add(userId);
+        isFollowed = false;
       }
       final MUser newUser = state.event!.host!.copyWith(followers: newFollower);
-      final result = await domain.user.updateFollowers(newUser);
+      final result =
+          await domain.user.updateFollowers(newUser.id, userId, isFollowed);
       if (result.isSuccess) {
         final MEvent newEvent = state.event!.copyWith(host: newUser);
+        emit(state.copyWith(event: newEvent));
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void onPressedFollowEvent() async {
+    try {
+      List<String> newFollower = [...state.event!.followersId!];
+      final String userId = GetIt.I<AccountBloc>().state.user.id;
+      final bool isFollowed;
+      if (newFollower.contains(userId)) {
+        newFollower.remove(userId);
+        isFollowed = true;
+      } else {
+        newFollower.add(userId);
+        isFollowed = false;
+      }
+
+      final MEvent newEvent = state.event!.copyWith(followersId: newFollower);
+      final result = await domain.event.updateFollowEvent(
+        newEvent.id!,
+        userId,
+        isFollowed,
+      );
+      if (result.isSuccess) {
         emit(state.copyWith(event: newEvent));
       }
     } catch (e) {
