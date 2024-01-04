@@ -6,9 +6,11 @@ class TimeEvent extends StatelessWidget {
   const TimeEvent({
     super.key,
     required this.startDate,
+    required this.followers,
   });
 
   final DateTime? startDate;
+  final int followers;
 
   @override
   Widget build(BuildContext context) {
@@ -63,9 +65,9 @@ class TimeEvent extends StatelessWidget {
               color: AppColors.rosyPink,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: const Text(
-              "+17",
-              style: TextStyle(
+            child: Text(
+              "+$followers",
+              style: const TextStyle(
                 fontSize: 12,
                 color: AppColors.white,
                 fontWeight: FontWeight.bold,

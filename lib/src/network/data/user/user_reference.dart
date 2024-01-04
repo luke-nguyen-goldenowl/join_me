@@ -28,6 +28,19 @@ class UserReference extends BaseCollectionReference<MUser> {
     }
   }
 
+  Future<MResult> updateFollowers(MUser user) async {
+    try {
+      final result = await set(user);
+      if (result.isError == false) {
+        return result;
+      } else {
+        return MResult.success(result.data);
+      }
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
   Future<MResult<MUser>> getOrAddUser(MUser user) async {
     try {
       final result = await get(user.id);

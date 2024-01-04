@@ -26,6 +26,10 @@ class UserRepositoryImpl extends UserRepository {
     }
   }
 
+  Future<MResult> updateFollowers(MUser user) async {
+    return usersRef.updateFollowers(user);
+  }
+
   @override
   Future<MResult<MUser>> getOrAddUser(MUser user) {
     return usersRef.getOrAddUser(user);

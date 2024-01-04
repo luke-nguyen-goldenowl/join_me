@@ -1,13 +1,15 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:myapp/src/features/account/logic/account_bloc.dart';
+import 'package:myapp/src/features/detail_event/logic/detail_event_bloc.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
 
 class HostEvent extends StatelessWidget {
-  HostEvent({
+  const HostEvent({
     super.key,
     required this.user,
   });
@@ -49,14 +51,18 @@ class HostEvent extends StatelessWidget {
               height: 35,
               width: 120,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  context.read<DetailEventBloc>().onPressedFollowHost();
+                },
                 style: ElevatedButton.styleFrom(
                   elevation: 0,
                   backgroundColor: AppColors.rosyPink.withOpacity(0.1),
                   foregroundColor: AppColors.rosyPink,
                 ),
                 child: Text(
-                  GetIt.I<AccountBloc>().state.user.followers!.contains(user.id)
+                  user.followers != null &&
+                          user.followers!
+                              .contains(GetIt.I<AccountBloc>().state.user.id)
                       ? "Following"
                       : "Follow",
                   style: const TextStyle(

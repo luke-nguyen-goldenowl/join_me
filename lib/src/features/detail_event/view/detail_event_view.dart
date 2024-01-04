@@ -41,6 +41,7 @@ class DetailEventPage extends StatelessWidget {
                     slivers: [
                       SliverAppBarCustomDetailEvent(
                         images: state.event?.images ?? [],
+                        favorites: state.event?.favoritesId ?? [],
                       ),
                       SliverList(
                         delegate: SliverChildListDelegate([
@@ -60,6 +61,7 @@ class DetailEventPage extends StatelessWidget {
                           const SizedBox(height: 20),
                           TimeEvent(
                             startDate: state.event?.startDate,
+                            followers: state.event?.followersId!.length ?? 0,
                           ),
                           const SizedBox(height: 20),
                           DescriptionEvent(
