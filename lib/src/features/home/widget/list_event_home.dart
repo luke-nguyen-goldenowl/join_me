@@ -29,7 +29,7 @@ class ListEventHome extends StatelessWidget {
                 child: Row(
                   children: [
                     EventItemHome(
-                      id: index.toString(),
+                      id: 'uWbVA0CkBqVxhYZ5QHYT',
                     ),
                     const SizedBox(width: 20),
                   ],

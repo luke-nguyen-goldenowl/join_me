@@ -20,7 +20,7 @@ class DetailEventBloc extends Cubit<DetailEventState> {
   void getEvent(String eventId) async {
     if (!isClosed) emit(state.copyWith(isLoading: true));
     try {
-      final result = await domain.event.getEvent("uWbVA0CkBqVxhYZ5QHYT");
+      final result = await domain.event.getEvent(eventId);
       if (result.isSuccess) {
         MEvent event = result.data!;
         emit(state.copyWith(event: event));
