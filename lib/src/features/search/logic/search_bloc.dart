@@ -1,9 +1,7 @@
-import 'dart:async';
-
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/src/features/search/logic/search_state.dart';
 import 'package:myapp/src/network/domain_manager.dart';
+import 'package:myapp/src/network/model/common/debounce.dart';
 
 class SearchBloc extends Cubit<SearchState> {
   SearchBloc() : super(SearchState.ds());
@@ -48,21 +46,5 @@ class SearchBloc extends Cubit<SearchState> {
       emit(state.copyWith(type: TypeSearch.people, resultPerson: []));
     }
     _search();
-  }
-}
-
-class Debounce {
-  final Duration delay;
-  VoidCallback? action;
-
-  Timer? _timer;
-
-  Debounce(this.delay);
-
-  void run(VoidCallback action) {
-    if (_timer != null) {
-      _timer!.cancel();
-    }
-    _timer = Timer(delay, action);
   }
 }
