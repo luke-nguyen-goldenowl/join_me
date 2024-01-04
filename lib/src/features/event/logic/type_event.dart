@@ -3,18 +3,29 @@ import 'package:flutter/material.dart';
 
 enum TypeEvent { Games, Sports, Music, Movie }
 
+extension TypeEventExtension on TypeEvent {
+  IconData get icon {
+    switch (this) {
+      case TypeEvent.Games:
+        return Icons.games_rounded;
+      case TypeEvent.Sports:
+        return Icons.sports_basketball;
+      case TypeEvent.Music:
+        return Icons.music_note_rounded;
+      case TypeEvent.Movie:
+        return Icons.movie_creation_outlined;
+    }
+  }
+}
+
 class CategoryEvent {
   TypeEvent type;
-  IconData icon;
+  IconData get icon => type.icon;
+
   CategoryEvent({
     required this.type,
-    required this.icon,
   });
 }
 
-List<CategoryEvent> categoryEvents = [
-  CategoryEvent(type: TypeEvent.Sports, icon: Icons.sports_basketball),
-  CategoryEvent(type: TypeEvent.Games, icon: Icons.games_rounded),
-  CategoryEvent(type: TypeEvent.Music, icon: Icons.music_note_rounded),
-  CategoryEvent(type: TypeEvent.Movie, icon: Icons.movie_creation_outlined),
-];
+List<CategoryEvent> categoryEvents = List.generate(TypeEvent.values.length,
+    (index) => CategoryEvent(type: TypeEvent.values[index]));

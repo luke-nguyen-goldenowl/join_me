@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/src/features/event/logic/event_view_bloc.dart';
@@ -15,7 +16,12 @@ class MapPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<EventViewBloc, EventViewState>(
-      buildWhen: (previous, current) => previous != current,
+      buildWhen: (previous, current) =>
+          previous.firstDate != current.firstDate ||
+          previous.lastDate != current.lastDate ||
+          previous.typeShow != current.typeShow ||
+          !listEquals(previous.weekDays, current.weekDays) ||
+          !listEquals(previous.types, current.types),
       builder: ((contextEvent, stateEvent) {
         return BlocProvider(
           create: (_) => MapPageBloc()

@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -15,7 +16,11 @@ class CalendarEventWidget extends StatelessWidget {
     final EventViewBloc eventBloc = BlocProvider.of<EventViewBloc>(context);
     return BlocBuilder<EventViewBloc, EventViewState>(
       buildWhen: (previousState, currentState) {
-        return previousState != currentState;
+        return previousState.firstDate != currentState.firstDate ||
+            previousState.lastDate != currentState.lastDate ||
+            previousState.typeShow != currentState.typeShow ||
+            !listEquals(previousState.weekDays, currentState.weekDays) ||
+            !listEquals(previousState.types, currentState.types);
       },
       builder: ((context, state) {
         return Column(
