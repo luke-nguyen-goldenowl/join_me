@@ -2,7 +2,7 @@ import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 
 class MStory {
-  String id;
+  String? id;
   String image;
   DateTime? time;
   MUser host;
@@ -57,24 +57,23 @@ class MStory {
       event.hashCode ^
       liker.hashCode;
 
-  factory MStory.fromMap(Map<String, dynamic> map) {
+  factory MStory.fromMap(Map<String, dynamic> map, String id) {
     return MStory(
-      id: map['id'],
+      id: id,
       image: map['image'] ?? "",
       time: map['time'] != null ? DateTime.parse(map['time']) : null,
-      host: MUser.fromJson(map['host']),
-      event: MEvent.fromMap(map['event']),
+      host: MUser(id: map['host']),
+      event: MEvent(id: map['event']),
       liker: map['liker'] ?? 0,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'image': image,
       'time': time?.toIso8601String(),
-      'host': host.toJson(),
-      'event': event.toMap(),
+      'host': host.id,
+      'event': event.id,
       'liker': liker,
     };
   }

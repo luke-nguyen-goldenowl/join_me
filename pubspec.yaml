@@ -63,7 +63,7 @@ dependencies:
   google_sign_in: ^6.1.5
   firebase_remote_config: ^4.0.2
   firebase_messaging: ^14.7.3
-  cloud_firestore: ^4.12.2
+  cloud_firestore: ^4.13.6
   # flutter_local_notifications: ^12.0.4
   # flutter_app_badger: ^1.5.0
   # firebase_dynamic_links: ^5.0.8
@@ -73,6 +73,7 @@ dependencies:
   image_picker: ^1.0.5
   gradient_borders: ^1.0.0
   story_view: ^0.16.0
+  firebase_storage: ^11.5.6
   # sign_in_with_apple: ^4.2.0
   # uni_links: ^0.5.1
 
