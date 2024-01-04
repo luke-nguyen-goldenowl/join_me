@@ -45,7 +45,7 @@ class EventHomePage extends StatelessWidget {
         return Scaffold(
           backgroundColor: AppColors.white,
           appBar: AppBarCustom(
-            title: "Events",
+            title: const Text("Events"),
             actions: [
               IconButton(
                 onPressed: () {
