@@ -125,6 +125,9 @@ class AddEventPage extends StatelessWidget {
                         duration: const Duration(milliseconds: 250),
                         curve: Curves.easeInOut,
                       );
+                      if (currentPage == 0) {
+                        context.read<AddEventBloc>().getCurrentLocation();
+                      }
                     } else {
                       context.read<AddEventBloc>().addEvent();
                     }

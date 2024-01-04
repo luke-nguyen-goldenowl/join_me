@@ -8,6 +8,7 @@ import 'package:myapp/src/network/model/event/event.dart';
 class AddEventState {
   int currentPage;
   bool isPosting;
+  bool isLoadingCurrentLocation;
 
   LatLng? selectedLocation;
   List<XFile?> medias;
@@ -31,6 +32,7 @@ class AddEventState {
     required this.nameEvent,
     required this.description,
     required this.numberMember,
+    required this.isLoadingCurrentLocation,
   });
 
   factory AddEventState.ds() {
@@ -46,6 +48,7 @@ class AddEventState {
       numberMember: 0,
       typeEvent: null,
       isPosting: false,
+      isLoadingCurrentLocation: true,
     );
   }
 
@@ -82,6 +85,7 @@ class AddEventState {
     String? nameEvent,
     String? description,
     int? numberMember,
+    bool? isLoadingCurrentLocation,
   }) {
     return AddEventState(
       currentPage: currentPage ?? this.currentPage,
@@ -95,6 +99,8 @@ class AddEventState {
       nameEvent: nameEvent ?? this.nameEvent,
       description: description ?? this.description,
       numberMember: numberMember ?? this.numberMember,
+      isLoadingCurrentLocation:
+          isLoadingCurrentLocation ?? this.isLoadingCurrentLocation,
     );
   }
 }

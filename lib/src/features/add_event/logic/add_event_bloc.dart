@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:myapp/src/dialogs/alert_wrapper.dart';
 import 'package:myapp/src/dialogs/toast_wrapper.dart';
 import 'package:myapp/src/features/account/logic/account_bloc.dart';
@@ -10,7 +12,7 @@ import 'package:myapp/src/features/account/logic/account_bloc.dart';
 import 'package:myapp/src/features/add_event/logic/add_event_state.dart';
 import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/model/event/event.dart';
-
+import 'package:location/location.dart';
 import 'package:myapp/src/router/coordinator.dart';
 
 class AddEventBloc extends Cubit<AddEventState> {
@@ -114,6 +116,45 @@ class AddEventBloc extends Cubit<AddEventState> {
       XToast.success('Create event success');
     } else {
       XAlert.show(title: 'Create event fail', body: result.error);
+    }
+  }
+
+  Future<void> getCurrentLocation() async {
+    Location location = Location();
+    LocationData currentLocation;
+    bool serviceEnabled;
+    PermissionStatus permissionGranted;
+    try {
+      serviceEnabled = await location.serviceEnabled();
+      if (!serviceEnabled) {
+        serviceEnabled = await location.requestService();
+        if (!serviceEnabled) {
+          emit(state.copyWith(isLoadingCurrentLocation: false));
+          return;
+        }
+      }
+
+      permissionGranted = await location.hasPermission();
+      if (permissionGranted == PermissionStatus.denied) {
+        permissionGranted = await location.requestPermission();
+        if (permissionGranted != PermissionStatus.granted) {
+          emit(state.copyWith(isLoadingCurrentLocation: false));
+          return;
+        }
+      }
+
+      currentLocation = await location.getLocation();
+
+      final locationLatLng = LatLng(
+        currentLocation.latitude ?? 10.790159,
+        currentLocation.longitude ?? 106.6557574,
+      );
+      emit(state.copyWith(
+          selectedLocation: locationLatLng, isLoadingCurrentLocation: false));
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error: $e");
+      }
     }
   }
 
