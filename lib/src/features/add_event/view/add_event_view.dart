@@ -34,7 +34,7 @@ class AddEventPage extends StatelessWidget {
         return Scaffold(
           backgroundColor: AppColors.white,
           appBar: const AppBarCustom(
-            title: "Create New Event",
+            title: Text("Create New Event"),
           ),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,

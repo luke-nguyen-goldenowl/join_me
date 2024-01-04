@@ -7,16 +7,14 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
 
   final Widget? leading;
   final List<Widget>? actions;
-  final String? title;
+  final Widget? title;
   final PreferredSizeWidget? bottom;
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: AppColors.white,
-      title: Text(
-        title ?? "",
-      ),
+      title: title,
       titleTextStyle: const TextStyle(
         fontSize: 22,
         fontWeight: FontWeight.bold,

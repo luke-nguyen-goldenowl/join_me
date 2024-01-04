@@ -15,7 +15,7 @@ class FollowedHomeView extends StatelessWidget {
       child: Scaffold(
         backgroundColor: AppColors.white,
         appBar: AppBarCustom(
-          title: "Followed",
+          title: const Text("Followed"),
           actions: [
             IconButton(
               onPressed: () {
