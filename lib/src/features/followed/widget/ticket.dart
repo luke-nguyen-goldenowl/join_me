@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
+import 'package:myapp/src/utils/date/date_helper.dart';
 
 class Ticket extends StatelessWidget {
   const Ticket({super.key, required this.event});
@@ -86,7 +86,7 @@ class BottomTicket extends StatelessWidget {
               ),
             ),
             Text(
-              DateFormat("MMMM dd, yyyy").format(event.startDate!),
+              DateHelper.getFullDate(date: event.startDate!),
               style: const TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
@@ -107,7 +107,7 @@ class BottomTicket extends StatelessWidget {
               ),
             ),
             Text(
-              TimeOfDay.fromDateTime(event.startDate!).format(context),
+              DateHelper.getTime(time: event.startDate!),
               style: const TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
