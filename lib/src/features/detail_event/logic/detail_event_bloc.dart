@@ -81,4 +81,31 @@ class DetailEventBloc extends Cubit<DetailEventState> {
       print(e);
     }
   }
+
+  void onPressedFavoriteEvent() async {
+    try {
+      List<String> newFavorites = [...state.event!.favoritesId!];
+      final String userId = GetIt.I<AccountBloc>().state.user.id;
+      final bool isFavorite;
+      if (newFavorites.contains(userId)) {
+        newFavorites.remove(userId);
+        isFavorite = true;
+      } else {
+        newFavorites.add(userId);
+        isFavorite = false;
+      }
+
+      final MEvent newEvent = state.event!.copyWith(favoritesId: newFavorites);
+      final result = await domain.event.updateFavoriteEvent(
+        newEvent.id!,
+        userId,
+        isFavorite,
+      );
+      if (result.isSuccess) {
+        emit(state.copyWith(event: newEvent));
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 }

@@ -24,7 +24,9 @@ class SliverAppBarCustomDetailEvent extends StatelessWidget {
       expandedHeight: 200,
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            context.read<DetailEventBloc>().onPressedFavoriteEvent();
+          },
           icon: favorites.contains(GetIt.I<AccountBloc>().state.user.id)
               ? const Icon(
                   Icons.favorite,

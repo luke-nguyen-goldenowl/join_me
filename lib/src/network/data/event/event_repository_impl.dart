@@ -16,6 +16,14 @@ class EventRepositoryImpl {
     return eventReference.updateFollowEvent(eventId, userId, isFollowed);
   }
 
+  Future<MResult> updateFavoriteEvent(
+    String eventId,
+    String userId,
+    bool isFavorite,
+  ) {
+    return eventReference.updateFavoriteEvent(eventId, userId, isFavorite);
+  }
+
   Future<MResult<MEvent>> getEvent(String eventId) {
     return eventReference.getEvent(eventId);
   }

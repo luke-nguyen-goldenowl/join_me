@@ -106,4 +106,25 @@ class EventReference extends BaseCollectionReference<MEvent> {
       return MResult.exception(e);
     }
   }
+
+  Future<MResult> updateFavoriteEvent(
+    String eventId,
+    String userId,
+    bool isFavorite,
+  ) async {
+    try {
+      final result = await update(eventId, {
+        'favoritesId': isFavorite
+            ? FieldValue.arrayRemove([userId])
+            : FieldValue.arrayUnion([userId])
+      });
+      if (result.isError == false) {
+        return result;
+      } else {
+        return MResult.success(result.data);
+      }
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
 }
