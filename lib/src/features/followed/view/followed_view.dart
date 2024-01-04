@@ -14,7 +14,7 @@ class FollowedHomeView extends StatelessWidget {
           Text("List event past"),
           ElevatedButton(
               onPressed: () {
-                AppCoordinator.showEventDetails(id: '1');
+                AppCoordinator.showEventDetails(id: 'uWbVA0CkBqVxhYZ5QHYT');
               },
               child: const Text("go detail event"))
         ],

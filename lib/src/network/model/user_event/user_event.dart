@@ -46,7 +46,7 @@ class MUserEvent {
       user: MUser.fromJson(map['user'] as Map<String, dynamic>),
       events: List<MEvent>.from(
         (map['events'] as List<int>).map<MEvent>(
-          (x) => MEvent.fromMap(x as Map<String, dynamic>),
+          (x) => MEvent.fromMap(x as Map<String, dynamic>, '1'),
         ),
       ),
     );

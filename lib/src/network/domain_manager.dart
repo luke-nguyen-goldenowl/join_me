@@ -1,3 +1,4 @@
+import 'package:myapp/src/network/data/event/event_repository_impl.dart';
 import 'package:myapp/src/network/data/event/event_repository_mock.dart';
 import 'package:myapp/src/network/data/sign/sign_repository_impl.dart';
 import 'package:myapp/src/network/data/story/story_repository_mock.dart';
@@ -16,5 +17,6 @@ class DomainManager {
   final upload = UploadRepositoryImpl();
   final sign = SignRepositoryImpl();
   final story = StoryRepositoryMock();
-  final event = EventRepositoryMock();
+  final eventMock = EventRepositoryMock();
+  final event = EventRepositoryImpl();
 }

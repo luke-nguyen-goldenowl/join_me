@@ -4,7 +4,6 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:myapp/src/network/data/sign/sign_repository.dart';
 import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/model/common/error_code.dart';
-import 'package:myapp/src/network/model/social_type.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 import 'package:myapp/src/network/model/social_user/social_user.dart';
 
@@ -27,10 +26,12 @@ class SignRepositoryImpl extends SignRepository {
       final firebaseUser = result.user;
 
       final newUser = MUser(
-          id: firebaseUser?.uid ?? '',
-          email: firebaseUser?.email,
-          name: firebaseUser?.displayName,
-          avatar: firebaseUser?.photoURL);
+        id: firebaseUser?.uid ?? '',
+        email: firebaseUser?.email,
+        name: firebaseUser?.displayName,
+        avatar: firebaseUser?.photoURL,
+        followers: [],
+      );
       final userResult = await DomainManager().user.getOrAddUser(newUser);
 
       return MResult.success(userResult.data ?? newUser);
@@ -53,6 +54,7 @@ class SignRepositoryImpl extends SignRepository {
         id: firebaseUser?.uid ?? '',
         email: user.email,
         name: user.fullName,
+        followers: [],
       );
       final userResult = await DomainManager().user.getOrAddUser(newUser);
 
@@ -97,8 +99,10 @@ class SignRepositoryImpl extends SignRepository {
         id: firebaseUser?.uid ?? '',
         email: firebaseUser?.email,
         name: firebaseUser?.displayName,
+        followers: [],
       );
-      return MResult.success(newUser);
+      final userResult = await DomainManager().user.getOrAddUser(newUser);
+      return MResult.success(userResult.data ?? newUser);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');

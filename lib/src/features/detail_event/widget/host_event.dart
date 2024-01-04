@@ -1,18 +1,25 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:myapp/gen/assets.gen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:myapp/src/features/account/logic/account_bloc.dart';
+import 'package:myapp/src/features/detail_event/logic/detail_event_bloc.dart';
+import 'package:myapp/src/network/model/user/user.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
 
 class HostEvent extends StatelessWidget {
   const HostEvent({
     super.key,
+    required this.user,
   });
+  final MUser user;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        AppCoordinator.showProfileOtherUser(id: '1');
+        AppCoordinator.showProfileOtherUser(id: user.id);
       },
       child: Container(
         padding: const EdgeInsets.all(20),
@@ -21,17 +28,19 @@ class HostEvent extends StatelessWidget {
           children: [
             Row(
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Assets.images.images.avatar.image(
-                    height: 50,
-                    width: 50,
+                if (user.avatar != null)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(
+                      user.avatar!,
+                      height: 50,
+                      width: 50,
+                    ),
                   ),
-                ),
                 const SizedBox(width: 10),
-                const Text(
-                  "Emiliano Vittoriosi",
-                  style: TextStyle(
+                Text(
+                  user.name ?? "",
+                  style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
                   ),
@@ -40,17 +49,23 @@ class HostEvent extends StatelessWidget {
             ),
             SizedBox(
               height: 35,
-              width: 100,
+              width: 120,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  context.read<DetailEventBloc>().onPressedFollowHost();
+                },
                 style: ElevatedButton.styleFrom(
                   elevation: 0,
                   backgroundColor: AppColors.rosyPink.withOpacity(0.1),
                   foregroundColor: AppColors.rosyPink,
                 ),
-                child: const Text(
-                  "Follow",
-                  style: TextStyle(
+                child: Text(
+                  user.followers != null &&
+                          user.followers!
+                              .contains(GetIt.I<AccountBloc>().state.user.id)
+                      ? "Following"
+                      : "Follow",
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),

@@ -9,7 +9,7 @@ class StoryRepositoryMock {
     final MStory result = MStory(
         id: id,
         host: MUser.empty(),
-        event: MEvent.ds(id: id, host: MUser.empty()));
+        event: MEvent(id: id, host: MUser.empty()));
     return MResult.success(result);
   }
 

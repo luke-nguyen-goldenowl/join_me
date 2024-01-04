@@ -15,7 +15,7 @@ class EventHomeView extends StatelessWidget {
           children: [
             ElevatedButton(
                 onPressed: () {
-                  AppCoordinator.showEventDetails(id: '1');
+                  AppCoordinator.showEventDetails(id: 'uWbVA0CkBqVxhYZ5QHYT');
                 },
                 child: const Text("go detail event"))
           ],

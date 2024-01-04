@@ -20,7 +20,7 @@ class SearchView extends StatelessWidget {
                 child: const Text("go profile other user")),
             ElevatedButton(
                 onPressed: () {
-                  AppCoordinator.showEventDetails(id: '1');
+                  AppCoordinator.showEventDetails(id: 'uWbVA0CkBqVxhYZ5QHYT');
                 },
                 child: const Text("go event detail view"))
           ],
