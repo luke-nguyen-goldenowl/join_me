@@ -74,7 +74,7 @@ class MapPageWidget extends StatelessWidget {
                         rotate: true,
                         width: 250.0,
                         height: 120.0,
-                        point: e,
+                        point: e.location!,
                         builder: (BuildContext context) {
                           return EventLocation(
                             myIndex: state.events.indexOf(e),

@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/src/features/event/logic/event_view_state.dart';
-import 'package:myapp/src/features/event/logic/type_event.dart';
+import 'package:myapp/src/network/model/event/event.dart';
 
 class EventViewBloc extends Cubit<EventViewState> {
   EventViewBloc() : super(EventViewState.ds());

@@ -5,10 +5,13 @@ import 'package:latlong2/latlong.dart';
 
 import 'package:location/location.dart';
 import 'package:myapp/src/features/event/logic/map_page_state.dart';
+import 'package:myapp/src/network/domain_manager.dart';
 
 class MapPageBloc extends Cubit<MapPageState> {
   MapPageBloc() : super(MapPageState(events: []));
   MapController mapController = MapController();
+
+  DomainManager domain = DomainManager();
 
   Future<void> getCurrentLocation() async {
     Location location = Location();
@@ -52,12 +55,8 @@ class MapPageBloc extends Cubit<MapPageState> {
   }
 
   void getEvent() {
-    emit(state.copyWith(events: [
-      LatLng(11.2501, 107.4229),
-      LatLng(11.2934, 107.4002),
-      LatLng(11.2896, 107.4428),
-      LatLng(11.2313, 107.4389)
-    ]));
+    final result = domain.eventMock.getAllEvent();
+    emit(state.copyWith(events: result.data));
   }
 
   @override

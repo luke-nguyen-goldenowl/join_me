@@ -1,11 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/foundation.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:myapp/src/network/model/event/event.dart';
 
 class MapPageState {
   LatLng? currentLocation;
   bool isLoadingCurrentLocation;
-  List<LatLng> events;
+  List<MEvent> events;
   int currentEvent;
   MapPageState({
     this.currentLocation,
@@ -17,7 +18,7 @@ class MapPageState {
   MapPageState copyWith({
     LatLng? currentLocation,
     bool? isLoadingCurrentLocation,
-    List<LatLng>? events,
+    List<MEvent>? events,
     int? currentEvent,
   }) {
     return MapPageState(
