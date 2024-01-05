@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_map/flutter_map.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:myapp/src/features/add_event/logic/add_event_bloc.dart';
 import 'package:myapp/src/features/add_event/logic/add_event_state.dart';
 import 'package:myapp/src/theme/colors.dart';
@@ -25,39 +25,22 @@ class AddressPage extends StatelessWidget {
             const SizedBox(height: 10),
             Expanded(
               child: !state.isLoadingCurrentLocation
-                  ? FlutterMap(
-                      mapController: context.read<AddEventBloc>().mapController,
-                      options: MapOptions(
-                        center: state.selectedLocation,
-                        zoom: 14.0,
-                        onTap: ((tapPosition, point) {
-                          context.read<AddEventBloc>().handleTap(point);
-                        }),
+                  ? GoogleMap(
+                      mapType: MapType.terrain,
+                      onMapCreated: context.read<AddEventBloc>().onMapCreate,
+                      initialCameraPosition: CameraPosition(
+                        target: state.selectedLocation!,
+                        zoom: 16,
                       ),
-                      children: [
-                        TileLayer(
-                          urlTemplate:
-                              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                          userAgentPackageName: 'com.example.app',
-                        ),
-                        MarkerLayer(
-                          markers: [
-                            Marker(
-                              rotate: true,
-                              width: 50.0,
-                              height: 50.0,
-                              point: state.selectedLocation!,
-                              builder: (BuildContext context) {
-                                return const Icon(
-                                  Icons.location_pin,
-                                  color: Colors.red,
-                                  size: 50,
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
+                      onTap: (argument) {
+                        context.read<AddEventBloc>().handlePressMap(argument);
+                      },
+                      markers: {
+                        Marker(
+                          markerId: const MarkerId('my location'),
+                          position: state.selectedLocation!,
+                        )
+                      },
                     )
                   : const Center(
                       child: CircularProgressIndicator(

@@ -1,14 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:myapp/src/dialogs/alert_wrapper.dart';
 import 'package:myapp/src/dialogs/toast_wrapper.dart';
 import 'package:myapp/src/features/account/logic/account_bloc.dart';
-
+// import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:myapp/src/features/add_event/logic/add_event_state.dart';
 import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/model/event/event.dart';
@@ -20,10 +19,15 @@ class AddEventBloc extends Cubit<AddEventState> {
 
   final DomainManager domain = DomainManager();
   PageController controller = PageController(initialPage: 0);
-  MapController mapController = MapController();
+  // MapController mapController = MapController();
+  GoogleMapController? mapController;
+
+  void onMapCreate(GoogleMapController controller) {
+    mapController ??= controller;
+  }
 
   void setCurrentPage(int index) {
-    emit(state.copyWith(currentPage: index));
+    if (!isClosed) emit(state.copyWith(currentPage: index));
   }
 
   void selectMedias() async {
@@ -35,51 +39,51 @@ class AddEventBloc extends Cubit<AddEventState> {
       if (newMedias.length > 5) {
         newMedias = [...newMedias.sublist(0, 5)];
       }
-      emit(state.copyWith(medias: newMedias));
+      if (!isClosed) emit(state.copyWith(medias: newMedias));
     } else {
       if (pickMedias.length > 5) {
         pickMedias = [...pickMedias.sublist(0, 5)];
       }
-      emit(state.copyWith(medias: [...pickMedias]));
+      if (!isClosed) emit(state.copyWith(medias: [...pickMedias]));
     }
   }
 
   void removeImage(int index) {
     final List<XFile?> newMedias = state.medias;
     newMedias.removeAt(index);
-    emit(state.copyWith(medias: newMedias));
+    if (!isClosed) emit(state.copyWith(medias: newMedias));
   }
 
-  void handleTap(point) {
-    emit(state.copyWith(selectedLocation: point));
+  void handlePressMap(point) {
+    if (!isClosed) emit(state.copyWith(selectedLocation: point));
   }
 
   void setNameEvent(value) {
-    emit(state.copyWith(nameEvent: value));
+    if (!isClosed) emit(state.copyWith(nameEvent: value));
   }
 
   void setDescriptionEvent(value) {
-    emit(state.copyWith(description: value));
+    if (!isClosed) emit(state.copyWith(description: value));
   }
 
   void setNumberMemberEvent(value) {
-    emit(state.copyWith(numberMember: value));
+    if (!isClosed) emit(state.copyWith(numberMember: value));
   }
 
   void setStartDateEvent(value) {
-    emit(state.copyWith(startDate: value));
+    if (!isClosed) emit(state.copyWith(startDate: value));
   }
 
   void setDeadlineEvent(value) {
-    emit(state.copyWith(deadlineDate: value));
+    if (!isClosed) emit(state.copyWith(deadlineDate: value));
   }
 
   void setTimeEvent(value) {
-    emit(state.copyWith(time: value));
+    if (!isClosed) emit(state.copyWith(time: value));
   }
 
   void setType(TypeEvent type) {
-    emit(state.copyWith(typeEvent: type));
+    if (!isClosed) emit(state.copyWith(typeEvent: type));
   }
 
   void addEvent() async {
@@ -129,7 +133,7 @@ class AddEventBloc extends Cubit<AddEventState> {
       if (!serviceEnabled) {
         serviceEnabled = await location.requestService();
         if (!serviceEnabled) {
-          emit(state.copyWith(isLoadingCurrentLocation: false));
+          if (!isClosed) emit(state.copyWith(isLoadingCurrentLocation: false));
           return;
         }
       }
@@ -138,19 +142,21 @@ class AddEventBloc extends Cubit<AddEventState> {
       if (permissionGranted == PermissionStatus.denied) {
         permissionGranted = await location.requestPermission();
         if (permissionGranted != PermissionStatus.granted) {
-          emit(state.copyWith(isLoadingCurrentLocation: false));
+          if (!isClosed) emit(state.copyWith(isLoadingCurrentLocation: false));
           return;
         }
       }
 
       currentLocation = await location.getLocation();
 
-      final locationLatLng = LatLng(
+      final LatLng locationLatLng = LatLng(
         currentLocation.latitude ?? 10.790159,
         currentLocation.longitude ?? 106.6557574,
       );
-      emit(state.copyWith(
-          selectedLocation: locationLatLng, isLoadingCurrentLocation: false));
+      if (!isClosed) {
+        emit(state.copyWith(
+            selectedLocation: locationLatLng, isLoadingCurrentLocation: false));
+      }
     } catch (e) {
       if (kDebugMode) {
         print("Error: $e");
@@ -160,7 +166,7 @@ class AddEventBloc extends Cubit<AddEventState> {
 
   @override
   Future<void> close() {
-    mapController.dispose();
+    mapController?.dispose();
     controller.dispose();
     return super.close();
   }
