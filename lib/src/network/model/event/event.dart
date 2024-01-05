@@ -1,9 +1,18 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 
-enum TypeEvent { sport, game, music, movie }
+enum TypeEvent {
+  sport("Sport", Icons.sports_basketball),
+  game("Game", Icons.games_rounded),
+  music("Music", Icons.music_note_rounded),
+  movie("Movie", Icons.movie_creation_outlined);
+
+  final String text;
+  final IconData icon;
+  const TypeEvent(this.text, this.icon);
+}
 
 class MEvent {
   String? id;
