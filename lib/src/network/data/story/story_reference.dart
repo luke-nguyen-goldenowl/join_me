@@ -41,7 +41,7 @@ class StoryReference extends BaseCollectionReference<MStory> {
 
   Future<MResult<MStory>> addStory(MStory story) async {
     try {
-      final image = await _uploadImage(story.image);
+      final image = await _uploadImage(story.image!);
       MStory newStory = story.copyWith(image: image);
       final MResult<MStory> result = await add(newStory);
       return MResult.success(result.data);
