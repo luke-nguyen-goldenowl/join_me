@@ -9,7 +9,9 @@ import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 
 class DetailEventBloc extends Cubit<DetailEventState> {
-  DetailEventBloc() : super(DetailEventState());
+  DetailEventBloc({required eventId}) : super(DetailEventState()) {
+    getEvent(eventId);
+  }
   PageController controller = PageController();
   GoogleMapController? mapController;
 
@@ -24,7 +26,6 @@ class DetailEventBloc extends Cubit<DetailEventState> {
   }
 
   void getEvent(String eventId) async {
-    if (!isClosed) emit(state.copyWith(isLoading: true));
     try {
       final result = await domain.event.getEvent(eventId);
       if (result.isSuccess) {
@@ -34,7 +35,6 @@ class DetailEventBloc extends Cubit<DetailEventState> {
     } catch (e) {
       print(e);
     }
-    if (!isClosed) emit(state.copyWith(isLoading: true));
   }
 
   void onPressedFollowHost() async {
@@ -113,5 +113,12 @@ class DetailEventBloc extends Cubit<DetailEventState> {
     } catch (e) {
       print(e);
     }
+  }
+
+  @override
+  Future<void> close() {
+    mapController?.dispose();
+    controller.dispose();
+    return super.close();
   }
 }

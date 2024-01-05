@@ -17,7 +17,7 @@ class DetailEventView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => DetailEventBloc()..getEvent(id),
+      create: (_) => DetailEventBloc(eventId: id),
       child: const DetailEventPage(),
     );
   }
@@ -29,8 +29,7 @@ class DetailEventPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DetailEventBloc, DetailEventState>(
-        buildWhen: (previous, current) =>
-            previous.indexPageImage != current.indexPageImage,
+        buildWhen: (previous, current) => previous.event != current.event,
         builder: (context, state) {
           return Scaffold(
             backgroundColor: AppColors.white,

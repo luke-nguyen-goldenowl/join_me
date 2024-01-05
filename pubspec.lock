@@ -1093,14 +1093,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
-  lists:
-    dependency: transitive
-    description:
-      name: lists
-      sha256: "4ca5c19ae4350de036a7e996cdd1ee39c93ac0a2b840f4915459b7d0a7d4ab27"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.1"
   location:
     dependency: "direct main"
     description:
