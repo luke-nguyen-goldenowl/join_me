@@ -30,7 +30,9 @@ class EditEventPage extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return BlocBuilder<EditEventBloc, EditEventState>(
-      buildWhen: (previous, current) => previous != current,
+      buildWhen: (previous, current) =>
+          previous.currentPage != current.currentPage ||
+          previous.event != previous.event,
       builder: ((context, state) {
         return Scaffold(
           backgroundColor: AppColors.white,

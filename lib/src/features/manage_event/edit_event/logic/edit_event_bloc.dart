@@ -13,11 +13,11 @@ class EditEventBloc extends Cubit<EditEventState> {
   void initState(MEvent event) {
     emit(state.copyWith(
       event: event,
-      selectedLocation: event.location,
-      nameEvent: event.name,
-      description: event.description,
-      deadlineDate: event.deadline,
-      startDate: event.startDate,
+      // selectedLocation: event.location,
+      // nameEvent: event.name,
+      // description: event.description,
+      // deadlineDate: event.deadline,
+      // startDate: event.startDate,
       time: TimeOfDay.fromDateTime(event.startDate!),
     ));
   }
@@ -27,23 +27,23 @@ class EditEventBloc extends Cubit<EditEventState> {
   }
 
   void handleTap(point) {
-    emit(state.copyWith(selectedLocation: point));
+    emit(state.copyWith(event: state.event.copyWith(location: point)));
   }
 
   void setNameEvent(value) {
-    emit(state.copyWith(nameEvent: value));
+    emit(state.copyWith(event: state.event.copyWith(name: value)));
   }
 
   void setDescriptionEvent(value) {
-    emit(state.copyWith(description: value));
+    emit(state.copyWith(event: state.event.copyWith(description: value)));
   }
 
   void setStartDateEvent(value) {
-    emit(state.copyWith(startDate: value));
+    emit(state.copyWith(event: state.event.copyWith(startDate: value)));
   }
 
   void setDeadlineEvent(value) {
-    emit(state.copyWith(deadlineDate: value));
+    emit(state.copyWith(event: state.event.copyWith(deadline: value)));
   }
 
   void setTimeEvent(value) {

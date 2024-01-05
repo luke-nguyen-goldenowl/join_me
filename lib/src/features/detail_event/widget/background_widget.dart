@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/src/features/detail_event/data/list_image.dart';
 import 'package:myapp/src/features/detail_event/widget/indicator_image_list.dart';
 
 class BackgroundWidget extends StatelessWidget {
@@ -58,7 +57,7 @@ class BackgroundWidget extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: List.generate(
-                listImage.length,
+                images.length,
                 (index) => IndicatorImageList(
                   isActive: index == indexPageImage,
                 ),
