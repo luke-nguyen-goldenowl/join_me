@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:myapp/src/features/profile_other_user/logic/profile_other_user_bloc.dart';
-import 'package:myapp/src/features/profile_other_user/logic/profile_other_user_state.dart';
+import 'package:myapp/src/features/profile_other_user/logic/attended_bloc.dart';
+import 'package:myapp/src/features/profile_other_user/logic/attended_state.dart';
+import 'package:myapp/src/features/profile_other_user/logic/favorite_bloc.dart';
+import 'package:myapp/src/features/profile_other_user/logic/favorite_state.dart';
+import 'package:myapp/src/features/profile_other_user/logic/host_bloc.dart';
+import 'package:myapp/src/features/profile_other_user/logic/host_state.dart';
 import 'package:myapp/src/features/profile_other_user/widget/event_profile_user_item.dart';
+import 'package:myapp/src/network/model/common/pagination/pagination.dart';
+import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/widgets/state/state_pagination_widget.dart';
 
 class TabViewProfileUser extends StatelessWidget {
@@ -12,62 +18,70 @@ class TabViewProfileUser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProfileOtherUserBloc, ProfileOtherUserState>(
-      buildWhen: (previous, current) => previous != current,
-      builder: ((context, state) {
-        return TabBarView(children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: state.paginationAttended.data.length + 1,
-              itemBuilder: ((context, index) {
-                return index == state.paginationAttended.data.length
-                    ? XStatePaginationWidget(
-                        page: state.paginationAttended,
-                        loadMore: context
-                            .read<ProfileOtherUserBloc>()
-                            .loadMoreAttended,
-                        autoLoad: true,
-                      )
-                    : EventProfileUserItem(
-                        event: state.paginationAttended.data[index]);
-              }),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: state.paginationEvents.data.length + 1,
-              itemBuilder: ((context, index) {
-                return index == state.paginationEvents.data.length
-                    ? XStatePaginationWidget(
-                        page: state.paginationEvents,
-                        loadMore:
-                            context.read<ProfileOtherUserBloc>().loadMoreEvents,
-                        autoLoad: true,
-                      )
-                    : EventProfileUserItem(
-                        event: state.paginationEvents.data[index]);
-              }),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: state.paginationFavorites.data.length + 1,
-              itemBuilder: ((context, index) {
-                return index == state.paginationFavorites.data.length
-                    ? XStatePaginationWidget(
-                        page: state.paginationFavorites,
-                        loadMore: context
-                            .read<ProfileOtherUserBloc>()
-                            .loadMoreFavorites,
-                        autoLoad: true,
-                      )
-                    : EventProfileUserItem(
-                        event: state.paginationFavorites.data[index]);
-              }),
-            ),
-          ),
-        ]);
-      }),
+    return TabBarView(children: [
+      BlocBuilder<AttendedBloc, AttendedState>(
+        buildWhen: (previous, current) => previous.data != current.data,
+        builder: ((context, state) {
+          return ListDataPaginationEvent(
+            data: state.data,
+            getData: context.read<AttendedBloc>().getData,
+          );
+        }),
+      ),
+      BlocBuilder<HostBloc, HostState>(
+        buildWhen: (previous, current) => previous.data != current.data,
+        builder: ((context, state) {
+          return ListDataPaginationEvent(
+            data: state.data,
+            getData: context.read<HostBloc>().getData,
+          );
+        }),
+      ),
+      BlocBuilder<FavoriteBloc, FavoriteState>(
+        buildWhen: (previous, current) => previous.data != current.data,
+        builder: ((context, state) {
+          return ListDataPaginationEvent(
+            data: state.data,
+            getData: context.read<FavoriteBloc>().getData,
+          );
+        }),
+      ),
+    ]);
+  }
+}
+
+// ignore: must_be_immutable
+class ListDataPaginationEvent<T> extends StatelessWidget {
+  ListDataPaginationEvent({
+    super.key,
+    required this.data,
+    required this.getData,
+  });
+
+  MPagination<T> data;
+  Function() getData;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: ListView.builder(
+        itemCount: data.data.length + 1,
+        itemBuilder: ((context, index) {
+          if (index == data.data.length) {
+            return Container(
+              margin: const EdgeInsets.symmetric(vertical: 20),
+              alignment: Alignment.center,
+              child: XStatePaginationWidget(
+                page: data,
+                loadMore: getData,
+                autoLoad: true,
+              ),
+            );
+          } else {
+            return EventProfileUserItem(event: data.data[index] as MEvent);
+          }
+        }),
+      ),
     );
   }
 }
