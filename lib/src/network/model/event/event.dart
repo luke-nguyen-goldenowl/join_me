@@ -3,21 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 
-enum TypeEvent { sport, game, music, movie }
+enum TypeEvent {
+  sport("Sport", Icons.sports_basketball),
+  game("Game", Icons.games_rounded),
+  music("Music", Icons.music_note_rounded),
+  movie("Movie", Icons.movie_creation_outlined);
 
-extension TypeEventExtension on TypeEvent {
-  IconData get icon {
-    switch (this) {
-      case TypeEvent.game:
-        return Icons.games_rounded;
-      case TypeEvent.sport:
-        return Icons.sports_basketball;
-      case TypeEvent.music:
-        return Icons.music_note_rounded;
-      case TypeEvent.movie:
-        return Icons.movie_creation_outlined;
-    }
-  }
+  final String text;
+  final IconData icon;
+  const TypeEvent(this.text, this.icon);
 }
 
 class MEvent {
