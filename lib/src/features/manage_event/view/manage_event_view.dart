@@ -15,32 +15,32 @@ class ManageEventView extends StatelessWidget {
     return BlocProvider(
       create: (_) => ManageEventBloc(),
       child: BlocBuilder<ManageEventBloc, ManageEventState>(
-        buildWhen: (previous, current) => previous != current,
+        buildWhen: (previous, current) => previous.data != current.data,
         builder: (context, state) {
           return Scaffold(
             backgroundColor: AppColors.white,
             appBar: const AppBarCustom(
-              title: "My Events",
+              title: Text("My Events"),
             ),
-            body: Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: state.pagination.data.length + 1,
-                    itemBuilder: ((context, index) {
-                      return index == state.pagination.data.length
-                          ? XStatePaginationWidget(
-                              page: state.pagination,
-                              loadMore:
-                                  context.read<ManageEventBloc>().loadMore,
-                              autoLoad: true,
-                            )
-                          : ManageEventItem(
-                              event: state.pagination.data[index]);
-                    }),
-                  ),
-                ),
-              ],
+            body: Expanded(
+              child: ListView.builder(
+                itemCount: state.data.data.length + 1,
+                itemBuilder: ((context, index) {
+                  if (index == state.data.data.length) {
+                    return Container(
+                      margin: const EdgeInsets.symmetric(vertical: 20),
+                      alignment: Alignment.center,
+                      child: XStatePaginationWidget(
+                        page: state.data,
+                        loadMore: context.read<ManageEventBloc>().getData,
+                        autoLoad: true,
+                      ),
+                    );
+                  } else {
+                    return ManageEventItem(event: state.data.data[index]);
+                  }
+                }),
+              ),
             ),
           );
         },

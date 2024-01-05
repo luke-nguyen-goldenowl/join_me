@@ -15,7 +15,7 @@ class EditEvent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => EditEventBloc()..initState(events[0]),
+      create: (_) => EditEventBloc()..initState(listEvent[0]),
       child: const EditEventPage(),
     );
   }
@@ -37,7 +37,7 @@ class EditEventPage extends StatelessWidget {
         return Scaffold(
           backgroundColor: AppColors.white,
           appBar: const AppBarCustom(
-            title: "Edit Event",
+            title: Text("Edit Event"),
           ),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,

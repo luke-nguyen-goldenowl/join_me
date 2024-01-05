@@ -41,7 +41,7 @@ class DetailEventPage extends StatelessWidget {
                     slivers: [
                       SliverAppBarCustomDetailEvent(
                         indexPageImage: state.indexPageImage,
-                        images: state.event!.images,
+                        images: state.event!.images!,
                         controller: context.read<DetailEventBloc>().controller,
                         setIndexPageImage:
                             context.read<DetailEventBloc>().setIndexPageImage,

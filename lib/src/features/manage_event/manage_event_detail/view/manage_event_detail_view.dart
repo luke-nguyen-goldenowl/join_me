@@ -34,18 +34,19 @@ class ManageEventDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ManageEventDetailBloc, ManageEventDetailState>(
-      buildWhen: (previous, current) => previous != current,
-      builder: ((context, state) {
-        return Scaffold(
-          backgroundColor: AppColors.white,
-          body: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Expanded(
-                child: CustomScrollView(
-                  slivers: [
-                    SliverAppBarCustomDetailEvent(
+    return Scaffold(
+      backgroundColor: AppColors.white,
+      body: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Expanded(
+            child: CustomScrollView(
+              slivers: [
+                BlocBuilder<ManageEventDetailBloc, ManageEventDetailState>(
+                  buildWhen: (previous, current) =>
+                      previous.indexPageImage != current.indexPageImage,
+                  builder: ((context, state) {
+                    return SliverAppBarCustomDetailEvent(
                       indexPageImage: state.indexPageImage,
                       images: listImage,
                       controller:
@@ -53,110 +54,108 @@ class ManageEventDetailPage extends StatelessWidget {
                       setIndexPageImage: context
                           .read<ManageEventDetailBloc>()
                           .setIndexPageImage,
+                    );
+                  }),
+                ),
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    const SizedBox(height: 20),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Text(
+                        "Let's play different famous board games, get together every Sunday",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                    SliverList(
-                      delegate: SliverChildListDelegate([
-                        const SizedBox(height: 20),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Text(
-                            "Let's play different famous board games, get together every Sunday",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                    const SizedBox(height: 20),
+                    const TimeEventMangeEventDetail(),
+                    const SizedBox(height: 20),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Text(
+                        "17/20 people",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
                         ),
-                        const SizedBox(height: 20),
-                        const TimeEventMangeEventDetail(),
-                        const SizedBox(height: 20),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Text(
-                            "17/20 people",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 80,
-                          child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: 15,
-                              itemBuilder: ((context, index) {
-                                return Container(
-                                  margin: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                  ),
-                                  width: 50,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        height: 50,
-                                        width: 50,
-                                        padding: const EdgeInsets.all(2),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(18),
-                                          color: AppColors.white,
-                                        ),
-                                        child: InkWell(
-                                          onTap: () {},
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            child: Assets.images.images.avatar
-                                                .image(),
-                                          ),
-                                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 80,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 15,
+                          itemBuilder: ((context, index) {
+                            return Container(
+                              margin: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                              ),
+                              width: 50,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    height: 50,
+                                    width: 50,
+                                    padding: const EdgeInsets.all(2),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(18),
+                                      color: AppColors.white,
+                                    ),
+                                    child: InkWell(
+                                      onTap: () {},
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(12),
+                                        child:
+                                            Assets.images.images.avatar.image(),
                                       ),
-                                      const Text(
-                                        'Keith',
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      )
-                                    ],
+                                    ),
                                   ),
-                                );
-                              })),
-                        ),
-                        const SizedBox(height: 20),
-                        const DescriptionEvent(),
-                        const SizedBox(height: 20),
-                        const AddressEvent()
-                      ]),
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                height: 80,
-                width: double.infinity,
-                color: AppColors.white,
-                alignment: Alignment.center,
-                child: ElevatedButton(
-                  onPressed: () {
-                    AppCoordinator.showEditEventScreen(id: id);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(150, 50),
-                    backgroundColor: AppColors.rosyPink,
-                    foregroundColor: AppColors.white,
-                  ),
-                  child: const Text(
-                    "Edit",
-                    style: TextStyle(fontSize: 15),
-                  ),
-                ),
-              )
-            ],
+                                  const Text(
+                                    'Keith',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  )
+                                ],
+                              ),
+                            );
+                          })),
+                    ),
+                    const SizedBox(height: 20),
+                    const DescriptionEvent(),
+                    const SizedBox(height: 20),
+                    const AddressEvent()
+                  ]),
+                )
+              ],
+            ),
           ),
-        );
-      }),
+          Container(
+            height: 80,
+            width: double.infinity,
+            color: AppColors.white,
+            alignment: Alignment.center,
+            child: ElevatedButton(
+              onPressed: () {
+                AppCoordinator.showEditEventScreen(id: id);
+              },
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(150, 50),
+                backgroundColor: AppColors.rosyPink,
+                foregroundColor: AppColors.white,
+              ),
+              child: const Text(
+                "Edit",
+                style: TextStyle(fontSize: 15),
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

@@ -32,7 +32,7 @@ class DetailPageEditEvent extends StatelessWidget {
                     children: [
                       XInput(
                         key: const Key('addEvent_nameEventInput_textField'),
-                        value: state.event.name,
+                        value: state.event.name!,
                         onChanged: (value) {
                           editEventBloc.setNameEvent(value);
                         },
@@ -45,7 +45,7 @@ class DetailPageEditEvent extends StatelessWidget {
                             'addEvent_descriptionEventInput_textField'),
                         minLines: 1,
                         maxLines: 10,
-                        value: state.event.description,
+                        value: state.event.description!,
                         onChanged: (value) {
                           editEventBloc.setDescriptionEvent(value);
                         },
