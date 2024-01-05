@@ -21,4 +21,4 @@ class DomainManager {
   final eventMock = EventRepositoryMock();
   final event = EventRepositoryImpl();
   final userMock = UserRepositoryMock();
-
+}

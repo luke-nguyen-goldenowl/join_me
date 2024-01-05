@@ -14,7 +14,8 @@ class SearchBloc extends Cubit<SearchState> {
         case TypeSearch.event:
           debounce.run(
             () {
-              final result = domain.event.getEventsSearch(state.searchValue);
+              final result =
+                  domain.eventMock.getEventsSearch(state.searchValue);
               emit(state.copyWith(resultEvent: result.data));
             },
           );
