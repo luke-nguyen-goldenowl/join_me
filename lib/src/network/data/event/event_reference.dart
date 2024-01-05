@@ -95,7 +95,9 @@ class EventReference extends BaseCollectionReference<MEvent> {
       final result = await update(eventId, {
         'followersId': isFollowed
             ? FieldValue.arrayRemove([userId])
-            : FieldValue.arrayUnion([userId])
+            : FieldValue.arrayUnion([userId]),
+        'countFollowers':
+            isFollowed ? FieldValue.increment(-1) : FieldValue.increment(1),
       });
       if (result.isError == false) {
         return result;
@@ -116,7 +118,9 @@ class EventReference extends BaseCollectionReference<MEvent> {
       final result = await update(eventId, {
         'favoritesId': isFavorite
             ? FieldValue.arrayRemove([userId])
-            : FieldValue.arrayUnion([userId])
+            : FieldValue.arrayUnion([userId]),
+        'countFavorites':
+            isFavorite ? FieldValue.increment(-1) : FieldValue.increment(1),
       });
       if (result.isError == false) {
         return result;
