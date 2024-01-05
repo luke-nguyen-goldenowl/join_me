@@ -1,4 +1,4 @@
-import 'package:latlong2/latlong.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:myapp/src/network/model/common/result.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/network/model/user/user.dart';
@@ -11,7 +11,7 @@ List<MEvent> events = [
     images: ["assets/images/images/bg-event.jpg"],
     startDate: DateTime.now(),
     deadline: DateTime.now(),
-    location: LatLng(88.00015, 85.1316546),
+    location: const LatLng(88.00015, 85.1316546),
     host: const MUser(
         id: '1', name: 'Keith', avatar: "assets/images/images/avatar.png"),
     type: TypeEvent.sport,
@@ -23,7 +23,7 @@ List<MEvent> events = [
     images: ["assets/images/images/bg-event.jpg"],
     startDate: DateTime.now(),
     deadline: DateTime.now(),
-    location: LatLng(88.00015, 85.1316546),
+    location: const LatLng(88.00015, 85.1316546),
     host: const MUser(
         id: '2', name: 'Kien Vo', avatar: "assets/images/images/avatar.png"),
     type: TypeEvent.music,
@@ -35,7 +35,7 @@ List<MEvent> events = [
     images: ["assets/images/images/bg-event.jpg"],
     startDate: DateTime.now(),
     deadline: DateTime.now(),
-    location: LatLng(88.00015, 85.1316546),
+    location: const LatLng(88.00015, 85.1316546),
     host: const MUser(
         id: '2', name: 'Kien Vo', avatar: "assets/images/images/avatar.png"),
     type: TypeEvent.movie,
@@ -47,7 +47,7 @@ List<MEvent> events = [
     images: ["assets/images/images/bg-event.jpg"],
     startDate: DateTime.now(),
     deadline: DateTime.now(),
-    location: LatLng(88.00015, 85.1316546),
+    location: const LatLng(88.00015, 85.1316546),
     host: const MUser(
         id: '2', name: 'Kien Vo', avatar: "assets/images/images/avatar.png"),
     type: TypeEvent.game,

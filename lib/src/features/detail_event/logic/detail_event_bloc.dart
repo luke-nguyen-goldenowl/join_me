@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:myapp/src/features/account/logic/account_bloc.dart';
 import 'package:myapp/src/features/detail_event/logic/detail_event_state.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +11,13 @@ import 'package:myapp/src/network/model/user/user.dart';
 class DetailEventBloc extends Cubit<DetailEventState> {
   DetailEventBloc() : super(DetailEventState());
   PageController controller = PageController();
+  GoogleMapController? mapController;
 
   DomainManager domain = DomainManager();
+
+  void onMapCreate(GoogleMapController controller) {
+    mapController ??= controller;
+  }
 
   void setIndexPageImage(int value) {
     emit(state.copyWith(indexPageImage: value));
