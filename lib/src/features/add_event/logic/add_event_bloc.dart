@@ -7,19 +7,18 @@ import 'package:image_picker/image_picker.dart';
 import 'package:myapp/src/dialogs/alert_wrapper.dart';
 import 'package:myapp/src/dialogs/toast_wrapper.dart';
 import 'package:myapp/src/features/account/logic/account_bloc.dart';
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:myapp/src/features/add_event/logic/add_event_state.dart';
 import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:location/location.dart';
 import 'package:myapp/src/router/coordinator.dart';
+import 'package:myapp/src/services/image_picker.dart';
 
 class AddEventBloc extends Cubit<AddEventState> {
   AddEventBloc() : super(AddEventState.ds());
 
   final DomainManager domain = DomainManager();
   PageController controller = PageController(initialPage: 0);
-  // MapController mapController = MapController();
   GoogleMapController? mapController;
 
   void onMapCreate(GoogleMapController controller) {
@@ -31,20 +30,10 @@ class AddEventBloc extends Cubit<AddEventState> {
   }
 
   void selectMedias() async {
-    final ImagePicker picker = ImagePicker();
-    List<XFile> pickMedias = await picker.pickMultiImage(imageQuality: 5);
-
-    if (state.medias.length < 5) {
-      List<XFile?> newMedias = [...pickMedias, ...state.medias];
-      if (newMedias.length > 5) {
-        newMedias = [...newMedias.sublist(0, 5)];
-      }
-      if (!isClosed) emit(state.copyWith(medias: newMedias));
-    } else {
-      if (pickMedias.length > 5) {
-        pickMedias = [...pickMedias.sublist(0, 5)];
-      }
-      if (!isClosed) emit(state.copyWith(medias: [...pickMedias]));
+    List<XFile> pickMedias =
+        await XImagePicker().onPickMultiImage(limit: 5 - state.medias.length);
+    if (!isClosed) {
+      emit(state.copyWith(medias: [...pickMedias, ...state.medias]));
     }
   }
 

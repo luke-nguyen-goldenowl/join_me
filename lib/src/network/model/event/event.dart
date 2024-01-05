@@ -102,7 +102,9 @@ class MEvent {
       'host': host?.id,
       'images': images,
       'favoritesId': favoritesId,
+      'countFavorites': favoritesId?.length ?? 0,
       'followersId': followersId,
+      'countFollowers': followersId?.length ?? 0,
       'location': location != null
           ? {'latitude': location!.latitude, 'longitude': location!.longitude}
           : null,
