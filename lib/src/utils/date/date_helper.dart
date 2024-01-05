@@ -159,4 +159,12 @@ class DateHelper {
         ? sundayWeekDayList.indexOf(weekdayValueForFirstValidDay)
         : mondayWeekDayList.indexOf(weekdayValueForFirstValidDay);
   }
+
+  static String getFullDate({required DateTime date}) {
+    return DateFormat('MMMM dd, yyyy').format(date);
+  }
+
+  static String getTime({required DateTime time}) {
+    return DateFormat('h:MM a').format(time);
+  }
 }
