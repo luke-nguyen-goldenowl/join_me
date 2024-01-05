@@ -10,7 +10,7 @@ class MStory {
   int liker;
 
   MStory({
-    required this.id,
+    this.id,
     required this.host,
     required this.event,
     this.image = "",

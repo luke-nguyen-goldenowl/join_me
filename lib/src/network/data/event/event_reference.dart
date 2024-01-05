@@ -134,8 +134,8 @@ class EventReference extends BaseCollectionReference<MEvent> {
 
       final QuerySnapshot<MEvent> querySnapshot = await ref
           .where('host', isEqualTo: userId)
-          .where('deadlineDate', isGreaterThan: currentDate)
-          .orderBy('startDate')
+          .where('deadline', isGreaterThan: currentDate.toIso8601String())
+          .orderBy('deadline')
           .get();
       final docs = querySnapshot.docs.map((e) => e.data()).toList();
       return MResult.success(docs);

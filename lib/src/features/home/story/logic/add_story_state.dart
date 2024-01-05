@@ -5,36 +5,52 @@ import 'package:image_picker/image_picker.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 
 class AddStoryState {
-  XFile? image;
-  String eventId;
   List<MEvent>? events;
+  bool isPosting;
+
+  XFile? image;
+  MEvent? event;
   AddStoryState({
     this.image,
-    this.eventId = "",
+    this.event,
     this.events,
+    this.isPosting = false,
   });
 
   AddStoryState copyWith({
-    XFile? image,
-    String? eventId,
     List<MEvent>? events,
+    bool? isPosting,
+    XFile? image,
+    MEvent? event,
   }) {
     return AddStoryState(
-      image: image ?? this.image,
-      eventId: eventId ?? this.eventId,
       events: events ?? this.events,
+      isPosting: isPosting ?? this.isPosting,
+      image: image ?? this.image,
+      event: event ?? this.event,
     );
+  }
+
+  bool checkCondition() {
+    if (image != null && event != null) return true;
+    return false;
   }
 
   @override
   bool operator ==(covariant AddStoryState other) {
     if (identical(this, other)) return true;
 
-    return other.image == image &&
-        other.eventId == eventId &&
-        listEquals(other.events, events);
+    return listEquals(other.events, events) &&
+        other.isPosting == isPosting &&
+        other.image == image &&
+        other.event == event;
   }
 
   @override
-  int get hashCode => image.hashCode ^ eventId.hashCode ^ events.hashCode;
+  int get hashCode {
+    return events.hashCode ^
+        isPosting.hashCode ^
+        image.hashCode ^
+        event.hashCode;
+  }
 }

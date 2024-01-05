@@ -7,7 +7,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:myapp/src/features/home/story/logic/add_story_bloc.dart';
 import 'package:myapp/src/features/home/story/logic/add_story_state.dart';
 import 'package:myapp/src/features/home/story/widget/event_item_story.dart';
-import 'package:myapp/src/router/coordinator.dart';
+import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/theme/colors.dart';
 
 class AddStoryView extends StatelessWidget {
@@ -31,60 +31,78 @@ class AddStoryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AddStoryBloc, AddStoryState>(
       builder: ((context, state) {
-        return Scaffold(
-            body: Stack(
+        return Stack(
           children: [
-            if (state.image != null)
-              Expanded(
-                child: Container(
-                  color: AppColors.black,
-                  alignment: Alignment.center,
-                  child: Image.file(
-                    File(state.image!.path),
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              )
-            else
-              Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(colors: AppColors.gradient),
-                ),
-              ),
-            AppBar(
-              backgroundColor: Colors.transparent,
-              foregroundColor: AppColors.white,
-              actions: [
-                Container(
-                  margin: const EdgeInsets.only(right: 10),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      AppCoordinator.pop();
-                    },
-                    style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(100, 50)),
-                    child: const Text(
-                      "Post",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
+            Scaffold(
+              body: Stack(
+                children: [
+                  if (state.image != null)
+                    Expanded(
+                      child: Container(
+                        color: AppColors.black,
+                        alignment: Alignment.center,
+                        child: Image.file(
+                          File(state.image!.path),
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    )
+                  else
+                    Container(
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(colors: AppColors.gradient),
                       ),
                     ),
+                  AppBar(
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: AppColors.white,
+                    actions: [
+                      Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        child: ElevatedButton(
+                          onPressed: state.checkCondition()
+                              ? () {
+                                  context.read<AddStoryBloc>().onPressPost();
+                                }
+                              : null,
+                          style: ElevatedButton.styleFrom(
+                              minimumSize: const Size(100, 50)),
+                          child: const Text(
+                            "Post",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
                   ),
-                )
-              ],
+                  const Align(
+                    alignment: Alignment.centerRight,
+                    child: AddEventBar(),
+                  ),
+                  if (state.event != null)
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: EventItem(
+                          event: state.event!, handlePress: (MEvent event) {}),
+                    )
+                ],
+              ),
             ),
-            const Align(
-              alignment: Alignment.centerRight,
-              child: AddEventBar(),
-            ),
-            if (state.eventId != "")
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: EventItem(storyId: state.eventId, handlePress: () {}),
-              )
+            if (state.isPosting)
+              Container(
+                color: AppColors.black.withOpacity(0.5),
+                height: double.infinity,
+                width: double.infinity,
+                alignment: Alignment.center,
+                child: const CircularProgressIndicator(
+                  color: AppColors.rosyPink,
+                ),
+              ),
           ],
-        ));
+        );
       }),
     );
   }
@@ -97,6 +115,7 @@ class AddEventBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final addStoryBloc = BlocProvider.of<AddStoryBloc>(context);
     return Container(
       margin: const EdgeInsets.all(20),
       child: Column(
@@ -105,21 +124,24 @@ class AddEventBar extends StatelessWidget {
           IconButtonAddEvent(
             icon: const Icon(Icons.camera_alt),
             handlePress: () {
-              context.read<AddStoryBloc>().pickImage(ImageSource.camera);
+              addStoryBloc.pickImage(ImageSource.camera);
             },
           ),
           const SizedBox(height: 20),
           IconButtonAddEvent(
             icon: const Icon(Icons.image),
             handlePress: () {
-              context.read<AddStoryBloc>().pickImage(ImageSource.gallery);
+              addStoryBloc.pickImage(ImageSource.gallery);
             },
           ),
           const SizedBox(height: 20),
           IconButtonAddEvent(
             icon: const Icon(Icons.event_available),
-            handlePress: () {
-              showMaterialModalBottomSheet(
+            handlePress: () async {
+              await addStoryBloc.getEvents();
+
+              // ignore: use_build_context_synchronously
+              final result = await showMaterialModalBottomSheet<MEvent>(
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.vertical(
                       top: Radius.circular(20),
@@ -130,22 +152,25 @@ class AddEventBar extends StatelessWidget {
                   builder: (contextModal) {
                     return SizedBox(
                       height: 700,
-                      child: ListView.builder(
-                        itemCount: 10,
-                        itemBuilder: ((contextListView, index) {
-                          return EventItem(
-                            storyId: index.toString(),
-                            handlePress: () {
-                              context.read<AddStoryBloc>().selectEvent(
-                                    index.toString(),
-                                  );
-                              Navigator.pop(context);
-                            },
-                          );
-                        }),
-                      ),
+                      child: addStoryBloc.state.events!.isNotEmpty
+                          ? ListView.builder(
+                              itemCount: addStoryBloc.state.events!.length,
+                              itemBuilder: ((contextListView, index) {
+                                return EventItem(
+                                  event: addStoryBloc.state.events![index],
+                                  handlePress: (MEvent event) {
+                                    Navigator.pop(context, event.copyWith());
+                                  },
+                                );
+                              }),
+                            )
+                          : const Center(
+                              child: Text("Not found event"),
+                            ),
                     );
                   });
+
+              addStoryBloc.selectEvent(result);
             },
           ),
         ],

@@ -8,7 +8,9 @@ import 'package:myapp/src/network/model/story/story.dart';
 class StoryReference extends BaseCollectionReference<MStory> {
   StoryReference()
       : super(
-          FirebaseFirestore.instance.collection('events').withConverter<MStory>(
+          FirebaseFirestore.instance
+              .collection('stories')
+              .withConverter<MStory>(
                 fromFirestore: (snapshot, options) => MStory.fromMap(
                     snapshot.data() as Map<String, dynamic>, snapshot.id),
                 toFirestore: (chatRoom, _) => chatRoom.toMap(),
