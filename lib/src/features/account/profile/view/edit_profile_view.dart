@@ -26,7 +26,7 @@ class EditProfileView extends StatelessWidget {
               return Scaffold(
                 backgroundColor: AppColors.white,
                 appBar: const AppBarCustom(
-                  title: "Edit Profile",
+                  title: Text("Edit Profile"),
                 ),
                 body: SingleChildScrollView(
                   child: Padding(

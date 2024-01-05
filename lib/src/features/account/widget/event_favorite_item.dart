@@ -13,7 +13,7 @@ class EventFavoriteItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        AppCoordinator.showManageEventDetails(id: event.id);
+        AppCoordinator.showManageEventDetails(id: event.id ?? "");
       },
       child: Container(
         padding: const EdgeInsets.all(10),
@@ -39,7 +39,7 @@ class EventFavoriteItem extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: Image.asset(
-                      event.images[0],
+                      event.images?[0] ?? "",
                       height: 70,
                       width: 70,
                       fit: BoxFit.cover,
@@ -52,7 +52,7 @@ class EventFavoriteItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          event.name,
+                          event.name ?? "",
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,

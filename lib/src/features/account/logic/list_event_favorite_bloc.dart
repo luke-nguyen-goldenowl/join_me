@@ -20,6 +20,6 @@ class ListEventFavoriteBloc extends PaginationBloc<ListEventFavoriteState> {
   Future<MResult<MPaginationResponse>> get getDataAPI async {
     await Future.delayed(const Duration(seconds: 2));
 
-    return domain.event.getEventsByUser(state.userId);
+    return domain.eventMock.getEventsByUser(state.userId);
   }
 }
