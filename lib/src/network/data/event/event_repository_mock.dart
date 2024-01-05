@@ -73,6 +73,11 @@ class EventRepositoryMock {
     return MResult.success(result);
   }
 
+  MResult<List<MEvent>> getAllEvent() {
+    final List<MEvent> result = listEvent;
+    return MResult.success(result);
+  }
+
   MResult<MPaginationResponse<MEvent>> getEventsByUser(String userId) {
     final List<MEvent> events = listEvent;
     final result = MPaginationResponse(
