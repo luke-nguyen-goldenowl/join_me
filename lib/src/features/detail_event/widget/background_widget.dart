@@ -13,7 +13,8 @@ class BackgroundWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DetailEventBloc, DetailEventState>(
-        buildWhen: (previous, current) => previous != current,
+        buildWhen: (previous, current) =>
+            previous.indexPageImage != current.indexPageImage,
         builder: (context, state) {
           return Stack(
             fit: StackFit.expand,

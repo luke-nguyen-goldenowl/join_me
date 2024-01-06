@@ -14,7 +14,7 @@ List<MEvent> listEvent = [
     images: ["assets/images/images/bg-event.jpg"],
     startDate: DateTime.now(),
     deadline: DateTime.now(),
-    location: LatLng(88.00015, 85.1316546),
+    location: LatLng(11.2501, 107.4229),
     host: const MUser(
         id: '1', name: 'Keith', avatar: "assets/images/images/avatar.png"),
     type: TypeEvent.sport,
@@ -26,7 +26,7 @@ List<MEvent> listEvent = [
     images: ["assets/images/images/bg-event.jpg"],
     startDate: DateTime.now(),
     deadline: DateTime.now(),
-    location: LatLng(88.00015, 85.1316546),
+    location: LatLng(11.2934, 107.4002),
     host: const MUser(
         id: '2', name: 'Kien Vo', avatar: "assets/images/images/avatar.png"),
     type: TypeEvent.music,
@@ -38,7 +38,7 @@ List<MEvent> listEvent = [
     images: ["assets/images/images/bg-event.jpg"],
     startDate: DateTime.now(),
     deadline: DateTime.now(),
-    location: LatLng(88.00015, 85.1316546),
+    location: LatLng(11.2896, 107.4428),
     host: const MUser(
         id: '2', name: 'Kien Vo', avatar: "assets/images/images/avatar.png"),
     type: TypeEvent.movie,
@@ -50,7 +50,7 @@ List<MEvent> listEvent = [
     images: ["assets/images/images/bg-event.jpg"],
     startDate: DateTime.now(),
     deadline: DateTime.now(),
-    location: LatLng(88.00015, 85.1316546),
+    location: LatLng(11.2313, 107.4389),
     host: const MUser(
         id: '2', name: 'Kien Vo', avatar: "assets/images/images/avatar.png"),
     type: TypeEvent.game,
@@ -70,6 +70,11 @@ class EventRepositoryMock {
             element.name?.toLowerCase().contains(search.toLowerCase()) ?? false)
         .toList();
 
+    return MResult.success(result);
+  }
+
+  MResult<List<MEvent>> getAllEvent() {
+    final List<MEvent> result = listEvent;
     return MResult.success(result);
   }
 
