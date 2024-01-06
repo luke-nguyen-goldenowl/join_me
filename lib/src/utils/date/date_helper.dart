@@ -168,7 +168,8 @@ class DateHelper {
     return DateFormat('h:MM a').format(time);
   }
 
-  static String getFullDateTime({required DateTime date}) {
+  static String? getFullDateTime({required DateTime? date}) {
+    if (date == null) return null;
     return DateFormat('MMM dd, yyyy - hh:mm a').format(date);
   }
 }

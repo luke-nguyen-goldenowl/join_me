@@ -31,7 +31,7 @@ class EventItem extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              DateHelper.getFullDateTime(date: event.startDate!),
+              DateHelper.getFullDateTime(date: event.startDate) ?? "",
               style: const TextStyle(
                 color: AppColors.grey,
                 fontSize: 15,
@@ -40,7 +40,7 @@ class EventItem extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              event.name!,
+              event.name ?? "F",
               style: const TextStyle(
                 wordSpacing: 0,
                 letterSpacing: 0,
@@ -69,7 +69,7 @@ class EventItem extends StatelessWidget {
                   ),
                 ),
                 TextSpan(
-                  text: event.followersId!.length.toString(),
+                  text: event.followersId?.length.toString() ?? "",
                   style: const TextStyle(
                       color: AppColors.rosyPink,
                       fontSize: 17,

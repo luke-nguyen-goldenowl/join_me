@@ -6,6 +6,7 @@ import 'package:myapp/src/features/home/widget/list_story_home.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
 import 'package:myapp/widgets/appbar/app_bar_custom.dart';
+import 'package:myapp/widgets/image/image_network.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -22,7 +23,7 @@ class HomeView extends StatelessWidget {
             },
             icon: ClipRRect(
               borderRadius: BorderRadius.circular(5.0),
-              child: Image.network(state.user.avatar!),
+              child: XImageNetwork(state.user.avatar),
             ),
             iconSize: 50,
           ),
