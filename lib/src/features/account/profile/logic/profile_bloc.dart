@@ -1,9 +1,17 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:myapp/src/features/account/logic/account_bloc.dart';
 import 'package:myapp/src/features/account/profile/logic/profile_state.dart';
+import 'package:myapp/src/network/model/user/user.dart';
+import 'package:myapp/src/services/image_picker.dart';
 
 class ProfileBloc extends Cubit<ProfileState> {
-  ProfileBloc() : super(ProfileState());
+  ProfileBloc() : super(ProfileState()) {
+    final MUser user = GetIt.I<AccountBloc>().state.user;
+    setName(user.name);
+    setEmail(user.email);
+  }
 
   void setName(String? name) {
     emit(state.copyWith(name: name));
@@ -13,38 +21,8 @@ class ProfileBloc extends Cubit<ProfileState> {
     emit(state.copyWith(email: email));
   }
 
-  void setCurrentPassword(String password) {
-    emit(state.copyWith(currentPassword: password));
-  }
-
-  void setNewPassword(String password) {
-    emit(state.copyWith(newPassword: password));
-  }
-
-  Future<XFile?> _pickImageToGallery(ImagePicker picker) async {
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-    return image;
-  }
-
-  Future<XFile?> _pickImageToCamera(ImagePicker picker) async {
-    final XFile? image = await picker.pickImage(source: ImageSource.camera);
-    return image;
-  }
-
-  void pickImage(ImageSource source) async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? image;
-    switch (source) {
-      case ImageSource.camera:
-        image = await _pickImageToCamera(picker);
-        break;
-      case ImageSource.gallery:
-        image = await _pickImageToGallery(picker);
-        break;
-      default:
-        image = null;
-        break;
-    }
+  void pickImage() async {
+    final XFile? image = await XImagePicker().onPickImage();
     emit(state.copyWith(avatar: image));
   }
 

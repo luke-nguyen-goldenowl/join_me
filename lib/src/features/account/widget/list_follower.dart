@@ -17,6 +17,8 @@ class ListFollower extends StatelessWidget {
     return BlocProvider(
       create: (_) => ListFollowerBloc()..setUserId(userId),
       child: BlocBuilder<ListFollowerBloc, ListFollowerState>(
+        buildWhen: (previous, current) =>
+            previous.userId != current.userId || previous.data != current.data,
         builder: ((context, state) {
           return Expanded(
             child: Container(
@@ -24,19 +26,21 @@ class ListFollower extends StatelessWidget {
               child: ListView.builder(
                 itemCount: state.data.data.length + 1,
                 itemBuilder: ((context, index) {
-                  return index == state.data.data.length
-                      ? Container(
-                          margin: const EdgeInsets.symmetric(vertical: 20),
-                          alignment: Alignment.center,
-                          child: XStatePaginationWidget(
-                            page: state.data,
-                            loadMore: context.read<ListFollowerBloc>().getData,
-                            autoLoad: true,
-                          ),
-                        )
-                      : Follower(
-                          person: state.data.data[index],
-                        );
+                  if (index == state.data.data.length) {
+                    return Container(
+                      margin: const EdgeInsets.symmetric(vertical: 20),
+                      alignment: Alignment.center,
+                      child: XStatePaginationWidget(
+                        page: state.data,
+                        loadMore: context.read<ListFollowerBloc>().getData,
+                        autoLoad: true,
+                      ),
+                    );
+                  } else {
+                    return Follower(
+                      person: state.data.data[index],
+                    );
+                  }
                 }),
               ),
             ),

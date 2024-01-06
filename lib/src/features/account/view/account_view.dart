@@ -16,50 +16,51 @@ class AccountHomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     const space = SizedBox(height: 15);
     return BlocBuilder<AccountBloc, AccountState>(
+        buildWhen: (previous, current) => previous.user != current.user,
         builder: (context, AccountState state) {
-      return Scaffold(
-        backgroundColor: AppColors.grey6,
-        appBar: AppBarCustom(
-          actions: [
-            IconButton(
-                onPressed: () {
-                  AppCoordinator.showProfile();
-                },
-                icon: const Icon(Icons.more_vert))
-          ],
-        ),
-        body: DefaultTabController(
-          length: 2,
-          child: Column(
-            children: [
-              space,
-              InfoUser(user: state.user),
-              space,
-              Container(
-                color: AppColors.white,
-                child: const TabBar(tabs: [
-                  Tab(
-                    text: "Favorite events",
+          return Scaffold(
+            backgroundColor: AppColors.grey6,
+            appBar: AppBarCustom(
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      AppCoordinator.showProfile();
+                    },
+                    icon: const Icon(Icons.more_vert))
+              ],
+            ),
+            body: DefaultTabController(
+              length: 2,
+              child: Column(
+                children: [
+                  space,
+                  InfoUser(user: state.user),
+                  space,
+                  Container(
+                    color: AppColors.white,
+                    child: const TabBar(tabs: [
+                      Tab(
+                        text: "Favorite events",
+                      ),
+                      Tab(
+                        text: "Follower",
+                      ),
+                    ]),
                   ),
-                  Tab(
-                    text: "Follower",
-                  ),
-                ]),
+                  Expanded(
+                    child: TabBarView(children: [
+                      ListEventFavorite(
+                        userId: state.user.id,
+                      ),
+                      ListFollower(
+                        userId: state.user.id,
+                      ),
+                    ]),
+                  )
+                ],
               ),
-              Expanded(
-                child: TabBarView(children: [
-                  ListEventFavorite(
-                    userId: state.user.id,
-                  ),
-                  ListFollower(
-                    userId: state.user.id,
-                  ),
-                ]),
-              )
-            ],
-          ),
-        ),
-      );
-    });
+            ),
+          );
+        });
   }
 }
