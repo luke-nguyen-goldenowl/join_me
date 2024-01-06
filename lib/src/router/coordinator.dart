@@ -105,4 +105,7 @@ class AppCoordinator {
 
   static Future<T?> showProfile<T extends Object?>() =>
       context.pushNamed<T>(AppRouteNames.profile.name);
+
+  static Future<T?> showEditProfile<T extends Object?>() =>
+      context.pushNamed<T>(AppRouteNames.editProfile.name);
 }

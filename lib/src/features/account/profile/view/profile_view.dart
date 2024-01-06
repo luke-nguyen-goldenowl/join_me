@@ -24,16 +24,10 @@ class ProfileView extends StatelessWidget {
             XCardSection(
               children: [
                 XCardSectionButton(
-                  title: 'User Profile',
-                  onTap: () {},
-                ),
-                XCardSectionButton(
-                  title: 'Change password',
-                  onTap: () {},
-                ),
-                XCardSectionButton(
-                  title: 'Address',
-                  onTap: () {},
+                  title: 'Edit profile',
+                  onTap: () {
+                    AppCoordinator.showEditProfile();
+                  },
                 ),
               ],
             ),

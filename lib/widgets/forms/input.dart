@@ -16,6 +16,7 @@ class XInput extends StatefulWidget {
     this.inputFormatters,
     this.onFieldSubmitted,
     this.readOnly = false,
+    this.enabled = true,
     this.maxLines = 1,
     this.minLines,
     this.onTap,
@@ -26,6 +27,7 @@ class XInput extends StatefulWidget {
 
   final Function()? onTap;
 
+  final bool enabled;
   final bool readOnly;
   final int? minLines;
   final int? maxLines;
@@ -74,14 +76,16 @@ class _XInputState extends State<XInput> {
     Widget? buildActions() {
       final List<Widget> actions = [];
       if (value.isNotEmpty) {
-        actions.add(
-          InkWell(
-            onTap: () {
-              widget.onChanged?.call('');
-            },
-            child: const Icon(Icons.cancel),
-          ),
-        );
+        if (widget.enabled) {
+          actions.add(
+            InkWell(
+              onTap: () {
+                widget.onChanged?.call('');
+              },
+              child: const Icon(Icons.cancel),
+            ),
+          );
+        }
       }
       if (widget.obscureText) {
         actions.add(
@@ -113,6 +117,7 @@ class _XInputState extends State<XInput> {
     }
 
     return TextFormField(
+      enabled: widget.enabled,
       controller: _controller,
       onTap: widget.onTap,
       readOnly: widget.readOnly,
