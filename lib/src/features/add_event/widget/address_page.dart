@@ -10,47 +10,53 @@ class AddressPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AddEventBloc, AddEventState>(builder: (context, state) {
-      return Container(
-        color: AppColors.white,
-        child: Column(
-          children: [
-            const Text(
-              "Select location",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: !state.isLoadingCurrentLocation
-                  ? GoogleMap(
-                      mapType: MapType.terrain,
-                      onMapCreated: context.read<AddEventBloc>().onMapCreate,
-                      initialCameraPosition: CameraPosition(
-                        target: state.selectedLocation!,
-                        zoom: 16,
-                      ),
-                      onTap: (argument) {
-                        context.read<AddEventBloc>().handlePressMap(argument);
-                      },
-                      markers: {
-                        Marker(
-                          markerId: const MarkerId('my location'),
-                          position: state.selectedLocation!,
+    return BlocBuilder<AddEventBloc, AddEventState>(
+        buildWhen: (previous, current) =>
+            previous.event.location != current.event.location,
+        builder: (context, state) {
+          return Container(
+            color: AppColors.white,
+            child: Column(
+              children: [
+                const Text(
+                  "Select location",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Expanded(
+                  child: !state.isLoadingCurrentLocation
+                      ? GoogleMap(
+                          mapType: MapType.terrain,
+                          onMapCreated:
+                              context.read<AddEventBloc>().onMapCreate,
+                          initialCameraPosition: CameraPosition(
+                            target: state.event.location!,
+                            zoom: 16,
+                          ),
+                          onTap: (argument) {
+                            context
+                                .read<AddEventBloc>()
+                                .handlePressMap(argument);
+                          },
+                          markers: {
+                            Marker(
+                              markerId: const MarkerId('my location'),
+                              position: state.event.location!,
+                            )
+                          },
                         )
-                      },
-                    )
-                  : const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.rosyPink,
-                      ),
-                    ),
+                      : const Center(
+                          child: CircularProgressIndicator(
+                            color: AppColors.rosyPink,
+                          ),
+                        ),
+                ),
+              ],
             ),
-          ],
-        ),
-      );
-    });
+          );
+        });
   }
 }

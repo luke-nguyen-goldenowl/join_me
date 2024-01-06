@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/src/features/add_event/logic/add_event_bloc.dart';
@@ -12,6 +13,8 @@ class UploadImagePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddEventBloc, AddEventState>(
+      buildWhen: (previous, current) =>
+          !listEquals(previous.medias, current.medias),
       builder: (context, state) {
         return Container(
           color: AppColors.white,

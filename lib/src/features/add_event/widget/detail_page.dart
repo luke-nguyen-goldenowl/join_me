@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-
 import 'package:myapp/src/features/add_event/logic/add_event_bloc.dart';
 import 'package:myapp/src/features/add_event/logic/add_event_state.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/theme/colors.dart';
-
+import 'package:myapp/src/utils/date/date_helper.dart';
 import 'package:myapp/widgets/forms/input.dart';
 
 class DetailPage extends StatelessWidget {
@@ -15,45 +13,56 @@ class DetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AddEventBloc addEventBloc = BlocProvider.of<AddEventBloc>(context);
-    return BlocBuilder<AddEventBloc, AddEventState>(builder: (context, state) {
-      return SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              const Text(
-                "Detail event",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            const Text(
+              "Detail event",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
               ),
-              Column(
-                children: [
-                  XInput(
+            ),
+            BlocBuilder<AddEventBloc, AddEventState>(
+                buildWhen: (previous, current) =>
+                    previous.event.name != current.event.name,
+                builder: (context, state) {
+                  return XInput(
                     key: const Key('addEvent_nameEventInput_textField'),
-                    value: state.nameEvent,
+                    value: state.event.name ?? "",
                     onChanged: (value) {
                       addEventBloc.setNameEvent(value);
                     },
                     decoration: const InputDecoration(
                       labelText: "Name Event",
                     ),
-                  ),
-                  XInput(
+                  );
+                }),
+            BlocBuilder<AddEventBloc, AddEventState>(
+                buildWhen: (previous, current) =>
+                    previous.event.description != current.event.description,
+                builder: (context, state) {
+                  return XInput(
                     key: const Key('addEvent_descriptionEventInput_textField'),
                     minLines: 1,
                     maxLines: 10,
-                    value: state.description,
+                    value: state.event.description ?? "",
                     onChanged: (value) {
                       addEventBloc.setDescriptionEvent(value);
                     },
                     decoration: const InputDecoration(
                       labelText: "Description",
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  DropdownButtonFormField(
+                  );
+                }),
+            const SizedBox(height: 10),
+            BlocBuilder<AddEventBloc, AddEventState>(
+                buildWhen: (previous, current) =>
+                    previous.event.type != current.event.type,
+                builder: (context, state) {
+                  return DropdownButtonFormField(
                     hint: const Text(
                       "Type Event",
                       style: TextStyle(
@@ -67,7 +76,7 @@ class DetailPage extends StatelessWidget {
                       color: AppColors.black,
                       fontWeight: FontWeight.normal,
                     ),
-                    value: state.typeEvent,
+                    value: state.event.type,
                     items: TypeEvent.values
                         .map(
                           (e) => DropdownMenuItem(
@@ -77,13 +86,18 @@ class DetailPage extends StatelessWidget {
                         )
                         .toList(),
                     onChanged: ((value) {
-                      context.read<AddEventBloc>().setType(value as TypeEvent);
+                      addEventBloc.setType(value as TypeEvent);
                     }),
-                  ),
-                  const SizedBox(height: 10),
-                  XInput(
+                  );
+                }),
+            const SizedBox(height: 10),
+            BlocBuilder<AddEventBloc, AddEventState>(
+                buildWhen: (previous, current) =>
+                    previous.event.maxAttendee != current.event.maxAttendee,
+                builder: (context, state) {
+                  return XInput(
                     key: const Key('addEvent_numberMemberEventInput_textField'),
-                    value: state.numberMember.toString(),
+                    value: state.event.maxAttendee.toString(),
                     onChanged: (value) {
                       if (int.tryParse(value) != null) {
                         addEventBloc.setNumberMemberEvent(int.tryParse(value));
@@ -96,12 +110,18 @@ class DetailPage extends StatelessWidget {
                     decoration: const InputDecoration(
                       labelText: "Maximum number of attendees",
                     ),
-                  ),
-                  XInput(
+                  );
+                }),
+            BlocBuilder<AddEventBloc, AddEventState>(
+                buildWhen: (previous, current) =>
+                    previous.event.startDate != current.event.startDate,
+                builder: (context, state) {
+                  return XInput(
                     key: const Key('addEvent_startDateEventInput_textField'),
                     readOnly: true,
-                    value: state.startDate != null
-                        ? DateFormat("dd/MM/yyyy").format(state.startDate!)
+                    value: state.event.startDate != null
+                        ? DateHelper.getFullDateTypeVN(
+                            date: state.event.startDate!)
                         : "",
                     decoration: const InputDecoration(
                       labelText: "Start day",
@@ -121,8 +141,12 @@ class DetailPage extends StatelessWidget {
                         addEventBloc.setStartDateEvent(selectedDate);
                       }
                     },
-                  ),
-                  XInput(
+                  );
+                }),
+            BlocBuilder<AddEventBloc, AddEventState>(
+                buildWhen: (previous, current) => previous.time != current.time,
+                builder: (context, state) {
+                  return XInput(
                     key: const Key('addEvent_timeEventInput_textField'),
                     readOnly: true,
                     value:
@@ -142,12 +166,18 @@ class DetailPage extends StatelessWidget {
                         addEventBloc.setTimeEvent(selectedTime);
                       }
                     },
-                  ),
-                  XInput(
+                  );
+                }),
+            BlocBuilder<AddEventBloc, AddEventState>(
+                buildWhen: (previous, current) =>
+                    previous.event.deadline != current.event.deadline,
+                builder: (context, state) {
+                  return XInput(
                     key: const Key('addEvent_deadlineEventInput_textField'),
                     readOnly: true,
-                    value: state.deadlineDate != null
-                        ? DateFormat("dd/MM/yyyy").format(state.deadlineDate!)
+                    value: state.event.deadline != null
+                        ? DateHelper.getFullDateTypeVN(
+                            date: state.event.deadline!)
                         : "",
                     decoration: const InputDecoration(
                       labelText: "Registration expiration date",
@@ -167,13 +197,11 @@ class DetailPage extends StatelessWidget {
                         addEventBloc.setDeadlineEvent(selectedDate);
                       }
                     },
-                  ),
-                ],
-              ),
-            ],
-          ),
+                  );
+                }),
+          ],
         ),
-      );
-    });
+      ),
+    );
   }
 }

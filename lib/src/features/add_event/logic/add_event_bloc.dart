@@ -44,27 +44,39 @@ class AddEventBloc extends Cubit<AddEventState> {
   }
 
   void handlePressMap(point) {
-    if (!isClosed) emit(state.copyWith(selectedLocation: point));
+    if (!isClosed) {
+      emit(state.copyWith(event: state.event.copyWith(location: point)));
+    }
   }
 
   void setNameEvent(value) {
-    if (!isClosed) emit(state.copyWith(nameEvent: value));
+    if (!isClosed) {
+      emit(state.copyWith(event: state.event.copyWith(name: value)));
+    }
   }
 
   void setDescriptionEvent(value) {
-    if (!isClosed) emit(state.copyWith(description: value));
+    if (!isClosed) {
+      emit(state.copyWith(event: state.event.copyWith(description: value)));
+    }
   }
 
   void setNumberMemberEvent(value) {
-    if (!isClosed) emit(state.copyWith(numberMember: value));
+    if (!isClosed) {
+      emit(state.copyWith(event: state.event.copyWith(maxAttendee: value)));
+    }
   }
 
   void setStartDateEvent(value) {
-    if (!isClosed) emit(state.copyWith(startDate: value));
+    if (!isClosed) {
+      emit(state.copyWith(event: state.event.copyWith(startDate: value)));
+    }
   }
 
   void setDeadlineEvent(value) {
-    if (!isClosed) emit(state.copyWith(deadlineDate: value));
+    if (!isClosed) {
+      emit(state.copyWith(event: state.event.copyWith(deadline: value)));
+    }
   }
 
   void setTimeEvent(value) {
@@ -72,29 +84,31 @@ class AddEventBloc extends Cubit<AddEventState> {
   }
 
   void setType(TypeEvent type) {
-    if (!isClosed) emit(state.copyWith(typeEvent: type));
+    if (!isClosed) {
+      emit(state.copyWith(event: state.event.copyWith(type: type)));
+    }
   }
 
   void addEvent() async {
     if (!isClosed) emit(state.copyWith(isPosting: true));
 
-    List<String> images = state.medias.map((e) => e!.path).toList();
-    DateTime startDate = DateTime(
-      state.startDate!.year,
-      state.startDate!.month,
-      state.startDate!.day,
-      state.time!.hour,
-      state.time!.minute,
-    );
-    final MEvent event = MEvent(
-      name: state.nameEvent,
-      description: state.description,
+    late final List<String> images;
+
+    images = state.medias.map((e) => e!.path).toList();
+
+    late final DateTime startDate;
+    if (state.event.startDate != null && state.time != null) {
+      startDate = DateTime(
+        state.event.startDate!.year,
+        state.event.startDate!.month,
+        state.event.startDate!.day,
+        state.time!.hour,
+        state.time!.minute,
+      );
+    }
+    final MEvent event = state.event.copyWith(
       images: images,
       startDate: startDate,
-      type: state.typeEvent,
-      deadline: state.deadlineDate,
-      location: state.selectedLocation,
-      maxAttendee: state.numberMember,
       host: GetIt.I<AccountBloc>().state.user,
       favoritesId: [],
       followersId: [],
@@ -143,8 +157,11 @@ class AddEventBloc extends Cubit<AddEventState> {
         currentLocation.longitude ?? 106.6557574,
       );
       if (!isClosed) {
-        emit(state.copyWith(
-            selectedLocation: locationLatLng, isLoadingCurrentLocation: false));
+        emit(
+          state.copyWith(
+              event: state.event.copyWith(location: locationLatLng),
+              isLoadingCurrentLocation: false),
+        );
       }
     } catch (e) {
       if (kDebugMode) {

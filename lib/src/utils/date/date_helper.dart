@@ -164,6 +164,10 @@ class DateHelper {
     return DateFormat('MMMM dd, yyyy').format(date);
   }
 
+  static String getFullDateTypeVN({required DateTime date}) {
+    return DateFormat('dd/MM/yyyy').format(date);
+  }
+
   static String getTime({required DateTime time}) {
     return DateFormat('h:MM a').format(time);
   }
