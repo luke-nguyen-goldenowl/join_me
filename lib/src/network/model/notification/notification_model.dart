@@ -46,7 +46,7 @@ class NotificationModel {
       case 'upcomingEvent':
         return TypeNotify.upcomingEvent;
       default:
-        throw ArgumentError('Unknown status: $typeNotifyString');
+        return TypeNotify.changeEvent;
     }
   }
 

@@ -37,7 +37,7 @@ class MFollowEvent {
   factory MFollowEvent.fromMap(Map<String, dynamic> map) {
     return MFollowEvent(
       id: map['id'] as String,
-      event: MEvent.fromMap(map['event'] as Map<String, dynamic>),
+      event: MEvent.fromMap(map['event'] as Map<String, dynamic>, ""),
       user: MUser.fromJson(map['user'] as Map<String, dynamic>),
     );
   }

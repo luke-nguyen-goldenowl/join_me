@@ -15,7 +15,7 @@ class NotificationUpcomingEvent extends StatelessWidget {
         leading: ClipRRect(
           borderRadius: BorderRadius.circular(12),
           child: Image.asset(
-            upcomingEvent.event.images[0],
+            upcomingEvent.event.images?[0] ?? "",
             height: 50,
             width: 50,
             fit: BoxFit.cover,

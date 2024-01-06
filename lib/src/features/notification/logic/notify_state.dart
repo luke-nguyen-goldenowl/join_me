@@ -1,20 +1,12 @@
+import 'package:myapp/src/features/common/logic/pagination_bloc.dart';
+import 'package:myapp/src/network/model/common/pagination/pagination.dart';
 import 'package:myapp/src/network/model/notification/notification_model.dart';
 
-class NotifyState {
-  List<NotificationModel> notifies;
-  NotifyState({
-    required this.notifies,
-  });
+class NotifyState extends PaginationState<NotificationModel> {
+  const NotifyState({required super.data});
 
-  factory NotifyState.ds() {
-    return NotifyState(notifies: []);
-  }
-
-  NotifyState copyWith({
-    List<NotificationModel>? notifies,
-  }) {
-    return NotifyState(
-      notifies: notifies ?? this.notifies,
-    );
+  @override
+  NotifyState copyWith({MPagination<NotificationModel>? data}) {
+    return NotifyState(data: data ?? this.data);
   }
 }

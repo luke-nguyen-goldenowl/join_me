@@ -1,4 +1,7 @@
 import 'package:latlong2/latlong.dart';
+import 'package:myapp/src/network/model/common/pagination/meta/pagination_meta.dart';
+import 'package:myapp/src/network/model/common/pagination/pagination.dart';
+import 'package:myapp/src/network/model/common/pagination/pagination_response.dart';
 import 'package:myapp/src/network/model/common/result.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/network/model/notification/change_event.dart';
@@ -22,12 +25,10 @@ final List<NotificationModel> notifies = [
         images: ["assets/images/images/bg-event.jpg"],
         startDate: DateTime.now(),
         deadline: DateTime.now(),
-        province: 'Ho Chi Minh',
-        location: LatLng(88.00015, 85.1316546),
+        location: LatLng(11.2501, 107.4229),
         host: const MUser(
             id: '1', name: 'Keith', avatar: "assets/images/images/avatar.png"),
-        follower: 122,
-        type: 'sport',
+        type: TypeEvent.sport,
       ),
     ),
   ),
@@ -42,12 +43,10 @@ final List<NotificationModel> notifies = [
         images: ["assets/images/images/bg-event.jpg"],
         startDate: DateTime.now(),
         deadline: DateTime.now(),
-        province: 'Ho Chi Minh',
-        location: LatLng(88.00015, 85.1316546),
+        location: LatLng(11.2501, 107.4229),
         host: const MUser(
             id: '1', name: 'Keith', avatar: "assets/images/images/avatar.png"),
-        follower: 122,
-        type: 'sport',
+        type: TypeEvent.sport,
       ),
     ),
   ),
@@ -62,12 +61,10 @@ final List<NotificationModel> notifies = [
         images: ["assets/images/images/bg-event.jpg"],
         startDate: DateTime.now(),
         deadline: DateTime.now(),
-        province: 'Ho Chi Minh',
-        location: LatLng(88.00015, 85.1316546),
+        location: LatLng(11.2501, 107.4229),
         host: const MUser(
             id: '1', name: 'Keith', avatar: "assets/images/images/avatar.png"),
-        follower: 122,
-        type: 'sport',
+        type: TypeEvent.sport,
       ),
       user: const MUser(
           id: '2', name: 'NaNa', avatar: "assets/images/images/avatar.png"),
@@ -84,8 +81,17 @@ final List<NotificationModel> notifies = [
 ];
 
 class NotificationRepositoryMock {
-  MResult<List<NotificationModel>> getNotifies(String userId) {
-    final result = notifies;
+  MResult<MPaginationResponse<NotificationModel>> getNotifies(String userId) {
+    final List<NotificationModel> notify = notifies;
+    final result = MPaginationResponse(
+      data: notify,
+      meta: const MPaginationMeta(
+        pageSize: MPagination.defaultPageLimit,
+        totalCount: 50,
+        pageNumber: 4,
+        lastPage: 5,
+      ),
+    );
     return MResult.success(result);
   }
 }

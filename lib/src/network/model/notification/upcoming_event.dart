@@ -31,7 +31,7 @@ class MUpcomingEvent {
   factory MUpcomingEvent.fromMap(Map<String, dynamic> map) {
     return MUpcomingEvent(
       id: map['id'] as String,
-      event: MEvent.fromMap(map['event'] as Map<String, dynamic>),
+      event: MEvent.fromMap(map['event'] as Map<String, dynamic>, ""),
     );
   }
 
