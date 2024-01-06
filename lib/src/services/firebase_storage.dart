@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 
-class MFirebaseStorage {
+class XFirebaseStorage {
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
   Future<String> uploadImage(String imagePath, String folderName) async {
