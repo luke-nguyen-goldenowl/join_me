@@ -16,7 +16,7 @@ class EventReference extends BaseCollectionReference<MEvent> {
           setObjectId: (e, id) => e.copyWith(id: id),
         );
 
-  final MFirebaseStorage firebaseStorage = MFirebaseStorage();
+  final XFirebaseStorage firebaseStorage = XFirebaseStorage();
 
   Future<MResult<MEvent>> addEvent(MEvent event) async {
     try {
