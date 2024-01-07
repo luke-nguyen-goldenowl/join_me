@@ -38,7 +38,7 @@ class AddEventBloc extends Cubit<AddEventState> {
   }
 
   void removeImage(int index) {
-    final List<XFile?> newMedias = state.medias;
+    final List<XFile?> newMedias = [...state.medias];
     newMedias.removeAt(index);
     if (!isClosed) emit(state.copyWith(medias: newMedias));
   }
