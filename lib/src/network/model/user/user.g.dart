@@ -14,6 +14,9 @@ _$MUserImpl _$$MUserImplFromJson(Map<String, dynamic> json) => _$MUserImpl(
       followers: (json['followers'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
+      followed: (json['followed'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
     );
 
 Map<String, dynamic> _$$MUserImplToJson(_$MUserImpl instance) =>
@@ -23,4 +26,5 @@ Map<String, dynamic> _$$MUserImplToJson(_$MUserImpl instance) =>
       'avatar': instance.avatar,
       'email': instance.email,
       'followers': instance.followers,
+      'followed': instance.followed,
     };

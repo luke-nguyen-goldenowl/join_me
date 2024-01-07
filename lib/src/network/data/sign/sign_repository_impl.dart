@@ -34,6 +34,7 @@ class SignRepositoryImpl extends SignRepository {
         name: firebaseUser?.displayName,
         avatar: firebaseUser?.photoURL,
         followers: [],
+        followed: [],
       );
       final userResult = await DomainManager().user.getOrAddUser(newUser);
 
@@ -59,6 +60,7 @@ class SignRepositoryImpl extends SignRepository {
         name: user.fullName,
         avatar: user.avatar,
         followers: [],
+        followed: [],
       );
       final userResult = await DomainManager().user.getOrAddUser(newUser);
 
@@ -105,6 +107,7 @@ class SignRepositoryImpl extends SignRepository {
         name: firebaseUser?.displayName,
         avatar: firebaseUser?.photoURL,
         followers: [],
+        followed: [],
       );
       final userResult = await DomainManager().user.getOrAddUser(newUser);
       return MResult.success(userResult.data ?? newUser);
@@ -185,6 +188,8 @@ class SignRepositoryImpl extends SignRepository {
         email: firebaseUser?.email,
         name: name,
         avatar: avatarDefault,
+        followers: [],
+        followed: [],
       );
       final userResult = await DomainManager().user.getOrAddUser(newUser);
       return MResult.success(userResult.data ?? newUser);
