@@ -110,4 +110,84 @@ class EventReference extends BaseCollectionReference<MEvent> {
       return MResult.exception(e);
     }
   }
+
+  Future<MResult<List<MEvent>>> getEventsPopular(String userId) async {
+    try {
+      DateTime currentDate = DateTime.now();
+
+      final QuerySnapshot<MEvent> querySnapshot = await ref
+          .where('deadline', isGreaterThan: currentDate.toIso8601String())
+          .orderBy('deadline')
+          .orderBy('countFollowers', descending: true)
+          .limit(15)
+          .get();
+      final docs = querySnapshot.docs
+          .where((document) => document['host'] != userId)
+          .toList()
+          .map((e) => e.data())
+          .toList();
+      return MResult.success(docs);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<List<MEvent>>> getEventsUpcoming(String userId) async {
+    try {
+      DateTime currentDate = DateTime.now();
+      DateTime oneWeekFromNow = currentDate.add(const Duration(days: 7));
+
+      final QuerySnapshot<MEvent> querySnapshot = await ref
+          .where('deadline', isGreaterThan: currentDate.toIso8601String())
+          .where('deadline', isLessThan: oneWeekFromNow.toIso8601String())
+          .orderBy('deadline')
+          .orderBy('countFollowers', descending: true)
+          .limit(15)
+          .get();
+      final docs = querySnapshot.docs
+          .where((document) => document['host'] != userId)
+          .toList()
+          .map((e) => e.data())
+          .toList();
+      return MResult.success(docs);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<List<MEvent>>> getEventsPeople(List<String> people) async {
+    try {
+      DateTime currentDate = DateTime.now();
+
+      final QuerySnapshot<MEvent> querySnapshot = await ref
+          .where('host', whereIn: people)
+          .where('deadline', isGreaterThan: currentDate.toIso8601String())
+          .orderBy('deadline')
+          .orderBy('countFollowers', descending: true)
+          .limit(15)
+          .get();
+      final docs = querySnapshot.docs.map((e) => e.data()).toList();
+      return MResult.success(docs);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<List<MEvent>>> getEventsFollow(String userId) async {
+    try {
+      DateTime currentDate = DateTime.now();
+
+      final QuerySnapshot<MEvent> querySnapshot = await ref
+          .where('followersId', arrayContains: userId)
+          .where('deadline', isGreaterThan: currentDate.toIso8601String())
+          .orderBy('deadline')
+          .orderBy('countFollowers', descending: true)
+          .limit(15)
+          .get();
+      final docs = querySnapshot.docs.map((e) => e.data()).toList();
+      return MResult.success(docs);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
 }

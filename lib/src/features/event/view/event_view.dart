@@ -9,7 +9,6 @@ import 'package:myapp/src/features/event/widget/calendar_event_widget.dart';
 import 'package:myapp/src/features/event/widget/category_event_widget.dart';
 import 'package:myapp/src/features/event/widget/map_page.dart';
 import 'package:myapp/src/features/home/logic/event_item_bloc.dart';
-import 'package:myapp/src/features/home/widget/event_item_home.dart';
 import 'package:myapp/src/theme/colors.dart';
 
 import 'package:myapp/widgets/appbar/app_bar_custom.dart';
@@ -95,13 +94,13 @@ class ListEventItemEventView extends StatelessWidget {
             (BuildContext context, int index) {
               return BlocProvider(
                 create: (_) => EventItemBloc()..initIsLike(Random().nextBool()),
-                child: Column(
+                child: const Column(
                   children: [
                     SizedBox(
                       height: 250,
-                      child: EventItemHome(id: index.toString()),
+                      // child: EventItemHome(id: index.toString()),
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20),
                   ],
                 ),
               );
