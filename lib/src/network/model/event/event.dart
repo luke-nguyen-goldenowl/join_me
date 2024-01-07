@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 
 enum TypeEvent {
@@ -102,7 +102,9 @@ class MEvent {
       'host': host?.id,
       'images': images,
       'favoritesId': favoritesId,
+      'countFavorites': favoritesId?.length ?? 0,
       'followersId': followersId,
+      'countFollowers': followersId?.length ?? 0,
       'location': location != null
           ? {'latitude': location!.latitude, 'longitude': location!.longitude}
           : null,
