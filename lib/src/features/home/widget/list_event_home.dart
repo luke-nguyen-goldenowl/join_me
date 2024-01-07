@@ -12,24 +12,24 @@ class ListEventHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final events = context.read<HomeBloc>().getListEvents(type);
-    if (events.isNotEmpty) {
-      return BlocBuilder<HomeBloc, HomeState>(
-        buildWhen: (previous, current) {
-          switch (type) {
-            case TypeListEventHome.followed:
-              return previous.followed.length != current.followed.length;
-            case TypeListEventHome.popular:
-              return previous.popular.length != current.popular.length;
-            case TypeListEventHome.people:
-              return previous.people.length != current.people.length;
-            case TypeListEventHome.upcoming:
-              return previous.upcoming.length != current.upcoming.length;
-            default:
-              return previous.followed.length != current.followed.length;
-          }
-        },
-        builder: ((context, state) {
+    return BlocBuilder<HomeBloc, HomeState>(
+      buildWhen: (previous, current) {
+        switch (type) {
+          case TypeListEventHome.followed:
+            return previous.followed.length != current.followed.length;
+          case TypeListEventHome.popular:
+            return previous.popular.length != current.popular.length;
+          case TypeListEventHome.people:
+            return previous.people.length != current.people.length;
+          case TypeListEventHome.upcoming:
+            return previous.upcoming.length != current.upcoming.length;
+          default:
+            return previous.followed.length != current.followed.length;
+        }
+      },
+      builder: ((context, state) {
+        final events = context.read<HomeBloc>().getListEvents(type);
+        if (events.isNotEmpty) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -56,10 +56,10 @@ class ListEventHome extends StatelessWidget {
               )
             ],
           );
-        }),
-      );
-    } else {
-      return const SizedBox(height: 5);
-    }
+        } else {
+          return const SizedBox(height: 5);
+        }
+      }),
+    );
   }
 }

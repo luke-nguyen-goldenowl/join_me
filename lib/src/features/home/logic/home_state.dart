@@ -6,7 +6,7 @@ import 'package:myapp/src/network/model/event/event.dart';
 enum TypeListEventHome {
   popular("Popular"),
   upcoming("Upcoming"),
-  people("Your friend has joined"),
+  people("Your friend organized it"),
   followed("Followed");
 
   final String text;
