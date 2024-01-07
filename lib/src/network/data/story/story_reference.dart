@@ -30,4 +30,22 @@ class StoryReference extends BaseCollectionReference<MStory> {
       return MResult.exception(e);
     }
   }
+
+  Future<MResult<List<MStory>>> getStoriesByUser(String userId) async {
+    try {
+      DateTime now = DateTime.now();
+      DateTime twentyFourHoursAgo = now.subtract(const Duration(hours: 24));
+      final QuerySnapshot<MStory> querySnapshot = await ref
+          .where('host', isEqualTo: userId)
+          .where('time', isGreaterThan: twentyFourHoursAgo.toIso8601String())
+          .orderBy('time')
+          .get()
+          .timeout(const Duration(seconds: 10));
+
+      final docs = querySnapshot.docs.map((e) => e.data()).toList();
+      return MResult.success(docs);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
 }

@@ -8,6 +8,7 @@ import 'package:myapp/src/network/model/user/user.dart';
 
 class HomeBloc extends Cubit<HomeState> {
   HomeBloc() : super(HomeState.ds()) {
+    getUsersEvents();
     getPopular();
     getUpcoming();
     getFollowed();
@@ -15,6 +16,19 @@ class HomeBloc extends Cubit<HomeState> {
   }
   DomainManager domain = DomainManager();
   final MUser user = GetIt.I<AccountBloc>().state.user;
+
+  void getUsersEvents() async {
+    try {
+      final result =
+          await domain.userEvent.getUserStoryByIds(user.followed ?? []);
+      if (result.isSuccess) {
+        emit(state.copyWith(userStory: result.data));
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   void getPopular() async {
     try {
       final result = await domain.event.getEventsPopular(user.id);

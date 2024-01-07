@@ -73,4 +73,17 @@ class UserReference extends BaseCollectionReference<MUser> {
       return MResult.exception(e);
     }
   }
+
+  Future<MResult<List<MUser>>> getUsersByIds(List<String> userIds) async {
+    try {
+      final result = await getDataByIds(userIds);
+      if (result.isError == false) {
+        return result;
+      } else {
+        return MResult.success(result.data);
+      }
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
 }

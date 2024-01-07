@@ -21,6 +21,7 @@ class UserRepositoryImpl extends UserRepository {
         name: result.data!.name,
         avatar: result.data!.avatar,
         followers: result.data!.followers,
+        followed: result.data!.followed,
       );
       return MResult.success(user);
     } catch (e) {

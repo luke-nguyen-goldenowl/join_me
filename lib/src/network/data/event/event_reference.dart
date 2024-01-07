@@ -107,7 +107,8 @@ class EventReference extends BaseCollectionReference<MEvent> {
           .where('host', isEqualTo: userId)
           .where('deadline', isGreaterThan: currentDate.toIso8601String())
           .orderBy('deadline')
-          .get();
+          .get()
+          .timeout(const Duration(seconds: 10));
       final docs = querySnapshot.docs.map((e) => e.data()).toList();
       return MResult.success(docs);
     } catch (e) {
@@ -124,7 +125,8 @@ class EventReference extends BaseCollectionReference<MEvent> {
           .orderBy('deadline')
           .orderBy('countFollowers', descending: true)
           .limit(15)
-          .get();
+          .get()
+          .timeout(const Duration(seconds: 10));
       final docs = querySnapshot.docs
           .where((document) => document['host'] != userId)
           .toList()
@@ -147,7 +149,8 @@ class EventReference extends BaseCollectionReference<MEvent> {
           .orderBy('deadline')
           .orderBy('countFollowers', descending: true)
           .limit(15)
-          .get();
+          .get()
+          .timeout(const Duration(seconds: 10));
       final docs = querySnapshot.docs
           .where((document) => document['host'] != userId)
           .toList()
@@ -169,7 +172,8 @@ class EventReference extends BaseCollectionReference<MEvent> {
           .orderBy('deadline')
           .orderBy('countFollowers', descending: true)
           .limit(15)
-          .get();
+          .get()
+          .timeout(const Duration(seconds: 10));
       final docs = querySnapshot.docs.map((e) => e.data()).toList();
       return MResult.success(docs);
     } catch (e) {
@@ -187,7 +191,8 @@ class EventReference extends BaseCollectionReference<MEvent> {
           .orderBy('deadline')
           .orderBy('countFollowers', descending: true)
           .limit(15)
-          .get();
+          .get()
+          .timeout(const Duration(seconds: 10));
       final docs = querySnapshot.docs.map((e) => e.data()).toList();
       return MResult.success(docs);
     } catch (e) {
