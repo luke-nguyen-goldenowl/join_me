@@ -11,6 +11,7 @@ class MUser with _$MUser {
     String? name,
     String? avatar,
     String? email,
+    List<String>? followers,
   }) = _MUser;
 
   factory MUser.empty() {
