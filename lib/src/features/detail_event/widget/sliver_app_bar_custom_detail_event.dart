@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/gen/assets.gen.dart';
 import 'package:myapp/src/features/detail_event/widget/background_widget.dart';
 import 'package:myapp/src/theme/colors.dart';
 
 class SliverAppBarCustomDetailEvent extends StatelessWidget {
   const SliverAppBarCustomDetailEvent({
-    super.key,
+    this.actions,
+    required this.images,
+    required this.setIndexPageImage,
+    required this.indexPageImage,
+    required this.controller,
   });
+
+  final List<String> images;
+  final Function(int index) setIndexPageImage;
+  final int indexPageImage;
+  final PageController controller;
+  final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) {
@@ -14,19 +23,17 @@ class SliverAppBarCustomDetailEvent extends StatelessWidget {
       pinned: true,
       foregroundColor: AppColors.white,
       expandedHeight: 200,
-      actions: [
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.favorite_border),
-        )
-      ],
+      actions: actions,
       flexibleSpace: Stack(
         children: <Widget>[
           Positioned.fill(
             child: Stack(
               fit: StackFit.expand,
               children: [
-                Assets.images.images.landscape2.image(fit: BoxFit.cover),
+                Image.asset(
+                  images[0],
+                  fit: BoxFit.cover,
+                ),
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.black.withOpacity(0.8),
@@ -35,8 +42,13 @@ class SliverAppBarCustomDetailEvent extends StatelessWidget {
               ],
             ),
           ),
-          const FlexibleSpaceBar(
-            background: BackgroundWidget(),
+          FlexibleSpaceBar(
+            background: BackgroundWidget(
+              images: images,
+              setIndexPageImage: setIndexPageImage,
+              indexPageImage: indexPageImage,
+              controller: controller,
+            ),
           ),
         ],
       ),
