@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:myapp/src/network/data/event/event_reference.dart';
 import 'package:myapp/src/network/firebase/base_collection.dart';
 import 'package:myapp/src/network/model/common/result.dart';
+import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/network/model/story/story.dart';
 import 'package:myapp/src/services/firebase_storage.dart';
 
@@ -33,6 +35,7 @@ class StoryReference extends BaseCollectionReference<MStory> {
 
   Future<MResult<List<MStory>>> getStoriesByUser(String userId) async {
     try {
+      final EventReference eventReference = EventReference();
       DateTime now = DateTime.now();
       DateTime twentyFourHoursAgo = now.subtract(const Duration(hours: 24));
       final QuerySnapshot<MStory> querySnapshot = await ref
@@ -43,7 +46,18 @@ class StoryReference extends BaseCollectionReference<MStory> {
           .timeout(const Duration(seconds: 10));
 
       final docs = querySnapshot.docs.map((e) => e.data()).toList();
-      return MResult.success(docs);
+      List<Future<MResult<MEvent>>> futures = docs.map((story) {
+        return eventReference.getEventNoUser(story.event?.id ?? "");
+      }).toList();
+      List<MResult<MEvent>> listEvent = await Future.wait(futures);
+      List<MStory> result = docs
+          .asMap()
+          .map((key, value) {
+            return MapEntry(key, value.copyWith(event: listEvent[key].data));
+          })
+          .values
+          .toList();
+      return MResult.success(result);
     } catch (e) {
       return MResult.exception(e);
     }

@@ -164,14 +164,19 @@ class DateHelper {
     return DateFormat('MMMM dd, yyyy').format(date);
   }
 
-  static String getShortMonth({required DateTime? date}) {
-    if (date == null) return "";
-    return DateFormat('MMM').format(date);
-  }
-
   static String getTime({required DateTime? time}) {
     if (time == null) return "";
     return DateFormat('h:MM a').format(time);
+  }
+
+  static String? getFullDateTime({required DateTime? date}) {
+    if (date == null) return null;
+    return DateFormat('MMM dd, yyyy - hh:mm a').format(date);
+  }
+
+  static String getShortMonth({required DateTime? date}) {
+    if (date == null) return "";
+    return DateFormat('MMM').format(date);
   }
 
   static String getFormatStoryTime(DateTime? inputDateTime) {

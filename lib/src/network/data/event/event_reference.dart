@@ -53,6 +53,19 @@ class EventReference extends BaseCollectionReference<MEvent> {
     }
   }
 
+  Future<MResult<MEvent>> getEventNoUser(String eventId) async {
+    try {
+      final MResult<MEvent> eventResult = await get(eventId);
+      if (eventResult.isSuccess) {
+        return MResult.success(eventResult.data);
+      } else {
+        return MResult.error('Event not found');
+      }
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
   Future<MResult> updateFollowEvent(
     String eventId,
     String userId,

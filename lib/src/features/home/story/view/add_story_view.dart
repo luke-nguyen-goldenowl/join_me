@@ -79,9 +79,10 @@ class AddStoryPage extends StatelessWidget {
             ),
             if (state.eventId != "")
               Align(
-                alignment: Alignment.bottomCenter,
-                child: EventItem(storyId: state.eventId, handlePress: () {}),
-              )
+                  alignment: Alignment.bottomCenter,
+                  child:
+                      Container() // EventItem(storyId: state.eventId, handlePress: () {}),
+                  )
           ],
         ));
       }),
@@ -132,15 +133,17 @@ class AddEventBar extends StatelessWidget {
                       child: ListView.builder(
                         itemCount: 10,
                         itemBuilder: ((contextListView, index) {
-                          return EventItem(
-                            storyId: index.toString(),
-                            handlePress: () {
-                              context.read<AddStoryBloc>().selectEvent(
-                                    index.toString(),
-                                  );
-                              Navigator.pop(context);
-                            },
-                          );
+                          return
+                              // EventItem(
+                              //   storyId: index.toString(),
+                              //   handlePress: () {
+                              //     context.read<AddStoryBloc>().selectEvent(
+                              //           index.toString(),
+                              //         );
+                              //     Navigator.pop(context);
+                              //   },
+                              // );
+                              Container();
                         }),
                       ),
                     );
