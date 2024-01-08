@@ -74,7 +74,7 @@ class EventRepositoryMock {
     if (search == "") return MResult.success([]);
     final result = listEvent
         .where((element) =>
-            element.name!.toLowerCase().contains(search.toLowerCase()))
+            element.name?.toLowerCase().contains(search.toLowerCase()) ?? false)
         .toList();
 
     return MResult.success(result);
