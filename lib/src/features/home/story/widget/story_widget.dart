@@ -1,23 +1,27 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:myapp/src/features/home/data/users.dart';
-import 'package:myapp/src/features/home/model/user.dart';
+import 'package:get_it/get_it.dart';
+import 'package:myapp/src/features/home/logic/home_bloc.dart';
 import 'package:myapp/src/features/home/story/logic/story_widget_bloc.dart';
 import 'package:myapp/src/features/home/story/logic/story_widget_state.dart';
 import 'package:myapp/src/features/home/story/widget/profile_widget.dart';
+import 'package:myapp/src/network/model/story/story.dart';
+import 'package:myapp/src/network/model/user/user.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
 import 'package:story_view/story_view.dart';
 
 class StoryWidget extends StatelessWidget {
-  final User user;
+  final MUser user;
+  final List<MStory> stories;
   final PageController controller;
 
   const StoryWidget({
     super.key,
     required this.user,
     required this.controller,
+    required this.stories,
   });
 
   void _handleCompleted() {
@@ -26,8 +30,11 @@ class StoryWidget extends StatelessWidget {
       curve: Curves.easeIn,
     );
 
-    final currentIndex = users.indexOf(user);
-    final isLastPage = users.length - 1 == currentIndex;
+    final userStory = GetIt.I<HomeBloc>().state.userStory;
+
+    final currentIndex =
+        userStory.indexWhere((element) => element.user.id == user.id);
+    final isLastPage = userStory.length - 1 == currentIndex;
 
     if (isLastPage) {
       AppCoordinator.pop();
@@ -37,7 +44,7 @@ class StoryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => StoryWidgetBloc()..initState(user),
+      create: (_) => StoryWidgetBloc()..initState(stories, user),
       child: BlocBuilder<StoryWidgetBloc, StoryWidgetState>(
         buildWhen: (previous, current) {
           return previous.date != current.date ||
@@ -62,11 +69,9 @@ class StoryWidget extends StatelessWidget {
                   onStoryShow: (storyItem) {
                     final index = state.storyItems.indexOf(storyItem);
 
-                    if (index > 0) {
-                      context
-                          .read<StoryWidgetBloc>()
-                          .handleOnStoryShow(user, index);
-                    }
+                    context
+                        .read<StoryWidgetBloc>()
+                        .handleOnStoryShow(stories, index);
                   },
                 ),
               ),

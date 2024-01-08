@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:myapp/gen/assets.gen.dart';
 import 'package:myapp/src/features/account/logic/account_bloc.dart';
-import 'package:myapp/src/features/home/logic/home_bloc.dart';
 import 'package:myapp/src/features/home/logic/home_state.dart';
 import 'package:myapp/src/features/home/widget/list_event_home.dart';
 import 'package:myapp/src/features/home/widget/list_story_home.dart';
@@ -16,10 +14,7 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => HomeBloc(),
-      child: const HomePage(),
-    );
+    return const HomePage();
   }
 }
 

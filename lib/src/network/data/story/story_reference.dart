@@ -48,4 +48,19 @@ class StoryReference extends BaseCollectionReference<MStory> {
       return MResult.exception(e);
     }
   }
+
+  Future<MResult> updateViewerStory(String storyId, String userId) async {
+    try {
+      final result = await update(storyId, {
+        'viewers': FieldValue.arrayUnion([userId])
+      });
+      if (result.isError == false) {
+        return result;
+      } else {
+        return MResult.success(result.data);
+      }
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
 }

@@ -7,4 +7,8 @@ class StoryRepositoryImpl {
   Future<MResult<MStory>> addStory(MStory story) {
     return storyReference.addStory(story);
   }
+
+  Future<MResult> updateViewerStory(String storyId, String userId) async {
+    return storyReference.updateViewerStory(storyId, userId);
+  }
 }
