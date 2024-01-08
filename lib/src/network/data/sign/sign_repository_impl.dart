@@ -33,6 +33,8 @@ class SignRepositoryImpl extends SignRepository {
         email: firebaseUser?.email,
         name: firebaseUser?.displayName,
         avatar: firebaseUser?.photoURL,
+        followers: [],
+        followed: [],
       );
       final userResult = await DomainManager().user.getOrAddUser(newUser);
 
@@ -57,6 +59,8 @@ class SignRepositoryImpl extends SignRepository {
         email: user.email,
         name: user.fullName,
         avatar: user.avatar,
+        followers: [],
+        followed: [],
       );
       final userResult = await DomainManager().user.getOrAddUser(newUser);
 
@@ -102,9 +106,11 @@ class SignRepositoryImpl extends SignRepository {
         email: firebaseUser?.email,
         name: firebaseUser?.displayName,
         avatar: firebaseUser?.photoURL,
+        followers: [],
+        followed: [],
       );
-
-      return MResult.success(newUser);
+      final userResult = await DomainManager().user.getOrAddUser(newUser);
+      return MResult.success(userResult.data ?? newUser);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
@@ -182,6 +188,8 @@ class SignRepositoryImpl extends SignRepository {
         email: firebaseUser?.email,
         name: name,
         avatar: avatarDefault,
+        followers: [],
+        followed: [],
       );
       final userResult = await DomainManager().user.getOrAddUser(newUser);
       return MResult.success(userResult.data ?? newUser);

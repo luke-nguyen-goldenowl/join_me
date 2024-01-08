@@ -1,61 +1,65 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:myapp/src/features/home/model/story.dart';
-import 'package:myapp/src/features/home/model/user.dart';
+import 'package:get_it/get_it.dart';
+import 'package:myapp/src/features/account/logic/account_bloc.dart';
+import 'package:myapp/src/features/home/logic/home_bloc.dart';
 import 'package:myapp/src/features/home/story/logic/story_widget_state.dart';
+import 'package:myapp/src/network/domain_manager.dart';
+import 'package:myapp/src/network/model/story/story.dart';
+import 'package:myapp/src/network/model/user/user.dart';
+import 'package:myapp/src/utils/date/date_helper.dart';
 import 'package:story_view/story_view.dart';
 
 class StoryWidgetBloc extends Cubit<StoryWidgetState> {
-  StoryWidgetBloc() : super(StoryWidgetState.ds());
+  StoryWidgetBloc({required List<MStory> stories, required MUser host})
+      : super(StoryWidgetState.ds()) {
+    final storyItems = _addStoryItems(stories);
+    String date = DateHelper.getFormatStoryTime(stories[0].time);
+    emit(state.copyWith(
+      date: date,
+      host: host,
+      storyItems: storyItems,
+      stories: stories,
+    ));
+  }
   StoryController controller = StoryController();
-  List<StoryItem> _addStoryItems(User user) {
+  DomainManager domain = DomainManager();
+  final user = GetIt.I<AccountBloc>().state.user;
+
+  List<StoryItem> _addStoryItems(List<MStory> stories) {
     final storyItems = <StoryItem>[];
-    for (final story in user.stories) {
-      switch (story.mediaType) {
-        case MediaType.image:
-          storyItems.add(
-            StoryItem.pageImage(
-              url: story.url,
-              controller: controller,
-              caption: story.caption,
-              duration: Duration(
-                milliseconds: (story.duration * 1000).toInt(),
-              ),
-            ),
-          );
-          break;
-        case MediaType.text:
-          storyItems.add(
-            StoryItem.text(
-              title: story.caption,
-              backgroundColor: story.color,
-              duration: Duration(
-                milliseconds: (story.duration * 1000).toInt(),
-              ),
-            ),
-          );
-          break;
-      }
+    for (final story in stories) {
+      storyItems.add(
+        StoryItem.pageImage(
+          url: story.image ?? "",
+          controller: controller,
+          duration: Duration(
+            milliseconds: (5 * 1000).toInt(),
+          ),
+        ),
+      );
     }
+
     return storyItems;
   }
 
-  void handleOnStoryShow(User user, int index) {
-    emit(state.copyWith(
-      date: user.stories[index].date,
-      storyId: user.stories[index].id,
-      indexStory: index,
-    ));
-  }
+  void handleOnStoryShow(List<MStory> stories, int index) async {
+    try {
+      final result = await domain.story
+          .updateViewerStory(stories[index].id ?? "", user.id);
 
-  void initState(User user) {
-    final storyItems = _addStoryItems(user);
-    String date = user.stories[0].date;
-    String storyId = user.stories[0].id;
-    emit(state.copyWith(
-      date: date,
-      storyId: storyId,
-      storyItems: storyItems,
-    ));
+      if (result.isSuccess) {
+        final userStory = GetIt.I<HomeBloc>().state.userStory;
+        final indexUser =
+            userStory.indexWhere((element) => element.user.id == state.host.id);
+        GetIt.I<HomeBloc>().handleSeenStory(indexUser, index);
+        emit(state.copyWith(
+          date: DateHelper.getFormatStoryTime(stories[index].time),
+          indexStory: index,
+        ));
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
