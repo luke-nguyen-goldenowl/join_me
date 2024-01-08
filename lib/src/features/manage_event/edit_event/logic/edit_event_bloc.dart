@@ -13,11 +13,6 @@ class EditEventBloc extends Cubit<EditEventState> {
   void initState(MEvent event) {
     emit(state.copyWith(
       event: event,
-      // selectedLocation: event.location,
-      // nameEvent: event.name,
-      // description: event.description,
-      // deadlineDate: event.deadline,
-      // startDate: event.startDate,
       time: TimeOfDay.fromDateTime(event.startDate!),
     ));
   }
