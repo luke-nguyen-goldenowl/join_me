@@ -30,7 +30,7 @@ class Ticket extends StatelessWidget {
             builder: (BuildContext context, BoxConstraints constraints) {
           return InkWell(
             onTap: () {
-              AppCoordinator.showEventDetails(id: '1');
+              AppCoordinator.showEventDetails(id: event.id ?? "");
             },
             child: Container(
               padding: const EdgeInsets.all(10),

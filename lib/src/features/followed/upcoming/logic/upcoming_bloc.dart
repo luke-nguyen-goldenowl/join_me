@@ -24,18 +24,16 @@ class UpcomingBloc extends PaginationBloc<UpComingState> {
         final totalCount =
             await domain.event.getCountEventsUpcomingByUser(user.id);
         meta = MPaginationMeta(
-          pageSize: 1, //state.data.pageLimit,
+          pageSize: state.data.pageLimit,
           totalCount: totalCount.data ?? 0,
-          pageNumber: (totalCount.data ?? 0 / state.data.pageLimit)
-              .ceil(), //state.data.page + 1,
+          pageNumber: (totalCount.data ?? 0 / state.data.pageLimit).ceil(),
           lastPage: (totalCount.data ?? 0 / state.data.pageLimit).ceil(),
         );
       } else {
         meta = MPaginationMeta(
-          pageSize: 1, //state.data.pageLimit,
+          pageSize: state.data.pageLimit,
           totalCount: state.data.countData,
-          pageNumber: (state.data.countData / state.data.pageLimit)
-              .ceil(), //state.data.page + 1,
+          pageNumber: (state.data.countData / state.data.pageLimit).ceil(),
           lastPage: (state.data.countData / state.data.pageLimit).ceil(),
         );
       }

@@ -227,7 +227,7 @@ class EventReference extends BaseCollectionReference<MEvent> {
           .startAfter(lastEvent != null
               ? [lastEvent.startDate?.toIso8601String(), lastEvent.host?.id]
               : [0])
-          .limit(1) //MPagination.defaultPageLimit)
+          .limit(MPagination.defaultPageLimit)
           .get()
           .timeout(const Duration(seconds: 10));
       final docs = querySnapshot.docs.map((e) => e.data()).toList();
@@ -252,7 +252,50 @@ class EventReference extends BaseCollectionReference<MEvent> {
           .get()
           .timeout(const Duration(seconds: 10));
       final result = querySnapshot.count;
-      // final docs = querySnapshot.docs.map((e) => e.data()).toList();
+      return MResult.success(result);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<List<MEvent>>> getEventsPastByUser(String userId,
+      [MEvent? lastEvent]) async {
+    try {
+      DateTime currentDate = DateTime.now();
+
+      final QuerySnapshot<MEvent> querySnapshot = await ref
+          .where('followersId', arrayContains: userId)
+          .where('startDate', isLessThan: currentDate.toIso8601String())
+          .orderBy('startDate')
+          .orderBy('host')
+          .startAfter(lastEvent != null
+              ? [lastEvent.startDate?.toIso8601String(), lastEvent.host?.id]
+              : [0])
+          .limit(MPagination.defaultPageLimit)
+          .get()
+          .timeout(const Duration(seconds: 10));
+      final docs = querySnapshot.docs.map((e) => e.data()).toList();
+      return MResult.success(docs);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<int>> getCountEventsPastByUser(
+    String userId,
+  ) async {
+    try {
+      DateTime currentDate = DateTime.now();
+
+      final AggregateQuerySnapshot querySnapshot = await ref
+          .where('followersId', arrayContains: userId)
+          .where('startDate', isLessThan: currentDate.toIso8601String())
+          .orderBy('startDate')
+          .orderBy('host')
+          .count()
+          .get()
+          .timeout(const Duration(seconds: 10));
+      final result = querySnapshot.count;
       return MResult.success(result);
     } catch (e) {
       return MResult.exception(e);
