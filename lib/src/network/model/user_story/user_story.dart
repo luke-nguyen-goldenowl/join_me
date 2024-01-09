@@ -25,14 +25,14 @@ class MUserStory {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'user': user.toJson(),
+      'user': user.toMap(),
       'stories': stories.map((x) => x.toMap()).toList(),
     };
   }
 
   factory MUserStory.fromMap(Map<String, dynamic> map) {
     return MUserStory(
-      user: MUser.fromJson(map['user'] as Map<String, dynamic>),
+      user: MUser.fromMap(map['user'] as Map<String, dynamic>),
       stories: List<MStory>.from(
         map['stories']?.map((x) => MStory.fromMap(x)) ?? [],
       ),

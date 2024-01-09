@@ -15,7 +15,7 @@ List<MEvent> listEvent = [
     startDate: DateTime.now(),
     deadline: DateTime.now(),
     location: const LatLng(88.00015, 85.1316546),
-    host: const MUser(
+    host: MUser(
         id: '1', name: 'Keith', avatar: "assets/images/images/avatar.png"),
     type: TypeEvent.sport,
   ),
@@ -27,7 +27,7 @@ List<MEvent> listEvent = [
     startDate: DateTime.now(),
     deadline: DateTime.now(),
     location: const LatLng(88.00015, 85.1316546),
-    host: const MUser(
+    host: MUser(
         id: '2', name: 'Kien Vo', avatar: "assets/images/images/avatar.png"),
     type: TypeEvent.music,
   ),
@@ -39,7 +39,7 @@ List<MEvent> listEvent = [
     startDate: DateTime.now(),
     deadline: DateTime.now(),
     location: const LatLng(88.00015, 85.1316546),
-    host: const MUser(
+    host: MUser(
         id: '2', name: 'Kien Vo', avatar: "assets/images/images/avatar.png"),
     type: TypeEvent.movie,
   ),
@@ -51,7 +51,7 @@ List<MEvent> listEvent = [
     startDate: DateTime.now(),
     deadline: DateTime.now(),
     location: const LatLng(88.00015, 85.1316546),
-    host: const MUser(
+    host: MUser(
         id: '2', name: 'Kien Vo', avatar: "assets/images/images/avatar.png"),
     type: TypeEvent.game,
   ),

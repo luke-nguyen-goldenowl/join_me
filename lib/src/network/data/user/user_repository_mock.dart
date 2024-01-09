@@ -7,22 +7,22 @@ import 'package:myapp/src/network/model/user/user.dart';
 // Person(id: '3', image: 'assets/images/images/avatar.png', name: 'Thor'),
 
 List<MUser> users = [
-  const MUser(
+  MUser(
     id: '1',
     avatar: 'assets/images/images/avatar.png',
     name: 'Keith',
   ),
-  const MUser(
+  MUser(
     id: '1',
     avatar: 'assets/images/images/avatar.png',
     name: 'jessica',
   ),
-  const MUser(
+  MUser(
     id: '1',
     avatar: 'assets/images/images/avatar.png',
     name: 'Iron',
   ),
-  const MUser(
+  MUser(
     id: '1',
     avatar: 'assets/images/images/avatar.png',
     name: 'Thor',

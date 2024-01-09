@@ -47,7 +47,7 @@ class DetailPage extends StatelessWidget {
                   return XInput(
                     key: const Key('addEvent_descriptionEventInput_textField'),
                     minLines: 1,
-                    maxLines: 10,
+                    maxLines: 30,
                     value: state.event.description ?? "",
                     onChanged: (value) {
                       addEventBloc.setDescriptionEvent(value);

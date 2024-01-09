@@ -62,7 +62,7 @@ class MStory {
       id: map['id'],
       image: map['image'] ?? "",
       time: map['time'] != null ? DateTime.parse(map['time']) : null,
-      host: MUser.fromJson(map['host']),
+      host: MUser.fromMap(map['host']),
       event: MEvent.fromMap(map['event'], "1"),
       liker: map['liker'] ?? 0,
     );
@@ -73,7 +73,7 @@ class MStory {
       'id': id,
       'image': image,
       'time': time?.toIso8601String(),
-      'host': host.toJson(),
+      'host': host.toMap(),
       'event': event.toMap(),
       'liker': liker,
     };
