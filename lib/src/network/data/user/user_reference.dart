@@ -15,6 +15,40 @@ class UserReference extends BaseCollectionReference<MUser> {
           setObjectId: (e, id) => e.copyWith(id: id),
         );
 
+  Future<MResult<MUser>> getUser(String userId) async {
+    try {
+      final result = await get(userId);
+      if (result.isError == false) {
+        return result;
+      } else {
+        return MResult.success(result.data);
+      }
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult> updateFollowers(
+    String hostId,
+    String followerId,
+    bool isFollowed,
+  ) async {
+    try {
+      final result = await update(hostId, {
+        'followers': isFollowed
+            ? FieldValue.arrayRemove([followerId])
+            : FieldValue.arrayUnion([followerId])
+      });
+      if (result.isError == false) {
+        return result;
+      } else {
+        return MResult.success(result.data);
+      }
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
   Future<MResult<MUser>> getOrAddUser(MUser user) async {
     try {
       final result = await get(user.id);
@@ -35,6 +69,19 @@ class UserReference extends BaseCollectionReference<MUser> {
           await ref.get().timeout(const Duration(seconds: 10));
       final docs = query.docs.map((e) => e.data()).toList();
       return MResult.success(docs);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<List<MUser>>> getUsersByIds(List<String> userIds) async {
+    try {
+      final result = await getDataByIds(userIds);
+      if (result.isError == false) {
+        return result;
+      } else {
+        return MResult.success(result.data);
+      }
     } catch (e) {
       return MResult.exception(e);
     }

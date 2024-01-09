@@ -34,7 +34,7 @@ class MUserStory {
     return MUserStory(
       user: MUser.fromJson(map['user'] as Map<String, dynamic>),
       stories: List<MStory>.from(
-        map['stories']?.map((x) => MStory.fromMap(x)) ?? [],
+        map['stories']?.map((x) => MStory.fromMap(x, "")) ?? [],
       ),
     );
   }
