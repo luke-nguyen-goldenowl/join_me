@@ -67,7 +67,7 @@ class EventRepositoryMock {
     if (search == "") return MResult.success([]);
     final result = listEvent
         .where((element) =>
-            element.name!.toLowerCase().contains(search.toLowerCase()))
+            element.name?.toLowerCase().contains(search.toLowerCase()) ?? false)
         .toList();
 
     return MResult.success(result);
@@ -84,9 +84,9 @@ class EventRepositoryMock {
       data: events,
       meta: const MPaginationMeta(
         pageSize: MPagination.defaultPageLimit,
-        totalCount: 50,
-        pageNumber: 4,
-        lastPage: 5,
+        totalCount: 10,
+        pageNumber: 1,
+        lastPage: 1,
       ),
     );
     return MResult.success(result);

@@ -3,6 +3,7 @@ import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
 import 'package:myapp/src/utils/date/date_helper.dart';
+import 'package:myapp/widgets/image/image_network.dart';
 
 class Ticket extends StatelessWidget {
   const Ticket({super.key, required this.event});
@@ -133,14 +134,13 @@ class HeaderTicket extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: Image.asset(
-            event.images![0],
-            height: 60,
-            width: 60,
-            fit: BoxFit.cover,
-          ),
-        ),
+            borderRadius: BorderRadius.circular(20),
+            child: XImageNetwork(
+              event.images?[0] ?? "",
+              height: 60,
+              width: 60,
+              fit: BoxFit.cover,
+            )),
         const SizedBox(width: 10),
         SizedBox(
           width: 250,

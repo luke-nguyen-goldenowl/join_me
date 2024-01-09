@@ -15,27 +15,31 @@ class UpcomingEventFollowedView extends StatelessWidget {
       child: BlocBuilder<UpcomingBloc, UpComingState>(
         buildWhen: (previous, current) => previous != current,
         builder: (context, state) {
-          return Expanded(
-            child: ListView.builder(
-              itemCount: state.data.data.length + 1,
-              itemBuilder: ((context, index) {
-                if (index == state.data.data.length) {
-                  return Container(
-                    margin: const EdgeInsets.symmetric(vertical: 20),
-                    alignment: Alignment.center,
-                    child: XStatePaginationWidget(
-                      page: state.data,
-                      loadMore: context.read<UpcomingBloc>().getData,
-                      autoLoad: true,
-                    ),
-                  );
-                } else {
-                  return Ticket(
-                    event: state.data.data[index],
-                  );
-                }
-              }),
-            ),
+          return Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  itemCount: state.data.data.length + 1,
+                  itemBuilder: ((context, index) {
+                    if (index == state.data.data.length) {
+                      return Container(
+                        margin: const EdgeInsets.symmetric(vertical: 20),
+                        alignment: Alignment.center,
+                        child: XStatePaginationWidget(
+                          page: state.data,
+                          loadMore: context.read<UpcomingBloc>().getData,
+                          autoLoad: true,
+                        ),
+                      );
+                    } else {
+                      return Ticket(
+                        event: state.data.data[index],
+                      );
+                    }
+                  }),
+                ),
+              ),
+            ],
           );
         },
       ),
