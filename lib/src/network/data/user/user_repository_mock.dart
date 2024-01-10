@@ -1,12 +1,10 @@
+import 'package:myapp/src/network/model/common/pagination/meta/pagination_meta.dart';
+import 'package:myapp/src/network/model/common/pagination/pagination.dart';
+import 'package:myapp/src/network/model/common/pagination/pagination_response.dart';
 import 'package:myapp/src/network/model/common/result.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 
-// Person(id: '1', image: 'assets/images/images/avatar.png', name: 'keith'),
-// Person(id: '2', image: 'assets/images/images/avatar.png', name: 'jessica'),
-// Person(id: '3', image: 'assets/images/images/avatar.png', name: 'Iron'),
-// Person(id: '3', image: 'assets/images/images/avatar.png', name: 'Thor'),
-
-List<MUser> users = [
+List<MUser> listUser = [
   const MUser(
     id: '1',
     avatar: 'assets/images/images/avatar.png',
@@ -32,10 +30,24 @@ List<MUser> users = [
 class UserRepositoryMock {
   MResult<List<MUser>> getUsersSearch(String search) {
     if (search == "") return MResult.success([]);
-    final result = users
+    final result = listUser
         .where((element) =>
             element.name!.toLowerCase().contains(search.toLowerCase()))
         .toList();
+    return MResult.success(result);
+  }
+
+  MResult<MPaginationResponse<MUser>> getFavoriteListByUser(String userId) {
+    final List<MUser> users = listUser;
+    final result = MPaginationResponse(
+      data: users,
+      meta: const MPaginationMeta(
+        pageSize: MPagination.defaultPageLimit,
+        totalCount: 50,
+        pageNumber: 4,
+        lastPage: 5,
+      ),
+    );
     return MResult.success(result);
   }
 }

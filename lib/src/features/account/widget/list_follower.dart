@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:myapp/src/features/manage_event/logic/manage_event_bloc.dart';
-import 'package:myapp/src/features/manage_event/logic/manage_event_state.dart';
-import 'package:myapp/src/features/manage_event/widget/manage_event_item.dart';
+
+import 'package:myapp/src/features/account/logic/list_follower_bloc.dart';
+import 'package:myapp/src/features/account/logic/list_follower_state.dart';
+
+import 'package:myapp/src/features/account/widget/follower.dart';
 import 'package:myapp/src/theme/colors.dart';
-import 'package:myapp/widgets/appbar/app_bar_custom.dart';
 import 'package:myapp/widgets/state/state_pagination_widget.dart';
 
-class ManageEventView extends StatelessWidget {
-  const ManageEventView({super.key});
+class ListFollower extends StatelessWidget {
+  const ListFollower({super.key, required this.userId});
+  final String userId;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => ManageEventBloc(),
-      child: BlocBuilder<ManageEventBloc, ManageEventState>(
-        buildWhen: (previous, current) => previous.data != current.data,
-        builder: (context, state) {
-          return Scaffold(
-            backgroundColor: AppColors.white,
-            appBar: const AppBarCustom(
-              title: Text("My Events"),
-            ),
-            body: Expanded(
+      create: (_) => ListFollowerBloc()..setUserId(userId),
+      child: BlocBuilder<ListFollowerBloc, ListFollowerState>(
+        buildWhen: (previous, current) =>
+            previous.userId != current.userId || previous.data != current.data,
+        builder: ((context, state) {
+          return Expanded(
+            child: Container(
+              color: AppColors.white,
               child: ListView.builder(
                 itemCount: state.data.data.length + 1,
                 itemBuilder: ((context, index) {
@@ -32,18 +32,20 @@ class ManageEventView extends StatelessWidget {
                       alignment: Alignment.center,
                       child: XStatePaginationWidget(
                         page: state.data,
-                        loadMore: context.read<ManageEventBloc>().getData,
+                        loadMore: context.read<ListFollowerBloc>().getData,
                         autoLoad: true,
                       ),
                     );
                   } else {
-                    return ManageEventItem(event: state.data.data[index]);
+                    return Follower(
+                      person: state.data.data[index],
+                    );
                   }
                 }),
               ),
             ),
           );
-        },
+        }),
       ),
     );
   }
