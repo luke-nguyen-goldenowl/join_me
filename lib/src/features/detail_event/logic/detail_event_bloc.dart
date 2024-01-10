@@ -11,7 +11,7 @@ class DetailEventBloc extends Cubit<DetailEventState> {
   DomainManager domain = DomainManager();
 
   void getEvent(String eventId) {
-    final result = domain.event.getEvent(eventId);
+    final result = domain.eventMock.getEvent(eventId);
     emit(state.copyWith(event: result.data));
   }
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/src/features/account/logic/list_event_favorite_bloc.dart';
 import 'package:myapp/src/features/account/logic/list_event_favorite_state.dart';
-import 'package:myapp/src/features/account/widget/event_favorite_item.dart';
+import 'package:myapp/src/features/search/widget/event_search_widget.dart';
 import 'package:myapp/src/theme/colors.dart';
 import 'package:myapp/widgets/state/state_pagination_widget.dart';
 
@@ -35,7 +35,7 @@ class ListEventFavorite extends StatelessWidget {
                       ),
                     );
                   } else {
-                    return EventFavoriteItem(
+                    return EventSearchWidget(
                       event: state.data.data[index],
                     );
                   }

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
+import 'package:myapp/src/utils/date/date_helper.dart';
 
 class EventSearchWidget extends StatelessWidget {
   const EventSearchWidget({super.key, required this.event});
@@ -13,7 +12,7 @@ class EventSearchWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        AppCoordinator.showEventDetails(id: event.id!);
+        AppCoordinator.showManageEventDetails(id: event.id ?? "");
       },
       child: Container(
         padding: const EdgeInsets.all(10),
@@ -32,39 +31,53 @@ class EventSearchWidget extends StatelessWidget {
         ),
         child: Row(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.asset(
-                event.images![0],
-                height: 70,
-                width: 70,
-                fit: BoxFit.cover,
+            Expanded(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.asset(
+                      event.images?[0] ?? "",
+                      height: 70,
+                      width: 70,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          event.name ?? "",
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 20),
+                        Text(
+                          DateHelper.getFullDateTime(date: event.startDate),
+                          style: const TextStyle(
+                            fontSize: 15,
+                            color: AppColors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
               ),
             ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    event.name!,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    DateFormat("dd-MM-yyyy HH:mm").format(event.startDate!),
-                    style: const TextStyle(
-                      fontSize: 15,
-                      color: AppColors.grey,
-                    ),
-                  ),
-                ],
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.favorite,
+                color: AppColors.rosyPink,
               ),
             )
           ],

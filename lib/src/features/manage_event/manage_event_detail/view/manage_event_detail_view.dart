@@ -42,21 +42,21 @@ class ManageEventDetailPage extends StatelessWidget {
           Expanded(
             child: CustomScrollView(
               slivers: [
-                BlocBuilder<ManageEventDetailBloc, ManageEventDetailState>(
-                  buildWhen: (previous, current) =>
-                      previous.indexPageImage != current.indexPageImage,
-                  builder: ((context, state) {
-                    return SliverAppBarCustomDetailEvent(
-                      indexPageImage: state.indexPageImage,
-                      images: listImage,
-                      controller:
-                          context.read<ManageEventDetailBloc>().controller,
-                      setIndexPageImage: context
-                          .read<ManageEventDetailBloc>()
-                          .setIndexPageImage,
-                    );
-                  }),
-                ),
+                // BlocBuilder<ManageEventDetailBloc, ManageEventDetailState>(
+                //   buildWhen: (previous, current) =>
+                //       previous.indexPageImage != current.indexPageImage,
+                //   builder: ((context, state) {
+                //     return SliverAppBarCustomDetailEvent(
+                //       indexPageImage: state.indexPageImage,
+                //       images: listImage,
+                //       controller:
+                //           context.read<ManageEventDetailBloc>().controller,
+                //       setIndexPageImage: context
+                //           .read<ManageEventDetailBloc>()
+                //           .setIndexPageImage,
+                //     );
+                //   }),
+                // ),
                 SliverList(
                   delegate: SliverChildListDelegate([
                     const SizedBox(height: 20),

@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/src/features/account/logic/list_follower_bloc.dart';
 import 'package:myapp/src/features/account/logic/list_follower_state.dart';
 
-import 'package:myapp/src/features/account/widget/follower.dart';
+import 'package:myapp/src/features/search/widget/person_search_widget.dart';
 import 'package:myapp/src/theme/colors.dart';
 import 'package:myapp/widgets/state/state_pagination_widget.dart';
 
@@ -37,7 +37,7 @@ class ListFollower extends StatelessWidget {
                       ),
                     );
                   } else {
-                    return Follower(
+                    return PersonSearchWidget(
                       person: state.data.data[index],
                     );
                   }
