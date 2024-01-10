@@ -34,15 +34,20 @@ class UserReference extends BaseCollectionReference<MUser> {
     bool isFollowed,
   ) async {
     try {
-      final result = await update(hostId, {
+      final resultFollower = await update(hostId, {
         'followers': isFollowed
             ? FieldValue.arrayRemove([followerId])
             : FieldValue.arrayUnion([followerId])
       });
-      if (result.isError == false) {
-        return result;
+      final resultFollowed = await update(followerId, {
+        'followed': isFollowed
+            ? FieldValue.arrayRemove([hostId])
+            : FieldValue.arrayUnion([hostId])
+      });
+      if (!resultFollower.isError && !resultFollowed.isError) {
+        return resultFollower;
       } else {
-        return MResult.success(result.data);
+        return MResult.success(resultFollower.data);
       }
     } catch (e) {
       return MResult.exception(e);
