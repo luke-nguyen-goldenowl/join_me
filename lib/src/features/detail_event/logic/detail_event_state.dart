@@ -1,12 +1,17 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:myapp/src/network/model/event/event.dart';
+
 class DetailEventState {
   int indexPageImage;
 
-  DetailEventState({this.indexPageImage = 0});
+  MEvent? event;
 
-  DetailEventState copyWith({indexPageImage}) {
+  DetailEventState({this.indexPageImage = 0, this.event});
+
+  DetailEventState copyWith({indexPageImage, event}) {
     return DetailEventState(
       indexPageImage: indexPageImage ?? this.indexPageImage,
+      event: event ?? this.event,
     );
   }
 
@@ -14,9 +19,9 @@ class DetailEventState {
   bool operator ==(covariant DetailEventState other) {
     if (identical(this, other)) return true;
 
-    return other.indexPageImage == indexPageImage;
+    return other.indexPageImage == indexPageImage && other.event == event;
   }
 
   @override
-  int get hashCode => indexPageImage.hashCode;
+  int get hashCode => indexPageImage.hashCode ^ event.hashCode;
 }
