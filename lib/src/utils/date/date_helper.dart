@@ -169,11 +169,6 @@ class DateHelper {
     return DateFormat('h:MM a').format(time);
   }
 
-  static String? getFullDateTime({required DateTime? date}) {
-    if (date == null) return null;
-    return DateFormat('MMM dd, yyyy - hh:mm a').format(date);
-  }
-
   static String getShortMonth({required DateTime? date}) {
     if (date == null) return "";
     return DateFormat('MMM').format(date);
@@ -196,5 +191,10 @@ class DateHelper {
       final days = difference.inDays;
       return '$days day${days > 1 ? 's' : ''} ago';
     }
+  }
+
+  static String getFullDateTime({required DateTime? date}) {
+    if (date != null) return DateFormat('MM dd, yyyy - HH:mm a').format(date);
+    return "";
   }
 }

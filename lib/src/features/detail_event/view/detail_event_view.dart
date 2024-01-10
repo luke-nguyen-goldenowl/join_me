@@ -39,7 +39,13 @@ class DetailEventPage extends StatelessWidget {
                 Expanded(
                   child: CustomScrollView(
                     slivers: [
-                      const SliverAppBarCustomDetailEvent(),
+                      SliverAppBarCustomDetailEvent(
+                        indexPageImage: state.indexPageImage,
+                        images: state.event?.images ?? [],
+                        controller: context.read<DetailEventBloc>().controller,
+                        setIndexPageImage:
+                            context.read<DetailEventBloc>().setIndexPageImage,
+                      ),
                       SliverList(
                         delegate: SliverChildListDelegate([
                           // const SizedBox(height: 10),

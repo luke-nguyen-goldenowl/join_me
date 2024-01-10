@@ -6,6 +6,13 @@ import 'package:myapp/src/network/model/common/result.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 
+List<String> listImage = [
+  'assets/images/images/landscape2.webp',
+  'assets/images/images/landscape3.jpg',
+  'assets/images/images/landscape4.webp',
+  'assets/images/images/bg-event.jpg'
+];
+
 List<MEvent> listEvent = [
   MEvent(
     id: '1',
@@ -59,7 +66,7 @@ List<MEvent> listEvent = [
 
 class EventRepositoryMock {
   MResult<MEvent> getEvent(String id) {
-    final MEvent result = MEvent(id: '1');
+    final MEvent result = listEvent[0];
     return MResult.success(result);
   }
 
