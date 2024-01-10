@@ -31,7 +31,7 @@ class EventItem extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              DateHelper.getFullDateTime(date: event.startDate) ?? "",
+              DateHelper.getFullDateTime(date: event.startDate),
               style: const TextStyle(
                 color: AppColors.grey,
                 fontSize: 15,
