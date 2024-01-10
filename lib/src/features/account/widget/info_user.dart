@@ -16,6 +16,7 @@ class InfoUser extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20),
+      width: double.infinity,
       color: AppColors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,

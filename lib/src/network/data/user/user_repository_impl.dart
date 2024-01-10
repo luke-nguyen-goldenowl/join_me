@@ -46,4 +46,8 @@ class UserRepositoryImpl extends UserRepository {
   Future<MResult<List<MUser>>> getUsers() {
     return usersRef.getUsers();
   }
+
+  Future<MResult<List<MUser>>> getUsersByIds(List<String> userIds) async {
+    return usersRef.getUsersByIds(userIds);
+  }
 }

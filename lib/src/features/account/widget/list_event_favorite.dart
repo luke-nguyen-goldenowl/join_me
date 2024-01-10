@@ -12,39 +12,35 @@ class ListEventFavorite extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => ListEventFavoriteBloc()..setUserId(userId),
-      child: BlocBuilder<ListEventFavoriteBloc, ListEventFavoriteState>(
-        buildWhen: (previous, current) =>
-            previous.userId != current.userId || previous.data != current.data,
-        builder: ((context, state) {
-          return Expanded(
-            child: Container(
-              color: AppColors.white,
-              child: ListView.builder(
-                itemCount: state.data.data.length + 1,
-                itemBuilder: ((context, index) {
-                  if (index == state.data.data.length) {
-                    return Container(
-                      margin: const EdgeInsets.symmetric(vertical: 20),
-                      alignment: Alignment.center,
-                      child: XStatePaginationWidget(
-                        page: state.data,
-                        loadMore: context.read<ListEventFavoriteBloc>().getData,
-                        autoLoad: true,
-                      ),
-                    );
-                  } else {
-                    return EventSearchWidget(
-                      event: state.data.data[index],
-                    );
-                  }
-                }),
-              ),
+    return BlocBuilder<ListEventFavoriteBloc, ListEventFavoriteState>(
+      buildWhen: (previous, current) => previous.data != current.data,
+      builder: ((context, state) {
+        return Expanded(
+          child: Container(
+            color: AppColors.white,
+            child: ListView.builder(
+              itemCount: state.data.data.length + 1,
+              itemBuilder: ((context, index) {
+                if (index == state.data.data.length) {
+                  return Container(
+                    margin: const EdgeInsets.symmetric(vertical: 20),
+                    alignment: Alignment.center,
+                    child: XStatePaginationWidget(
+                      page: state.data,
+                      loadMore: context.read<ListEventFavoriteBloc>().getData,
+                      autoLoad: true,
+                    ),
+                  );
+                } else {
+                  return EventSearchWidget(
+                    event: state.data.data[index],
+                  );
+                }
+              }),
             ),
-          );
-        }),
-      ),
+          ),
+        );
+      }),
     );
   }
 }

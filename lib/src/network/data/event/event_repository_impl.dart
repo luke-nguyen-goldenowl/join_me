@@ -65,4 +65,15 @@ class EventRepositoryImpl {
   Future<MResult<int>> getCountEventsPastByUser(String userId) {
     return eventReference.getCountEventsPastByUser(userId);
   }
+
+  Future<MResult<List<MEvent>>> getEventsFavoriteByUser(String userId,
+      [MEvent? lastEvent]) {
+    return eventReference.getEventsFavoriteByUser(userId, lastEvent);
+  }
+
+  Future<MResult<int>> getCountEventsFavoriteByUser(
+    String userId,
+  ) {
+    return eventReference.getCountEventsFavoriteByUser(userId);
+  }
 }

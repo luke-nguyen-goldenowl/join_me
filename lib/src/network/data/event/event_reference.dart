@@ -301,4 +301,45 @@ class EventReference extends BaseCollectionReference<MEvent> {
       return MResult.exception(e);
     }
   }
+
+  Future<MResult<List<MEvent>>> getEventsFavoriteByUser(String userId,
+      [MEvent? lastEvent]) async {
+    try {
+      final QuerySnapshot<MEvent> querySnapshot = await ref
+          .where('favoritesId', arrayContains: userId)
+          .orderBy('startDate')
+          .orderBy('countFollowers', descending: true)
+          .startAfter(lastEvent != null
+              ? [
+                  lastEvent.startDate?.toIso8601String(),
+                  lastEvent.followersId?.length
+                ]
+              : [0])
+          .limit(MPagination.defaultPageLimit)
+          .get()
+          .timeout(const Duration(seconds: 10));
+      final docs = querySnapshot.docs.map((e) => e.data()).toList();
+      return MResult.success(docs);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<int>> getCountEventsFavoriteByUser(
+    String userId,
+  ) async {
+    try {
+      final AggregateQuerySnapshot querySnapshot = await ref
+          .where('favoritesId', arrayContains: userId)
+          .orderBy('startDate')
+          .orderBy('countFollowers', descending: true)
+          .count()
+          .get()
+          .timeout(const Duration(seconds: 10));
+      final result = querySnapshot.count;
+      return MResult.success(result);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
 }

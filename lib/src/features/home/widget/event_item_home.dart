@@ -13,7 +13,7 @@ class EventItemHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        AppCoordinator.showEventDetails(id: id);
+        AppCoordinator.showEventDetails(id: "4f");
       },
       child: Container(
         width: 300,
