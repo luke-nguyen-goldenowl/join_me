@@ -44,7 +44,7 @@ class InfoUser extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            user.name!,
+            user.name ?? "",
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,

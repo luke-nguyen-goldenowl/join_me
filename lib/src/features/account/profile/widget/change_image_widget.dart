@@ -2,9 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:myapp/src/features/account/logic/account_bloc.dart';
 import 'package:myapp/src/features/account/profile/logic/profile_bloc.dart';
 import 'package:myapp/src/features/account/profile/logic/profile_state.dart';
 import 'package:myapp/src/theme/colors.dart';
+import 'package:myapp/widgets/image/image_network.dart';
 
 class ChangeImage extends StatelessWidget {
   const ChangeImage({
@@ -30,21 +33,15 @@ class ChangeImage extends StatelessWidget {
                     style: BorderStyle.solid,
                   ),
                 ),
-                child: state.avatar != null
-                    ? ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: Image.file(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: state.avatar != null
+                      ? Image.file(
                           File(state.avatar!.path),
                           fit: BoxFit.cover,
-                        ),
-                      )
-                    : const Center(
-                        child: Icon(
-                          Icons.person,
-                          size: 70,
-                          color: AppColors.rosyPink,
-                        ),
-                      ),
+                        )
+                      : XImageNetwork(GetIt.I<AccountBloc>().state.user.avatar),
+                ),
               ),
               InkWell(
                 onTap: () {
@@ -55,7 +52,7 @@ class ChangeImage extends StatelessWidget {
                   width: 100,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
-                      color: AppColors.black.withOpacity(0.5)),
+                      color: AppColors.black.withOpacity(0.4)),
                   child: Icon(
                     Icons.camera_alt_outlined,
                     size: 40,

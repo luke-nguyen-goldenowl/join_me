@@ -6,6 +6,7 @@ import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/model/common/error_code.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 import 'package:myapp/src/network/model/social_user/social_user.dart';
+import 'package:myapp/src/services/firebase_storage.dart';
 
 import '../../model/common/result.dart';
 
@@ -202,6 +203,30 @@ class SignRepositoryImpl extends SignRepository {
       return MResult.exception(e.code);
     } catch (e) {
       print(e);
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult> updateProfile([String? image, String? name]) async {
+    try {
+      if (name != null) {
+        await FirebaseAuth.instance.currentUser?.updateDisplayName(name);
+      }
+      String? imageUrl;
+      if (image != null) {
+        XFirebaseStorage firebaseStorage = XFirebaseStorage();
+        imageUrl = await firebaseStorage.uploadImage(
+            image, 'avatar/${FirebaseAuth.instance.currentUser?.uid}');
+        await FirebaseAuth.instance.currentUser?.updatePhotoURL(imageUrl);
+      }
+      final userResult = await DomainManager().user.updateUser(
+          FirebaseAuth.instance.currentUser?.uid ?? "", imageUrl, name);
+
+      if (userResult.isSuccess) {
+        return MResult.success(imageUrl);
+      }
+      return userResult;
+    } catch (e) {
       return MResult.exception(e);
     }
   }
