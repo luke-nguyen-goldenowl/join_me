@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:myapp/src/dialogs/alert_wrapper.dart';
 import 'package:myapp/src/dialogs/widget/alert_dialog.dart';
@@ -9,19 +10,39 @@ class XImagePicker {
     final result = await XAlert.show(
       body: S.text.camera_choose_option_take_image,
       actions: [
-        XAlertButton<ImageSource>(
-          key: ImageSource.gallery,
-          title: S.text.camera_image_from_gallery,
+        XAlertButton(
+          key: ImageSource.gallery.name,
+          child: Row(
+            children: [
+              const Icon(Icons.image),
+              const SizedBox(width: 20),
+              Text(S.text.camera_image_from_gallery)
+            ],
+          ),
         ),
-        XAlertButton<ImageSource>(
-          key: ImageSource.camera,
-          title: S.text.camera_image_from_camera,
+        XAlertButton(
+          key: ImageSource.camera.name,
+          child: Row(
+            children: [
+              const Icon(Icons.camera_alt),
+              const SizedBox(width: 20),
+              Text(S.text.camera_image_from_camera)
+            ],
+          ),
         ),
       ],
     );
     if (result != null) {
-      final XFile? photo = await _picker.pickImage(source: ImageSource.gallery);
-      return photo;
+      if (result == "camera") {
+        final XFile? photo =
+            await _picker.pickImage(source: ImageSource.camera);
+        return photo;
+      } else {
+        final XFile? photo =
+            await _picker.pickImage(source: ImageSource.gallery);
+        return photo;
+      }
+      // return photo;
     }
     return null;
   }
