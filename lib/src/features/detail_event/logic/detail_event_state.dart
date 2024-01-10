@@ -17,6 +17,7 @@ class DetailEventState {
   }) {
     return DetailEventState(
       indexPageImage: indexPageImage ?? this.indexPageImage,
+      event: event ?? this.event,
     );
   }
 

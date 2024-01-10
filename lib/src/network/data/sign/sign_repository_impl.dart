@@ -10,6 +10,9 @@ import 'package:myapp/src/network/model/social_user/social_user.dart';
 import '../../model/common/result.dart';
 
 class SignRepositoryImpl extends SignRepository {
+  static const String avatarDefault =
+      "https://firebasestorage.googleapis.com/v0/b/see-joy-3f334.appspot.com/o/avatar%2Fnot_avatar%2Favatar_default.png?alt=media&token=c4453031-ccc3-449f-a267-aaed55782701";
+
   @override
   Future<MResult<MUser>> connectBEWithApple(MSocialUser user) {
     // TODO: implement connectBEWithApple
@@ -55,6 +58,7 @@ class SignRepositoryImpl extends SignRepository {
         email: user.email,
         name: user.fullName,
         followers: [],
+        avatar: user.avatar,
       );
       final userResult = await DomainManager().user.getOrAddUser(newUser);
 
@@ -100,6 +104,7 @@ class SignRepositoryImpl extends SignRepository {
         email: firebaseUser?.email,
         name: firebaseUser?.displayName,
         followers: [],
+        avatar: firebaseUser?.photoURL,
       );
       final userResult = await DomainManager().user.getOrAddUser(newUser);
       return MResult.success(userResult.data ?? newUser);
@@ -118,6 +123,7 @@ class SignRepositoryImpl extends SignRepository {
     try {
       final LoginResult loginResult =
           await FacebookAuth.instance.login(permissions: ['email']);
+
       return MResult.success(
           MSocialUser.fromFacebookAccount({}, loginResult.accessToken!));
     } catch (e) {
@@ -159,11 +165,11 @@ class SignRepositoryImpl extends SignRepository {
   }
 
   @override
-  Future<MResult<MUser>> signUpWithEmail(
-      {required String email,
-      required String password,
-      required String name}) async {
-    // TODO: implement signUpWithEmail
+  Future<MResult<MUser>> signUpWithEmail({
+    required String email,
+    required String password,
+    required String name,
+  }) async {
     try {
       final credential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -171,15 +177,17 @@ class SignRepositoryImpl extends SignRepository {
         password: password,
       );
       await credential.user?.updateDisplayName(name);
+      await credential.user?.updatePhotoURL(avatarDefault);
 
       final firebaseUser = credential.user;
       final newUser = MUser(
         id: firebaseUser?.uid ?? '',
         email: firebaseUser?.email,
-        name: firebaseUser?.displayName,
+        name: name,
+        avatar: avatarDefault,
       );
-
-      return MResult.success(newUser);
+      final userResult = await DomainManager().user.getOrAddUser(newUser);
+      return MResult.success(userResult.data ?? newUser);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
