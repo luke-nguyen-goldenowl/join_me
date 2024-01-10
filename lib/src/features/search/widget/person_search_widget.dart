@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
+import 'package:myapp/widgets/image/image_network.dart';
 
 class PersonSearchWidget extends StatelessWidget {
   const PersonSearchWidget({super.key, required this.person});
@@ -35,8 +36,8 @@ class PersonSearchWidget extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: Image.asset(
-                      person.avatar!,
+                    child: XImageNetwork(
+                      person.avatar,
                       height: 50,
                       width: 50,
                     ),
@@ -44,7 +45,7 @@ class PersonSearchWidget extends StatelessWidget {
                   const SizedBox(width: 20),
                   Expanded(
                     child: Text(
-                      person.name!,
+                      person.name ?? "",
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,

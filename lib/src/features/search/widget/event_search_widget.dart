@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
+import 'package:myapp/src/utils/date/date_helper.dart';
+import 'package:myapp/widgets/image/image_network.dart';
 
 class EventSearchWidget extends StatelessWidget {
   const EventSearchWidget({super.key, required this.event});
@@ -34,8 +34,8 @@ class EventSearchWidget extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.asset(
-                event.images![0],
+              child: XImageNetwork(
+                event.images?[0],
                 height: 70,
                 width: 70,
                 fit: BoxFit.cover,
@@ -48,7 +48,7 @@ class EventSearchWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    event.name!,
+                    event.name ?? "",
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -58,7 +58,7 @@ class EventSearchWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   Text(
-                    DateFormat("dd-MM-yyyy HH:mm").format(event.startDate!),
+                    DateHelper.getFullDateTime(event.startDate),
                     style: const TextStyle(
                       fontSize: 15,
                       color: AppColors.grey,

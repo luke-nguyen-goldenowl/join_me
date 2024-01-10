@@ -167,4 +167,9 @@ class DateHelper {
   static String getTime({required DateTime time}) {
     return DateFormat('h:MM a').format(time);
   }
+
+  static String getFullDateTime(DateTime? date) {
+    if (date == null) return "";
+    return DateFormat("dd-MM-yyyy HH:mm").format(date);
+  }
 }

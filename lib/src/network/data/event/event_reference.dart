@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:myapp/src/network/data/user/user_reference.dart';
 import 'package:myapp/src/network/firebase/base_collection.dart';
-import 'package:myapp/src/network/model/common/pagination/pagination.dart';
 import 'package:myapp/src/network/model/common/result.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/network/model/user/user.dart';
@@ -222,10 +221,6 @@ class EventReference extends BaseCollectionReference<MEvent> {
           .where('caseSearchName', arrayContains: search)
           .orderBy('host')
           .orderBy('startDate')
-          .startAfter(lastEvent != null
-              ? [lastEvent.startDate?.toIso8601String(), lastEvent.host?.id]
-              : [0])
-          .limit(MPagination.defaultPageLimit)
           .get()
           .timeout(const Duration(seconds: 10));
       final docs = querySnapshot.docs.map((e) => e.data()).toList();
