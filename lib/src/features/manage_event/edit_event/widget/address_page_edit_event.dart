@@ -33,7 +33,7 @@ class AddressPageEditEvent extends StatelessWidget {
                       mapController:
                           context.read<EditEventBloc>().mapController,
                       options: MapOptions(
-                        center: state.event.location!,
+                        // center: state.event.location!,
                         zoom: 13.0,
                         onTap: ((tapPosition, point) {
                           context.read<EditEventBloc>().handleTap(point);
@@ -47,19 +47,19 @@ class AddressPageEditEvent extends StatelessWidget {
                         ),
                         MarkerLayer(
                           markers: [
-                            Marker(
-                              rotate: true,
-                              width: 50.0,
-                              height: 50.0,
-                              point: state.event.location!,
-                              builder: (BuildContext context) {
-                                return const Icon(
-                                  Icons.location_pin,
-                                  color: Colors.red,
-                                  size: 50,
-                                );
-                              },
-                            ),
+                            // Marker(
+                            //   rotate: true,
+                            //   width: 50.0,
+                            //   height: 50.0,
+                            //   point: state.event.location!,
+                            //   builder: (BuildContext context) {
+                            //     return const Icon(
+                            //       Icons.location_pin,
+                            //       color: Colors.red,
+                            //       size: 50,
+                            //     );
+                            //   },
+                            // ),
                           ],
                         ),
                       ],

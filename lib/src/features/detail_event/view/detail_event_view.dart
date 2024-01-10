@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:myapp/src/features/account/logic/account_bloc.dart';
 import 'package:myapp/src/features/detail_event/logic/detail_event_bloc.dart';
 import 'package:myapp/src/features/detail_event/logic/detail_event_state.dart';
 import 'package:myapp/src/features/detail_event/widget/address_event.dart';
@@ -39,9 +41,41 @@ class DetailEventPage extends StatelessWidget {
                 Expanded(
                   child: CustomScrollView(
                     slivers: [
-                      SliverAppBarCustomDetailEvent(
-                        images: state.event?.images ?? [],
-                        favorites: state.event?.favoritesId ?? [],
+                      BlocBuilder<DetailEventBloc, DetailEventState>(
+                        buildWhen: (previous, current) =>
+                            previous.indexPageImage != current.indexPageImage ||
+                            current.event != previous.event,
+                        builder: ((context, state) {
+                          return SliverAppBarCustomDetailEvent(
+                            indexPageImage: state.indexPageImage,
+                            images: state.event?.images ?? [],
+                            controller:
+                                context.read<DetailEventBloc>().controller,
+                            setIndexPageImage: context
+                                .read<DetailEventBloc>()
+                                .setIndexPageImage,
+                            actions: [
+                              IconButton(
+                                onPressed: () {
+                                  context
+                                      .read<DetailEventBloc>()
+                                      .onPressedFavoriteEvent();
+                                },
+                                icon: state.event?.favoritesId?.contains(
+                                            GetIt.I<AccountBloc>()
+                                                .state
+                                                .user
+                                                .id) ??
+                                        false
+                                    ? const Icon(
+                                        Icons.favorite,
+                                        color: AppColors.rosyPink,
+                                      )
+                                    : const Icon(Icons.favorite_border),
+                              )
+                            ],
+                          );
+                        }),
                       ),
                       SliverList(
                         delegate: SliverChildListDelegate([

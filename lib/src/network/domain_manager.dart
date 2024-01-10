@@ -17,7 +17,6 @@ class DomainManager {
   final user = UserRepositoryImpl();
   final upload = UploadRepositoryImpl();
   final sign = SignRepositoryImpl();
-  final event = EventRepositoryMock();
   final eventMock = EventRepositoryMock();
   final userMock = UserRepositoryMock();
   final story = StoryRepositoryMock();
