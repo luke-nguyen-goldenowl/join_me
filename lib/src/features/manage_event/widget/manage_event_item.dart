@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
+import 'package:myapp/src/utils/date/date_helper.dart';
+import 'package:myapp/widgets/image/image_network.dart';
 
 class ManageEventItem extends StatelessWidget {
   const ManageEventItem({super.key, required this.event});
@@ -34,8 +34,8 @@ class ManageEventItem extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.asset(
-                event.images?[0] ?? "",
+              child: XImageNetwork(
+                event.images?[0],
                 height: 70,
                 width: 70,
                 fit: BoxFit.cover,
@@ -58,7 +58,7 @@ class ManageEventItem extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   Text(
-                    DateFormat("dd-MM-yyyy HH:mm a").format(event.startDate!),
+                    DateHelper.getFullDateTime(event.startDate),
                     style: const TextStyle(
                       fontSize: 15,
                       color: AppColors.grey,

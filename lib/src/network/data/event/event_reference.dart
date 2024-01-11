@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:myapp/src/network/data/user/user_reference.dart';
 import 'package:myapp/src/network/firebase/base_collection.dart';
+import 'package:myapp/src/network/model/common/pagination/pagination.dart';
 import 'package:myapp/src/network/model/common/result.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/network/model/user/user.dart';
@@ -106,6 +107,47 @@ class EventReference extends BaseCollectionReference<MEvent> {
           .get();
       final docs = querySnapshot.docs.map((e) => e.data()).toList();
       return MResult.success(docs);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<List<MEvent>>> getEventsHostByUser(String userId,
+      [MEvent? lastEvent]) async {
+    try {
+      final QuerySnapshot<MEvent> querySnapshot = await ref
+          .where('host', isEqualTo: userId)
+          .orderBy('startDate')
+          .orderBy('deadline')
+          .startAfter(lastEvent != null
+              ? [
+                  lastEvent.startDate?.toIso8601String(),
+                  lastEvent.deadline?.toIso8601String()
+                ]
+              : [0])
+          .limit(MPagination.defaultPageLimit)
+          .get()
+          .timeout(const Duration(seconds: 10));
+      final docs = querySnapshot.docs.map((e) => e.data()).toList();
+      return MResult.success(docs);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<int>> getCountEventsHostByUser(
+    String userId,
+  ) async {
+    try {
+      final AggregateQuerySnapshot querySnapshot = await ref
+          .where('host', isEqualTo: userId)
+          .orderBy('startDate')
+          .orderBy('deadline')
+          .count()
+          .get()
+          .timeout(const Duration(seconds: 10));
+      final result = querySnapshot.count;
+      return MResult.success(result);
     } catch (e) {
       return MResult.exception(e);
     }
