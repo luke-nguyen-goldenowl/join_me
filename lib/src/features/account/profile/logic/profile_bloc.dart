@@ -45,7 +45,8 @@ class ProfileBloc extends Cubit<ProfileState> {
         GetIt.I<AccountBloc>().emit(
           GetIt.I<AccountBloc>().state.copyWith(
                 user: user.copyWith(
-                  avatar: result.data,
+                  avatar:
+                      result.data ?? GetIt.I<AccountBloc>().state.user.avatar,
                   name: state.name,
                 ),
               ),
