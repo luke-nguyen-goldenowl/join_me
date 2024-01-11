@@ -27,4 +27,8 @@ class EventRepositoryImpl {
   Future<MResult<MEvent>> getEvent(String eventId) {
     return eventReference.getEvent(eventId);
   }
+
+  Future<MResult<List<MEvent>>> getEventsByUser(String userId) {
+    return eventReference.getEventsByUser(userId);
+  }
 }
