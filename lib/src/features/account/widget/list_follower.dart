@@ -18,18 +18,22 @@ class ListFollower extends StatelessWidget {
       buildWhen: (previous, current) =>
           !listEquals(previous.followers, current.followers),
       builder: ((context, state) {
-        return Expanded(
-          child: Container(
-            color: AppColors.white,
-            child: ListView.builder(
-              itemCount: state.followers.length,
-              itemBuilder: ((context, index) {
-                return PersonSearchWidget(
-                  person: state.followers[index],
-                );
-              }),
+        return Column(
+          children: [
+            Expanded(
+              child: Container(
+                color: AppColors.white,
+                child: ListView.builder(
+                  itemCount: state.followers.length,
+                  itemBuilder: ((context, index) {
+                    return PersonSearchWidget(
+                      person: state.followers[index],
+                    );
+                  }),
+                ),
+              ),
             ),
-          ),
+          ],
         );
       }),
     );

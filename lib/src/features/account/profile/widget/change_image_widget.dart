@@ -40,7 +40,10 @@ class ChangeImage extends StatelessWidget {
                           File(state.avatar!.path),
                           fit: BoxFit.cover,
                         )
-                      : XImageNetwork(GetIt.I<AccountBloc>().state.user.avatar),
+                      : XImageNetwork(
+                          GetIt.I<AccountBloc>().state.user.avatar,
+                          fit: BoxFit.cover,
+                        ),
                 ),
               ),
               InkWell(

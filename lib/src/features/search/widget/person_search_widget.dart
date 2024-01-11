@@ -50,6 +50,7 @@ class PersonSearchWidget extends StatelessWidget {
                             person.avatar,
                             height: 50,
                             width: 50,
+                            fit: BoxFit.cover,
                           ),
                         ),
                         const SizedBox(width: 20),

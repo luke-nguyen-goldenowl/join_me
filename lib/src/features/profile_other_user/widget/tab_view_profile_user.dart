@@ -6,7 +6,7 @@ import 'package:myapp/src/features/profile_other_user/logic/favorite_bloc.dart';
 import 'package:myapp/src/features/profile_other_user/logic/favorite_state.dart';
 import 'package:myapp/src/features/profile_other_user/logic/host_bloc.dart';
 import 'package:myapp/src/features/profile_other_user/logic/host_state.dart';
-import 'package:myapp/src/features/profile_other_user/widget/event_profile_user_item.dart';
+import 'package:myapp/src/features/search/widget/event_search_widget.dart';
 import 'package:myapp/src/network/model/common/pagination/pagination.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/widgets/state/state_pagination_widget.dart';
@@ -63,25 +63,29 @@ class ListDataPaginationEvent<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: data.data.length + 1,
-        itemBuilder: ((context, index) {
-          if (index == data.data.length) {
-            return Container(
-              margin: const EdgeInsets.symmetric(vertical: 20),
-              alignment: Alignment.center,
-              child: XStatePaginationWidget(
-                page: data,
-                loadMore: getData,
-                autoLoad: true,
-              ),
-            );
-          } else {
-            return EventProfileUserItem(event: data.data[index] as MEvent);
-          }
-        }),
-      ),
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            itemCount: data.data.length + 1,
+            itemBuilder: ((context, index) {
+              if (index == data.data.length) {
+                return Container(
+                  margin: const EdgeInsets.symmetric(vertical: 20),
+                  alignment: Alignment.center,
+                  child: XStatePaginationWidget(
+                    page: data,
+                    loadMore: getData,
+                    autoLoad: true,
+                  ),
+                );
+              } else {
+                return EventSearchWidget(event: data.data[index] as MEvent);
+              }
+            }),
+          ),
+        ),
+      ],
     );
   }
 }
