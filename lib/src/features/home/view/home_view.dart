@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:myapp/gen/assets.gen.dart';
 import 'package:myapp/src/features/account/logic/account_bloc.dart';
 import 'package:myapp/src/features/home/logic/home_state.dart';
 import 'package:myapp/src/features/home/widget/list_event_home.dart';
@@ -8,6 +7,7 @@ import 'package:myapp/src/features/home/widget/list_story_home.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
 import 'package:myapp/widgets/appbar/app_bar_custom.dart';
+import 'package:myapp/widgets/image/image_network.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -32,7 +32,12 @@ class HomePage extends StatelessWidget {
           },
           icon: ClipRRect(
             borderRadius: BorderRadius.circular(5.0),
-            child: Assets.images.images.avatar.image(),
+            child: XImageNetwork(
+              GetIt.I<AccountBloc>().state.user.avatar,
+              height: 50,
+              width: 50,
+              fit: BoxFit.cover,
+            ),
           ),
           iconSize: 50,
         ),

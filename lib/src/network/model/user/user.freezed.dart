@@ -227,15 +227,10 @@ class _$MUserImpl extends _MUser {
   int get hashCode => Object.hash(
       runtimeType,
       id,
-      name,
       avatar,
       email,
       const DeepCollectionEquality().hash(_followers),
       const DeepCollectionEquality().hash(_followed));
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
   _$$MUserImplCopyWith<_$MUserImpl> get copyWith =>
       __$$MUserImplCopyWithImpl<_$MUserImpl>(this, _$identity);
 
