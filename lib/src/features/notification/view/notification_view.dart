@@ -6,7 +6,7 @@ import 'package:myapp/src/features/notification/widget/notfication_change_event.
 import 'package:myapp/src/features/notification/widget/notifcation_upcoming_event.dart';
 import 'package:myapp/src/features/notification/widget/notification_follow_event.dart';
 import 'package:myapp/src/features/notification/widget/notification_follow_user.dart';
-import 'package:myapp/src/network/data/notification/notification_repository_mock.dart';
+import 'package:myapp/src/network/model/notification/notification_model.dart';
 import 'package:myapp/widgets/appbar/app_bar_custom.dart';
 import 'package:myapp/widgets/state/state_pagination_widget.dart';
 
