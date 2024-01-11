@@ -57,10 +57,10 @@ class SignRepositoryImpl extends SignRepository {
       final newUser = MUser(
         id: firebaseUser?.uid ?? '',
         email: user.email,
-        name: user.fullName,
+        name: firebaseUser?.displayName ?? user.fullName,
+        avatar: firebaseUser?.photoURL ?? user.avatar,
         followers: [],
         followed: [],
-        avatar: user.avatar,
       );
       final userResult = await DomainManager().user.getOrAddUser(newUser);
 
@@ -105,9 +105,9 @@ class SignRepositoryImpl extends SignRepository {
         id: firebaseUser?.uid ?? '',
         email: firebaseUser?.email,
         name: firebaseUser?.displayName,
+        avatar: firebaseUser?.photoURL,
         followers: [],
         followed: [],
-        avatar: firebaseUser?.photoURL,
       );
       final userResult = await DomainManager().user.getOrAddUser(newUser);
       return MResult.success(userResult.data ?? newUser);
@@ -124,8 +124,8 @@ class SignRepositoryImpl extends SignRepository {
   @override
   Future<MResult<MSocialUser>> loginWithFacebook() async {
     try {
-      final LoginResult loginResult =
-          await FacebookAuth.instance.login(permissions: ['email']);
+      final LoginResult loginResult = await FacebookAuth.instance
+          .login(permissions: ['email', 'public_profile']);
 
       return MResult.success(
           MSocialUser.fromFacebookAccount({}, loginResult.accessToken!));

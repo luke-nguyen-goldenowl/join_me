@@ -9,17 +9,23 @@ import 'package:myapp/src/network/model/user/user.dart';
 import 'package:myapp/src/network/model/user_story/user_story.dart';
 
 class HomeBloc extends Cubit<HomeState> {
-  HomeBloc() : super(HomeState.ds()) {
-    getUsersEvents();
-    getPopular();
-    getUpcoming();
-    getFollowed();
-    getPeople();
-  }
+  HomeBloc() : super(HomeState.ds());
   DomainManager domain = DomainManager();
-  final MUser user = GetIt.I<AccountBloc>().state.user;
 
-  void getUsersEvents() async {
+  void getDateHome() {
+    final MUser user = GetIt.I<AccountBloc>().state.user;
+    getUsersEvents(user);
+    getPopular(user);
+    getUpcoming(user);
+    getFollowed(user);
+    getPeople(user);
+  }
+
+  void clearDateHome() {
+    emit(HomeState.ds());
+  }
+
+  void getUsersEvents(MUser user) async {
     try {
       final result =
           await domain.userEvent.getUserStoryByIds(user.followed ?? []);
@@ -31,7 +37,7 @@ class HomeBloc extends Cubit<HomeState> {
     }
   }
 
-  void getPopular() async {
+  void getPopular(MUser user) async {
     try {
       final result = await domain.event.getEventsPopular(user.id);
       if (result.isSuccess) {
@@ -42,7 +48,7 @@ class HomeBloc extends Cubit<HomeState> {
     }
   }
 
-  void getUpcoming() async {
+  void getUpcoming(MUser user) async {
     try {
       final result = await domain.event.getEventsUpcoming(user.id);
       if (result.isSuccess) {
@@ -53,7 +59,7 @@ class HomeBloc extends Cubit<HomeState> {
     }
   }
 
-  void getPeople() async {
+  void getPeople(MUser user) async {
     try {
       if (user.followers != null && user.followed!.isEmpty) {
         return emit(state.copyWith(people: []));
@@ -67,7 +73,7 @@ class HomeBloc extends Cubit<HomeState> {
     }
   }
 
-  void getFollowed() async {
+  void getFollowed(MUser user) async {
     try {
       final result = await domain.event.getEventsFollow(user.id);
       if (result.isSuccess) {
@@ -95,6 +101,7 @@ class HomeBloc extends Cubit<HomeState> {
 
   void handleSeenStory(int indexUser, int indexStory) {
     try {
+      final MUser user = GetIt.I<AccountBloc>().state.user;
       if (state.userStory[indexUser].stories[indexStory].viewers
               ?.contains(user.id) ??
           false) {
