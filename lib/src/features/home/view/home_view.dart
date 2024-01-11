@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:myapp/gen/assets.gen.dart';
 import 'package:myapp/src/features/account/logic/account_bloc.dart';
 import 'package:myapp/src/features/home/widget/list_event_home.dart';
 import 'package:myapp/src/features/home/widget/list_story_home.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
 import 'package:myapp/widgets/appbar/app_bar_custom.dart';
+import 'package:myapp/widgets/image/image_network.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -23,7 +23,7 @@ class HomeView extends StatelessWidget {
             },
             icon: ClipRRect(
               borderRadius: BorderRadius.circular(5.0),
-              child: Assets.images.images.avatar.image(),
+              child: XImageNetwork(state.user.avatar),
             ),
             iconSize: 50,
           ),

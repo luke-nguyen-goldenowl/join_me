@@ -73,6 +73,7 @@ dependencies:
   image_picker: ^1.0.5
   gradient_borders: ^1.0.0
   story_view: ^0.16.0
+  firebase_storage: ^11.5.6
   location: ^5.0.3
   firebase_storage: ^11.6.0
 

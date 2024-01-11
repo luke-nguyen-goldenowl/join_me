@@ -2,6 +2,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:myapp/src/_dev/dev_screen.dart';
+import 'package:myapp/src/features/account/profile/view/edit_profile_view.dart';
 import 'package:myapp/src/features/add_event/view/add_event_view.dart';
 import 'package:myapp/src/features/dashboard/logic/navigation_bar_item.dart';
 import 'package:myapp/src/features/account/profile/view/profile_view.dart';
@@ -189,6 +190,14 @@ class AppRouter {
             path: AppRouteNames.profile.subPath,
             name: AppRouteNames.profile.name,
             builder: (_, __) => const ProfileView(),
+            routes: <RouteBase>[
+              GoRoute(
+                parentNavigatorKey: AppCoordinator.navigatorKey,
+                path: AppRouteNames.editProfile.subPath,
+                name: AppRouteNames.editProfile.name,
+                builder: (_, __) => const EditProfileView(),
+              )
+            ],
           )
         ],
       ),
