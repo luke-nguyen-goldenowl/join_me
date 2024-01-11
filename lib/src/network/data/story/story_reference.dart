@@ -16,7 +16,7 @@ class StoryReference extends BaseCollectionReference<MStory> {
                     snapshot.data() as Map<String, dynamic>, snapshot.id),
                 toFirestore: (chatRoom, _) => chatRoom.toMap(),
               ),
-          getObjectId: (e) => e.id!,
+          getObjectId: (e) => e.id ?? "",
           setObjectId: (e, id) => e.copyWith(id: id),
         );
 
@@ -24,7 +24,8 @@ class StoryReference extends BaseCollectionReference<MStory> {
 
   Future<MResult<MStory>> addStory(MStory story) async {
     try {
-      final image = await firebaseStorage.uploadImage(story.image!, "stories");
+      final image =
+          await firebaseStorage.uploadImage(story.image ?? "", "stories");
       MStory newStory = story.copyWith(image: image);
       final MResult<MStory> result = await add(newStory);
       return MResult.success(result.data);
