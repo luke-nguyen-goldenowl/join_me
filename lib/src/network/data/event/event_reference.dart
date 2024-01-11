@@ -38,7 +38,7 @@ class EventReference extends BaseCollectionReference<MEvent> {
       final MResult<MEvent> eventResult = await get(eventId);
       if (eventResult.isSuccess) {
         final MResult<MUser> user =
-            await userReference.getUser(eventResult.data!.host!.id);
+            await userReference.getUser(eventResult.data?.host?.id ?? "");
         if (user.isSuccess) {
           final MEvent event = eventResult.data!.copyWith(host: user.data);
           return MResult.success(event);
