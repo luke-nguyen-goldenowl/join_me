@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/theme/colors.dart';
+import 'package:myapp/src/utils/date/date_helper.dart';
 
 // ignore: must_be_immutable
 class EventItem extends StatelessWidget {
   EventItem({
     super.key,
-    required this.storyId,
+    required this.event,
     required this.handlePress,
   });
 
-  final String storyId;
-  void Function() handlePress;
+  final MEvent event;
+  void Function(MEvent) handlePress;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: handlePress,
+      onTap: () {
+        handlePress(event);
+      },
       child: Container(
         margin: const EdgeInsets.all(20),
         padding: const EdgeInsets.all(10),
@@ -26,22 +30,22 @@ class EventItem extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              "Dec 12, 2023 - 11:00 PM ",
-              style: TextStyle(
+            Text(
+              DateHelper.getFullDateTime(date: event.startDate),
+              style: const TextStyle(
                 color: AppColors.grey,
                 fontSize: 15,
                 decoration: TextDecoration.none,
               ),
             ),
             const SizedBox(height: 10),
-            const Text(
-              "Let's play different famous board games, get together every Sunday",
-              style: TextStyle(
+            Text(
+              event.name ?? "F",
+              style: const TextStyle(
                 wordSpacing: 0,
                 letterSpacing: 0,
                 color: AppColors.black,
-                fontSize: 18,
+                fontSize: 20,
                 decoration: TextDecoration.none,
               ),
               maxLines: 2,
@@ -55,20 +59,20 @@ class EventItem extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: RichText(
-                  text: const TextSpan(children: [
-                TextSpan(
-                  text: "Followed: ",
+                  text: TextSpan(children: [
+                const TextSpan(
+                  text: "Follower: ",
                   style: TextStyle(
                     color: AppColors.black,
-                    fontSize: 18,
+                    fontSize: 15,
                     decoration: TextDecoration.none,
                   ),
                 ),
                 TextSpan(
-                  text: "100",
-                  style: TextStyle(
+                  text: event.followersId?.length.toString() ?? "",
+                  style: const TextStyle(
                       color: AppColors.rosyPink,
-                      fontSize: 20,
+                      fontSize: 17,
                       decoration: TextDecoration.none,
                       fontWeight: FontWeight.w900),
                 )
