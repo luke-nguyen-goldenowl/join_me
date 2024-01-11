@@ -13,7 +13,7 @@ class EventSearchWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        AppCoordinator.showEventDetails(id: event.id!);
+        if (event.id != null) AppCoordinator.showEventDetails(id: event.id!);
       },
       child: Container(
         padding: const EdgeInsets.all(10),
@@ -34,12 +34,25 @@ class EventSearchWidget extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.asset(
-                event.images![0],
-                height: 70,
-                width: 70,
-                fit: BoxFit.cover,
-              ),
+              child: event.images != null
+                  ? Container(
+                      height: 70,
+                      width: 70,
+                      color: AppColors.grey,
+                      alignment: Alignment.center,
+                      child: const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                          )),
+                    )
+                  : Image.asset(
+                      event.images![0],
+                      height: 70,
+                      width: 70,
+                      fit: BoxFit.cover,
+                    ),
             ),
             const SizedBox(width: 10),
             Expanded(
@@ -48,7 +61,7 @@ class EventSearchWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    event.name!,
+                    event.name ?? "",
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,

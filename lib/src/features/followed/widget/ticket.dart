@@ -134,18 +134,31 @@ class HeaderTicket extends StatelessWidget {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(20),
-          child: Image.asset(
-            event.images![0],
-            height: 60,
-            width: 60,
-            fit: BoxFit.cover,
-          ),
+          child: event.images != null
+              ? Container(
+                  height: 60,
+                  width: 60,
+                  color: AppColors.grey,
+                  alignment: Alignment.center,
+                  child: const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                      )),
+                )
+              : Image.asset(
+                  event.images![0],
+                  height: 60,
+                  width: 60,
+                  fit: BoxFit.cover,
+                ),
         ),
         const SizedBox(width: 10),
         SizedBox(
           width: 250,
           child: Text(
-            event.name!,
+            event.name ?? "",
             style: const TextStyle(
               color: AppColors.black,
               fontWeight: FontWeight.bold,
