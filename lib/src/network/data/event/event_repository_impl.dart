@@ -7,4 +7,28 @@ class EventRepositoryImpl {
   Future<MResult<MEvent>> addEvent(MEvent event) {
     return eventReference.addEvent(event);
   }
+
+  Future<MResult> updateFollowEvent(
+    String eventId,
+    String userId,
+    bool isFollowed,
+  ) {
+    return eventReference.updateFollowEvent(eventId, userId, isFollowed);
+  }
+
+  Future<MResult> updateFavoriteEvent(
+    String eventId,
+    String userId,
+    bool isFavorite,
+  ) {
+    return eventReference.updateFavoriteEvent(eventId, userId, isFavorite);
+  }
+
+  Future<MResult<MEvent>> getEvent(String eventId) {
+    return eventReference.getEvent(eventId);
+  }
+
+  Future<MResult<List<MEvent>>> getEventsByUser(String userId) {
+    return eventReference.getEventsByUser(userId);
+  }
 }

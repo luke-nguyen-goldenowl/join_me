@@ -1,21 +1,25 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/foundation.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 
 class MStory {
-  String id;
-  String image;
+  String? id;
+  String? image;
   DateTime? time;
-  MUser host;
-  MEvent event;
-  int liker;
+  MUser? host;
+  MEvent? event;
+  List<String>? likers;
+  List<String>? viewers;
 
   MStory({
-    required this.id,
-    required this.host,
-    required this.event,
-    this.image = "",
-    this.liker = 0,
+    this.id,
+    this.image,
     this.time,
+    this.host,
+    this.event,
+    this.likers,
+    this.viewers,
   });
 
   MStory copyWith({
@@ -24,58 +28,64 @@ class MStory {
     DateTime? time,
     MUser? host,
     MEvent? event,
-    int? liker,
+    List<String>? likers,
+    List<String>? viewers,
   }) {
     return MStory(
       id: id ?? this.id,
+      image: image ?? this.image,
+      time: time ?? this.time,
       host: host ?? this.host,
       event: event ?? this.event,
-      image: image ?? this.image,
-      liker: liker ?? this.liker,
-      time: time ?? this.time,
+      likers: likers ?? this.likers,
+      viewers: viewers ?? this.viewers,
     );
   }
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is MStory &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          image == other.image &&
-          time == other.time &&
-          host == other.host &&
-          event == other.event &&
-          liker == other.liker;
+  bool operator ==(covariant MStory other) {
+    if (identical(this, other)) return true;
+
+    return other.id == id &&
+        other.image == image &&
+        other.time == time &&
+        other.host == host &&
+        other.event == event &&
+        listEquals(other.likers, likers) &&
+        listEquals(other.viewers, viewers);
+  }
 
   @override
-  int get hashCode =>
-      id.hashCode ^
-      image.hashCode ^
-      time.hashCode ^
-      host.hashCode ^
-      event.hashCode ^
-      liker.hashCode;
+  int get hashCode {
+    return id.hashCode ^
+        image.hashCode ^
+        time.hashCode ^
+        host.hashCode ^
+        event.hashCode ^
+        likers.hashCode ^
+        viewers.hashCode;
+  }
 
-  factory MStory.fromMap(Map<String, dynamic> map) {
+  factory MStory.fromMap(Map<String, dynamic> map, String id) {
     return MStory(
-      id: map['id'],
+      id: id,
       image: map['image'] ?? "",
       time: map['time'] != null ? DateTime.parse(map['time']) : null,
-      host: MUser.fromMap(map['host']),
-      event: MEvent.fromMap(map['event'], "1"),
-      liker: map['liker'] ?? 0,
+      host: MUser(id: map['host']),
+      event: MEvent(id: map['event']),
+      likers: map['liker'] ?? [],
+      viewers: map['viewers'] ?? [],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'image': image,
       'time': time?.toIso8601String(),
-      'host': host.toMap(),
-      'event': event.toMap(),
-      'liker': liker,
+      'host': host?.id,
+      'event': event?.id,
+      'likers': likers ?? [],
+      'viewers': viewers ?? []
     };
   }
 }
