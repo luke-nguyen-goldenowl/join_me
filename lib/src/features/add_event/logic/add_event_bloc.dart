@@ -96,7 +96,7 @@ class AddEventBloc extends Cubit<AddEventState> {
 
     images = state.medias.map((e) => e!.path).toList();
 
-    late final DateTime startDate;
+    DateTime? startDate;
     if (state.event.startDate != null && state.time != null) {
       startDate = DateTime(
         state.event.startDate!.year,
