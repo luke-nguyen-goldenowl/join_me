@@ -1,4 +1,4 @@
-import 'package:latlong2/latlong.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:myapp/src/network/model/common/pagination/meta/pagination_meta.dart';
 import 'package:myapp/src/network/model/common/pagination/pagination.dart';
 import 'package:myapp/src/network/model/common/pagination/pagination_response.dart';
@@ -23,7 +23,7 @@ final List<NotificationModel> notifies = [
         images: ["assets/images/images/bg-event.jpg"],
         startDate: DateTime.now(),
         deadline: DateTime.now(),
-        location: LatLng(11.2501, 107.4229),
+        location: const LatLng(11.2501, 107.4229),
         host: const MUser(
             id: '1', name: 'Keith', avatar: "assets/images/images/avatar.png"),
         type: TypeEvent.sport,
@@ -41,7 +41,7 @@ final List<NotificationModel> notifies = [
         images: ["assets/images/images/bg-event.jpg"],
         startDate: DateTime.now(),
         deadline: DateTime.now(),
-        location: LatLng(11.2501, 107.4229),
+        location: const LatLng(11.2501, 107.4229),
         host: const MUser(
             id: '1', name: 'Keith', avatar: "assets/images/images/avatar.png"),
         type: TypeEvent.sport,
@@ -59,7 +59,7 @@ final List<NotificationModel> notifies = [
         images: ["assets/images/images/bg-event.jpg"],
         startDate: DateTime.now(),
         deadline: DateTime.now(),
-        location: LatLng(11.2501, 107.4229),
+        location: const LatLng(11.2501, 107.4229),
         host: const MUser(
             id: '1', name: 'Keith', avatar: "assets/images/images/avatar.png"),
         type: TypeEvent.sport,
