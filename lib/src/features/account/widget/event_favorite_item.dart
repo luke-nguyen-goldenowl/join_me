@@ -61,7 +61,7 @@ class EventFavoriteItem extends StatelessWidget {
                         ),
                         const SizedBox(height: 20),
                         Text(
-                          DateHelper.getFullDateTime(date: event.startDate),
+                          DateHelper.getFullDateTime(event.startDate),
                           style: const TextStyle(
                             fontSize: 15,
                             color: AppColors.grey,
