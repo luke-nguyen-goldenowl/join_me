@@ -6,10 +6,6 @@ if (localPropertiesFile.exists()) {
     }
 }
 
-def GMP_KEY = localProperties.getProperty('GMP_KEY')
-if (GMP_KEY == null){
-    GMP_KEY = ""
-}
 
 def flutterRoot = localProperties.getProperty('flutter.sdk')
 if (flutterRoot == null) {
@@ -29,6 +25,7 @@ if (flutterVersionName == null) {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+apply from: project(':flutter_config').projectDir.getPath() + "/dotenv.gradle"
 
 android {
     compileSdkVersion flutter.compileSdkVersion
@@ -63,12 +60,12 @@ android {
         production {
             dimension "flavor"
             applicationIdSuffix ""
-            manifestPlaceholders = [appName: "Template",GMP_KEY:GMP_KEY]
+            manifestPlaceholders = [appName: "Template"]
         }
         staging {
             dimension "flavor"
             applicationIdSuffix ".stg"
-            manifestPlaceholders = [appName: "Template [STG]",GMP_KEY:GMP_KEY]
+            manifestPlaceholders = [appName: "Template [STG]"]
         }
     }
 
