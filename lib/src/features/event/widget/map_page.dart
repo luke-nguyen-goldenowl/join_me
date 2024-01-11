@@ -70,20 +70,20 @@ class MapPageWidget extends StatelessWidget {
                     },
                   ),
 
-                  // ...state.events.map((e) => Marker(
-                  //       rotate: true,
-                  //       width: 250.0,
-                  //       height: 120.0,
-                  //       point: e.location!,
-                  //       builder: (BuildContext context) {
-                  //         return EventLocation(
-                  //           myIndex: state.events.indexOf(e),
-                  //           currentEvent: state.currentEvent,
-                  //           handleSetNewEvent:
-                  //               context.read<MapPageBloc>().selectEvent,
-                  //         );
-                  //       },
-                  //     ))
+                  ...state.events.map((e) => Marker(
+                        rotate: true,
+                        width: 250.0,
+                        height: 120.0,
+                        point: e.location! as LatLng,
+                        builder: (BuildContext context) {
+                          return EventLocation(
+                            myIndex: state.events.indexOf(e),
+                            currentEvent: state.currentEvent,
+                            handleSetNewEvent:
+                                context.read<MapPageBloc>().selectEvent,
+                          );
+                        },
+                      ))
                 ],
               ),
             ],
