@@ -11,7 +11,7 @@ class PastEventFollowedView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PastBloc, PastState>(
-      buildWhen: (previous, current) => previous != current,
+      buildWhen: (previous, current) => previous.data != current.data,
       builder: (context, state) {
         return Column(
           children: [

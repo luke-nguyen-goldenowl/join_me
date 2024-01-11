@@ -23,7 +23,12 @@ class HomeView extends StatelessWidget {
             },
             icon: ClipRRect(
               borderRadius: BorderRadius.circular(5.0),
-              child: XImageNetwork(state.user.avatar),
+              child: XImageNetwork(
+                state.user.avatar,
+                height: 50,
+                width: 50,
+                fit: BoxFit.cover,
+              ),
             ),
             iconSize: 50,
           ),

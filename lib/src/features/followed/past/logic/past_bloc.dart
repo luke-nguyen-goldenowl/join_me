@@ -19,28 +19,25 @@ class PastBloc extends PaginationBloc<PastState> {
     final data =
         await domain.event.getEventsPastByUser(user.id, state.data.lastDoc);
 
-    if (data.isSuccess) {
-      final MPaginationMeta meta;
-      if (state.data.countData == -1) {
-        final totalCount = await domain.event.getCountEventsPastByUser(user.id);
-        meta = MPaginationMeta(
-          pageSize: state.data.pageLimit,
-          totalCount: totalCount.data ?? 0,
-          pageNumber: (totalCount.data ?? 0 / state.data.pageLimit).ceil(),
-          lastPage: (totalCount.data ?? 0 / state.data.pageLimit).ceil(),
-        );
-      } else {
-        meta = MPaginationMeta(
-          pageSize: state.data.pageLimit,
-          totalCount: state.data.countData,
-          pageNumber: (state.data.countData / state.data.pageLimit).ceil(),
-          lastPage: (state.data.countData / state.data.pageLimit).ceil(),
-        );
-      }
-      final paginationResponse =
-          MPaginationResponse<MEvent>(data: data.data ?? [], meta: meta);
-      return MResult.success(paginationResponse);
+    final MPaginationMeta meta;
+    if (state.data.countData == -1) {
+      final totalCount = await domain.event.getCountEventsPastByUser(user.id);
+      meta = MPaginationMeta(
+        pageSize: state.data.pageLimit,
+        totalCount: totalCount.data ?? 0,
+        pageNumber: (totalCount.data ?? 0 / state.data.pageLimit).ceil(),
+        lastPage: (totalCount.data ?? 0 / state.data.pageLimit).ceil(),
+      );
+    } else {
+      meta = MPaginationMeta(
+        pageSize: state.data.pageLimit,
+        totalCount: state.data.countData,
+        pageNumber: (state.data.countData / state.data.pageLimit).ceil(),
+        lastPage: (state.data.countData / state.data.pageLimit).ceil(),
+      );
     }
-    return MResult.error(data.error);
+    final paginationResponse =
+        MPaginationResponse<MEvent>(data: data.data ?? [], meta: meta);
+    return MResult.success(paginationResponse);
   }
 }
