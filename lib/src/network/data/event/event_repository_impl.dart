@@ -31,4 +31,20 @@ class EventRepositoryImpl {
   Future<MResult<List<MEvent>>> getEventsByUser(String userId) {
     return eventReference.getEventsByUser(userId);
   }
+
+  Future<MResult<List<MEvent>>> getEventsPopular(String userId) {
+    return eventReference.getEventsPopular(userId);
+  }
+
+  Future<MResult<List<MEvent>>> getEventsUpcoming(String userId) {
+    return eventReference.getEventsUpcoming(userId);
+  }
+
+  Future<MResult<List<MEvent>>> getEventsPeople(List<String> people) {
+    return eventReference.getEventsPeople(people);
+  }
+
+  Future<MResult<List<MEvent>>> getEventsFollow(String userId) {
+    return eventReference.getEventsFollow(userId);
+  }
 }

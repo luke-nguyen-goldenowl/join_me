@@ -107,7 +107,7 @@ class BottomTicket extends StatelessWidget {
               ),
             ),
             Text(
-              DateHelper.getTime(time: event.startDate!),
+              DateHelper.getTime(event.startDate!),
               style: const TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,

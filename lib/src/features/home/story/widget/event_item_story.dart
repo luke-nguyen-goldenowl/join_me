@@ -40,7 +40,7 @@ class EventItem extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              event.name ?? "F",
+              event.name ?? "",
               style: const TextStyle(
                 wordSpacing: 0,
                 letterSpacing: 0,

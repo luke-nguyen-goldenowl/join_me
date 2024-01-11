@@ -50,16 +50,12 @@ class MUser {
 
   factory MUser.fromMap(Map<String, dynamic> map) {
     return MUser(
-      id: map['id'] as String,
-      name: map['name'] != null ? map['name'] as String : null,
-      avatar: map['avatar'] != null ? map['avatar'] as String : null,
-      email: map['email'] != null ? map['email'] as String : null,
-      followers: map['followers'] != null
-          ? List<String>.from((map['followers'] as List<String>))
-          : [],
-      followed: map['followed'] != null
-          ? List<String>.from((map['followed'] as List<String>))
-          : [],
+      id: map['id'],
+      name: map['name'],
+      avatar: map['avatar'],
+      email: map['email'],
+      followers: List<String>.from((map['followers'])),
+      followed: List<String>.from((map['followed'])),
     );
   }
 

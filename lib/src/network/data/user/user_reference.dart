@@ -51,7 +51,7 @@ class UserReference extends BaseCollectionReference<MUser> {
 
   Future<MResult<MUser>> getOrAddUser(MUser user) async {
     try {
-      final result = await get(user.id);
+      final MResult<MUser> result = await get(user.id);
       if (result.isError == false) {
         return result;
       } else {
@@ -69,6 +69,19 @@ class UserReference extends BaseCollectionReference<MUser> {
           await ref.get().timeout(const Duration(seconds: 10));
       final docs = query.docs.map((e) => e.data()).toList();
       return MResult.success(docs);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<List<MUser>>> getUsersByIds(List<String> userIds) async {
+    try {
+      final result = await getDataByIds(userIds);
+      if (result.isError == false) {
+        return result;
+      } else {
+        return MResult.success(result.data);
+      }
     } catch (e) {
       return MResult.exception(e);
     }

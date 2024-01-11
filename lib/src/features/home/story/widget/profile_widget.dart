@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/src/features/home/model/user.dart';
+import 'package:myapp/src/network/model/user/user.dart';
 
 class ProfileWidget extends StatelessWidget {
-  final User user;
+  final MUser user;
   final String date;
 
   const ProfileWidget({
@@ -21,7 +21,7 @@ class ProfileWidget extends StatelessWidget {
             children: <Widget>[
               CircleAvatar(
                 radius: 24,
-                backgroundImage: AssetImage(user.imgUrl),
+                backgroundImage: Image.network(user.avatar ?? "").image,
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -29,7 +29,7 @@ class ProfileWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      user.name,
+                      user.name ?? "",
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
