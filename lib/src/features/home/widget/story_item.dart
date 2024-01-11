@@ -39,7 +39,12 @@ class StoryItem extends StatelessWidget {
         },
         child: ClipRRect(
           borderRadius: BorderRadius.circular(12),
-          child: XImageNetwork(host.avatar),
+          child: XImageNetwork(
+            host.avatar,
+            height: 50,
+            width: 50,
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );

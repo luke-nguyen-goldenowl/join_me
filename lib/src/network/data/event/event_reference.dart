@@ -14,7 +14,7 @@ class EventReference extends BaseCollectionReference<MEvent> {
                     snapshot.data() as Map<String, dynamic>, snapshot.id),
                 toFirestore: (chatRoom, _) => chatRoom.toMap(),
               ),
-          getObjectId: (e) => e.id!,
+          getObjectId: (e) => e.id ?? "",
           setObjectId: (e, id) => e.copyWith(id: id),
         );
 

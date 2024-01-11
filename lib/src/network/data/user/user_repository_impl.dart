@@ -15,15 +15,18 @@ class UserRepositoryImpl extends UserRepository {
       if (result.isError) {
         return MResult.error('Not user login');
       }
-      final user = MUser(
-        id: result.data!.id,
-        email: result.data!.email,
-        name: result.data!.name,
-        avatar: result.data!.avatar,
-        followers: result.data!.followers,
-        followed: result.data!.followed,
-      );
-      return MResult.success(user);
+      if (result.isSuccess) {
+        final user = MUser(
+          id: result.data!.id,
+          email: result.data!.email,
+          name: result.data!.name,
+          avatar: result.data!.avatar,
+          followers: result.data!.followers,
+          followed: result.data!.followed,
+        );
+        return MResult.success(user);
+      }
+      return result;
     } catch (e) {
       return MResult.exception(e);
     }

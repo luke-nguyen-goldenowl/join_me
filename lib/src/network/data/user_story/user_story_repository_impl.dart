@@ -2,6 +2,7 @@ import 'package:myapp/src/network/data/story/story_reference.dart';
 import 'package:myapp/src/network/data/user/user_reference.dart';
 import 'package:myapp/src/network/model/common/result.dart';
 import 'package:myapp/src/network/model/story/story.dart';
+import 'package:myapp/src/network/model/user/user.dart';
 
 import 'package:myapp/src/network/model/user_story/user_story.dart';
 
@@ -23,8 +24,11 @@ class UserStoryRepositoryImpl {
       }
       for (int i = 0; i < listStories.length; i++) {
         if (listStories[i].isSuccess) {
-          result.add(
-              MUserStory(user: users.data![i], stories: listStories[i].data!));
+          if (listStories[i].data?.isNotEmpty ?? false) {
+            result.add(MUserStory(
+                user: users.data?[i] ?? MUser.empty(),
+                stories: listStories[i].data ?? []));
+          }
         }
       }
       return MResult.success(result);
