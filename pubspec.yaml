@@ -68,13 +68,14 @@ dependencies:
   # flutter_app_badger: ^1.5.0
   # firebase_dynamic_links: ^5.0.8
   flutter_facebook_auth: ^5.0.6
-  flutter_map: ^4.0.0
-  latlong2: ^0.8.2
   image_picker: ^1.0.5
   gradient_borders: ^1.0.0
   story_view: ^0.16.0
   firebase_storage: ^11.5.6
+  google_maps_flutter: ^2.5.1
   location: ^5.0.3
+  flutter_map: ^4.0.0
+  flutter_config: ^2.0.2
 
   # sign_in_with_apple: ^4.2.0
   # uni_links: ^0.5.1

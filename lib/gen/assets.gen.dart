@@ -77,6 +77,10 @@ class $AssetsImagesImagesGen {
   AssetGenImage get avatar =>
       const AssetGenImage('assets/images/images/avatar.png');
 
+  /// File path: assets/images/images/bg-event.jpg
+  AssetGenImage get bgEvent =>
+      const AssetGenImage('assets/images/images/bg-event.jpg');
+
   /// File path: assets/images/images/landscape1.avif
   String get landscape1 => 'assets/images/images/landscape1.avif';
 
@@ -92,17 +96,13 @@ class $AssetsImagesImagesGen {
   AssetGenImage get landscape4 =>
       const AssetGenImage('assets/images/images/landscape4.webp');
 
-  /// File path: assets/images/images/bg-event.jpg
-  AssetGenImage get bgEvent =>
-      const AssetGenImage('assets/images/images/bg-event.jpg');
-
   /// File path: assets/images/images/logo2.png
   AssetGenImage get logo2 =>
       const AssetGenImage('assets/images/images/logo2.png');
 
   /// List of all assets
   List<dynamic> get values =>
-      [avatar, landscape1, landscape2, landscape3, landscape4, logo2, bgEvent];
+      [avatar, bgEvent, landscape1, landscape2, landscape3, landscape4, logo2];
 }
 
 class $AssetsImagesLocaleGen {

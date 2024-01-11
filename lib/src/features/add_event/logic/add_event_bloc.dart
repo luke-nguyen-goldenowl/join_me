@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_map/flutter_map.dart';
+
 import 'package:image_picker/image_picker.dart';
 
 import 'package:myapp/src/features/add_event/logic/add_event_state.dart';
@@ -9,7 +9,7 @@ class AddEventBloc extends Cubit<AddEventState> {
   AddEventBloc() : super(AddEventState.ds());
 
   PageController controller = PageController(initialPage: 0);
-  MapController mapController = MapController();
+  // MapController mapController = MapController();
 
   void setCurrentPage(int index) {
     emit(state.copyWith(currentPage: index));
@@ -69,7 +69,7 @@ class AddEventBloc extends Cubit<AddEventState> {
 
   @override
   Future<void> close() {
-    mapController.dispose();
+    // mapController.dispose();
     controller.dispose();
     return super.close();
   }

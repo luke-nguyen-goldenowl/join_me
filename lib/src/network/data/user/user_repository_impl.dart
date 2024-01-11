@@ -11,18 +11,18 @@ class UserRepositoryImpl extends UserRepository {
   Future<MResult<MUser>> getUser(String id) async {
     try {
       final result = await usersRef.getUser(id);
-      // final result = FirebaseAuth.instance.currentUser;
-      if (result.isError) {
-        return MResult.error('Not user login');
+
+      if (result.isSuccess) {
+        final user = MUser(
+          id: result.data!.id,
+          email: result.data!.email,
+          name: result.data!.name,
+          avatar: result.data!.avatar,
+          followers: result.data!.followers,
+        );
+        return MResult.success(user);
       }
-      final user = MUser(
-        id: result.data!.id,
-        email: result.data!.email,
-        name: result.data!.name,
-        avatar: result.data!.avatar,
-        followers: result.data!.followers,
-      );
-      return MResult.success(user);
+      return MResult.error('Not user login');
     } catch (e) {
       return MResult.exception(e);
     }

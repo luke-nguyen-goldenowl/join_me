@@ -19,7 +19,7 @@ class FollowedHomeView extends StatelessWidget {
           actions: [
             IconButton(
               onPressed: () {
-                AppCoordinator.showSearchScreen();
+                AppCoordinator.showEventDetails(id: 'uWbVA0CkBqVxhYZ5QHYT');
               },
               icon: const Icon(
                 Icons.search,
