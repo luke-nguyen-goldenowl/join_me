@@ -24,7 +24,7 @@ final List<NotificationModel> notifies = [
         startDate: DateTime.now(),
         deadline: DateTime.now(),
         location: const LatLng(11.2501, 107.4229),
-        host: const MUser(
+        host: MUser(
             id: '1', name: 'Keith', avatar: "assets/images/images/avatar.png"),
         type: TypeEvent.sport,
       ),
@@ -42,7 +42,7 @@ final List<NotificationModel> notifies = [
         startDate: DateTime.now(),
         deadline: DateTime.now(),
         location: const LatLng(11.2501, 107.4229),
-        host: const MUser(
+        host: MUser(
             id: '1', name: 'Keith', avatar: "assets/images/images/avatar.png"),
         type: TypeEvent.sport,
       ),
@@ -60,11 +60,11 @@ final List<NotificationModel> notifies = [
         startDate: DateTime.now(),
         deadline: DateTime.now(),
         location: const LatLng(11.2501, 107.4229),
-        host: const MUser(
+        host: MUser(
             id: '1', name: 'Keith', avatar: "assets/images/images/avatar.png"),
         type: TypeEvent.sport,
       ),
-      user: const MUser(
+      user: MUser(
           id: '2', name: 'NaNa', avatar: "assets/images/images/avatar.png"),
     ),
   ),
@@ -72,7 +72,7 @@ final List<NotificationModel> notifies = [
     type: TypeNotify.followUser,
     data: MFollowUser(
       id: '3',
-      user: const MUser(
+      user: MUser(
           id: '2', name: 'NaNa', avatar: "assets/images/images/avatar.png"),
     ),
   )

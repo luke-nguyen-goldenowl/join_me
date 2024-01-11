@@ -1,5 +1,4 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import 'package:myapp/src/network/model/common/pagination/meta/pagination_meta.dart';
 import 'package:myapp/src/network/model/common/pagination/pagination.dart';
 import 'package:myapp/src/network/model/common/pagination/pagination_response.dart';
@@ -22,8 +21,8 @@ List<MEvent> listEvent = [
     images: ["assets/images/images/bg-event.jpg"],
     startDate: DateTime.now(),
     deadline: DateTime.now(),
-    location: const LatLng(11.2501, 107.4229),
-    host: const MUser(
+    location: const LatLng(88.00015, 85.1316546),
+    host: MUser(
         id: '1', name: 'Keith', avatar: "assets/images/images/avatar.png"),
     type: TypeEvent.sport,
   ),
@@ -34,8 +33,8 @@ List<MEvent> listEvent = [
     images: ["assets/images/images/bg-event.jpg"],
     startDate: DateTime.now(),
     deadline: DateTime.now(),
-    location: const LatLng(11.2934, 107.4002),
-    host: const MUser(
+    location: const LatLng(88.00015, 85.1316546),
+    host: MUser(
         id: '2', name: 'Kien Vo', avatar: "assets/images/images/avatar.png"),
     type: TypeEvent.music,
   ),
@@ -46,8 +45,8 @@ List<MEvent> listEvent = [
     images: ["assets/images/images/bg-event.jpg"],
     startDate: DateTime.now(),
     deadline: DateTime.now(),
-    location: const LatLng(11.2896, 107.4428),
-    host: const MUser(
+    location: const LatLng(88.00015, 85.1316546),
+    host: MUser(
         id: '2', name: 'Kien Vo', avatar: "assets/images/images/avatar.png"),
     type: TypeEvent.movie,
   ),
@@ -58,8 +57,8 @@ List<MEvent> listEvent = [
     images: ["assets/images/images/bg-event.jpg"],
     startDate: DateTime.now(),
     deadline: DateTime.now(),
-    location: const LatLng(11.2313, 107.4389),
-    host: const MUser(
+    location: const LatLng(88.00015, 85.1316546),
+    host: MUser(
         id: '2', name: 'Kien Vo', avatar: "assets/images/images/avatar.png"),
     type: TypeEvent.game,
   ),

@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter/material.dart';
 import 'package:myapp/src/network/model/user/user.dart';
+import 'package:myapp/src/utils/utils.dart';
 
 enum TypeEvent {
   sport("Sport", Icons.sports_basketball),
@@ -102,14 +103,28 @@ class MEvent {
       'host': host?.id,
       'images': images,
       'favoritesId': favoritesId,
+      'countFavorites': favoritesId?.length ?? 0,
       'followersId': followersId,
+      'countFollowers': followersId?.length ?? 0,
       'location': location != null
           ? {'latitude': location!.latitude, 'longitude': location!.longitude}
           : null,
       'startDate': startDate?.toIso8601String(),
       'type': type?.name,
       'maxAttendee': maxAttendee,
+      'caseSearchName': _getCaseSearchName
     };
+  }
+
+  List<String> get _getCaseSearchName {
+    List<String> listWord = name?.split(' ') ?? [];
+    String word = listWord.removeLast();
+    List<String> result = Utils.getCaseSearch(word);
+    listWord.reversed.toList().forEach((element) {
+      word = "$element $word";
+      result.addAll(Utils.getCaseSearch(word));
+    });
+    return result;
   }
 
   @override

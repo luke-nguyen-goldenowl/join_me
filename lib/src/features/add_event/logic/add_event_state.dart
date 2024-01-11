@@ -1,66 +1,100 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import 'package:image_picker/image_picker.dart';
 
+import 'package:myapp/src/network/model/event/event.dart';
+
 class AddEventState {
-  LatLng? selectedLocation;
   int currentPage;
+  bool isPosting;
+  bool isLoadingCurrentLocation;
+
+  MEvent event;
   List<XFile?> medias;
-  DateTime? startDate;
-  DateTime? deadlineDate;
   TimeOfDay? time;
-  String nameEvent;
-  String description;
-  int numberMember;
 
   AddEventState({
     required this.currentPage,
+    required this.isPosting,
     required this.medias,
-    required this.selectedLocation,
-    required this.deadlineDate,
-    required this.startDate,
     required this.time,
-    required this.description,
-    required this.nameEvent,
-    required this.numberMember,
+    required this.isLoadingCurrentLocation,
+    required this.event,
   });
 
   factory AddEventState.ds() {
     return AddEventState(
       currentPage: 0,
       medias: [],
-      selectedLocation: null,
       time: null,
-      deadlineDate: null,
-      startDate: null,
-      description: "",
-      nameEvent: "",
-      numberMember: 0,
+      isPosting: false,
+      isLoadingCurrentLocation: true,
+      event: MEvent(),
     );
   }
 
+  bool checkValidate() {
+    if (currentPage == 0 && medias.isEmpty) {
+      return false;
+    }
+    if (currentPage == 1 && event.location == null) {
+      return false;
+    }
+    if (currentPage == 2 &&
+        (time == null ||
+            event.deadline == null ||
+            event.startDate == null ||
+            event.type == null ||
+            event.description == null ||
+            (event.description?.isEmpty ?? true) ||
+            event.name == null ||
+            (event.name?.isEmpty ?? true) ||
+            event.maxAttendee <= 0)) {
+      return false;
+    }
+
+    return true;
+  }
+
   AddEventState copyWith({
-    currentPage,
-    medias,
-    time,
-    deadlineDate,
-    startDate,
-    selectedLocation,
-    description,
-    nameEvent,
-    numberMember,
+    int? currentPage,
+    bool? isPosting,
+    bool? isLoadingCurrentLocation,
+    MEvent? event,
+    List<XFile?>? medias,
+    TimeOfDay? time,
   }) {
     return AddEventState(
       currentPage: currentPage ?? this.currentPage,
+      isPosting: isPosting ?? this.isPosting,
+      isLoadingCurrentLocation:
+          isLoadingCurrentLocation ?? this.isLoadingCurrentLocation,
+      event: event ?? this.event,
       medias: medias ?? this.medias,
-      selectedLocation: selectedLocation ?? this.selectedLocation,
       time: time ?? this.time,
-      deadlineDate: deadlineDate ?? this.deadlineDate,
-      startDate: startDate ?? this.startDate,
-      description: description ?? this.description,
-      nameEvent: nameEvent ?? this.nameEvent,
-      numberMember: numberMember ?? this.numberMember,
     );
+  }
+
+  @override
+  bool operator ==(covariant AddEventState other) {
+    if (identical(this, other)) return true;
+
+    return other.currentPage == currentPage &&
+        other.isPosting == isPosting &&
+        other.isLoadingCurrentLocation == isLoadingCurrentLocation &&
+        other.event == event &&
+        listEquals(other.medias, medias) &&
+        other.time == time;
+  }
+
+  @override
+  int get hashCode {
+    return currentPage.hashCode ^
+        isPosting.hashCode ^
+        isLoadingCurrentLocation.hashCode ^
+        event.hashCode ^
+        medias.hashCode ^
+        time.hashCode;
   }
 }

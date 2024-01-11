@@ -9,7 +9,7 @@ import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 
 class DetailEventBloc extends Cubit<DetailEventState> {
-  DetailEventBloc({required eventId}) : super(DetailEventState()) {
+  DetailEventBloc({required String eventId}) : super(DetailEventState()) {
     getEvent(eventId);
   }
   PageController controller = PageController();
