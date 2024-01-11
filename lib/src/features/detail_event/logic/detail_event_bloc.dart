@@ -39,7 +39,7 @@ class DetailEventBloc extends Cubit<DetailEventState> {
 
   void onPressedFollowHost() async {
     try {
-      List<String> newFollower = [...state.event!.host!.followers!];
+      List<String> newFollower = [...state.event?.host?.followers ?? []];
       final String userId = GetIt.I<AccountBloc>().state.user.id;
       final bool isFollowed;
       if (newFollower.contains(userId)) {
@@ -49,11 +49,13 @@ class DetailEventBloc extends Cubit<DetailEventState> {
         newFollower.add(userId);
         isFollowed = false;
       }
-      final MUser newUser = state.event!.host!.copyWith(followers: newFollower);
+      final MUser newUser =
+          state.event?.host?.copyWith(followers: newFollower) ?? MUser.empty();
       final result =
           await domain.user.updateFollowers(newUser.id, userId, isFollowed);
       if (result.isSuccess) {
-        final MEvent newEvent = state.event!.copyWith(host: newUser);
+        final MEvent newEvent =
+            state.event?.copyWith(host: newUser) ?? MEvent();
         emit(state.copyWith(event: newEvent));
       }
     } catch (e) {
@@ -63,7 +65,7 @@ class DetailEventBloc extends Cubit<DetailEventState> {
 
   void onPressedFollowEvent() async {
     try {
-      List<String> newFollower = [...state.event!.followersId!];
+      List<String> newFollower = [...state.event?.followersId ?? []];
       final String userId = GetIt.I<AccountBloc>().state.user.id;
       final bool isFollowed;
       if (newFollower.contains(userId)) {
@@ -74,9 +76,10 @@ class DetailEventBloc extends Cubit<DetailEventState> {
         isFollowed = false;
       }
 
-      final MEvent newEvent = state.event!.copyWith(followersId: newFollower);
+      final MEvent newEvent =
+          state.event?.copyWith(followersId: newFollower) ?? MEvent();
       final result = await domain.event.updateFollowEvent(
-        newEvent.id!,
+        newEvent.id ?? "",
         userId,
         isFollowed,
       );
@@ -90,7 +93,7 @@ class DetailEventBloc extends Cubit<DetailEventState> {
 
   void onPressedFavoriteEvent() async {
     try {
-      List<String> newFavorites = [...state.event!.favoritesId!];
+      List<String> newFavorites = [...state.event?.favoritesId ?? []];
       final String userId = GetIt.I<AccountBloc>().state.user.id;
       final bool isFavorite;
       if (newFavorites.contains(userId)) {
@@ -101,9 +104,10 @@ class DetailEventBloc extends Cubit<DetailEventState> {
         isFavorite = false;
       }
 
-      final MEvent newEvent = state.event!.copyWith(favoritesId: newFavorites);
+      final MEvent newEvent =
+          state.event?.copyWith(favoritesId: newFavorites) ?? MEvent();
       final result = await domain.event.updateFavoriteEvent(
-        newEvent.id!,
+        newEvent.id ?? "",
         userId,
         isFavorite,
       );

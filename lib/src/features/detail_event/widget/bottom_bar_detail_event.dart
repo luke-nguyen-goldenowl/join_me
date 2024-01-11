@@ -35,8 +35,9 @@ class BottomBarDetailEvent extends StatelessWidget {
         ),
         child: Text(
           event != null &&
-                  event!.followersId!
-                      .contains(GetIt.I<AccountBloc>().state.user.id)
+                  (event!.followersId
+                          ?.contains(GetIt.I<AccountBloc>().state.user.id) ??
+                      false)
               ? "Followed"
               : "Follow Event",
           style: const TextStyle(fontSize: 15),

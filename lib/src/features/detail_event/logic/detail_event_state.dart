@@ -23,8 +23,8 @@ class DetailEventState {
 
   bool isExpiredRegisterEvent() {
     if (event == null) return true;
-    if (event!.deadline!.isBefore(DateTime.now()) ||
-        event!.maxAttendee < event!.favoritesId!.length) return true;
+    if ((event!.deadline?.isBefore(DateTime.now()) ?? false) ||
+        event!.maxAttendee < (event!.favoritesId?.length ?? 0)) return true;
     return false;
   }
 
