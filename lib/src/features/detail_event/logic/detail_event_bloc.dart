@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/src/network/domain_manager.dart';
 
 class DetailEventBloc extends Cubit<DetailEventState> {
-  DetailEventBloc({eventId}) : super(DetailEventState()) {
+  DetailEventBloc({required String eventId}) : super(DetailEventState()) {
     getEvent(eventId);
   }
   PageController controller = PageController();

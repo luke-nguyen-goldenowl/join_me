@@ -16,7 +16,7 @@ class DetailEventView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => DetailEventBloc(),
+      create: (_) => DetailEventBloc(eventId: id),
       child: const DetailEventPage(),
     );
   }
