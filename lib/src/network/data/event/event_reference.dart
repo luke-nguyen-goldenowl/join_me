@@ -15,7 +15,7 @@ class EventReference extends BaseCollectionReference<MEvent> {
                     snapshot.data() as Map<String, dynamic>, snapshot.id),
                 toFirestore: (chatRoom, _) => chatRoom.toMap(),
               ),
-          getObjectId: (e) => e.id!,
+          getObjectId: (e) => e.id ?? "",
           setObjectId: (e, id) => e.copyWith(id: id),
         );
 
@@ -39,7 +39,7 @@ class EventReference extends BaseCollectionReference<MEvent> {
       final MResult<MEvent> eventResult = await get(eventId);
       if (eventResult.isSuccess) {
         final MResult<MUser> user =
-            await userReference.getUser(eventResult.data!.host!.id);
+            await userReference.getUser(eventResult.data!.host?.id ?? "");
         if (user.isSuccess) {
           final MEvent event = eventResult.data!.copyWith(host: user.data);
           return MResult.success(event);

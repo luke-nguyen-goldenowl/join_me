@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
-import 'package:myapp/gen/assets.gen.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 import 'package:myapp/src/theme/colors.dart';
+import 'package:myapp/widgets/image/image_network.dart';
 
 class InfoUser extends StatelessWidget {
   const InfoUser({
@@ -34,12 +34,10 @@ class InfoUser extends StatelessWidget {
                 )),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: user.avatar == null || user.avatar!.isEmpty
-                  ? Assets.images.images.avatar.image()
-                  : Image.network(
-                      user.avatar!,
-                      fit: BoxFit.cover,
-                    ),
+              child: XImageNetwork(
+                user.avatar,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           const SizedBox(height: 10),
