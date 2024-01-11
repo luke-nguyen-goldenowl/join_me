@@ -1,7 +1,27 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:myapp/src/network/data/notification/notification_repository_mock.dart';
+enum TypeNotify {
+  followEvent,
+  followUser,
+  upcomingEvent,
+  changeEvent;
+
+  static TypeNotify getTypeNotifyFromString(String typeNotifyString) {
+    switch (typeNotifyString) {
+      case 'changeEvent':
+        return TypeNotify.changeEvent;
+      case 'followEvent':
+        return TypeNotify.followEvent;
+      case 'followUser':
+        return TypeNotify.followUser;
+      case 'upcomingEvent':
+        return TypeNotify.upcomingEvent;
+      default:
+        return TypeNotify.changeEvent;
+    }
+  }
+}
 
 class NotificationModel {
   TypeNotify type;
@@ -23,31 +43,16 @@ class NotificationModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'type': type.name.toString(),
+      'type': type.name,
       'data': data,
     };
   }
 
   factory NotificationModel.fromMap(Map<String, dynamic> map) {
     return NotificationModel(
-      type: _getTypeNotifyFromString(map['status']),
+      type: TypeNotify.getTypeNotifyFromString(map['status']),
       data: map['data'] as dynamic,
     );
-  }
-
-  static TypeNotify _getTypeNotifyFromString(String typeNotifyString) {
-    switch (typeNotifyString) {
-      case 'changeEvent':
-        return TypeNotify.changeEvent;
-      case 'followEvent':
-        return TypeNotify.followEvent;
-      case 'followUser':
-        return TypeNotify.followUser;
-      case 'upcomingEvent':
-        return TypeNotify.upcomingEvent;
-      default:
-        return TypeNotify.changeEvent;
-    }
   }
 
   String toJson() => json.encode(toMap());

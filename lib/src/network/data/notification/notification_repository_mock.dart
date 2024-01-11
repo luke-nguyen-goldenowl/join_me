@@ -11,8 +11,6 @@ import 'package:myapp/src/network/model/notification/notification_model.dart';
 import 'package:myapp/src/network/model/notification/upcoming_event.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 
-enum TypeNotify { followEvent, followUser, upcomingEvent, changeEvent }
-
 final List<NotificationModel> notifies = [
   NotificationModel(
     type: TypeNotify.changeEvent,
