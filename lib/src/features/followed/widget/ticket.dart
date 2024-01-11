@@ -145,7 +145,7 @@ class HeaderTicket extends StatelessWidget {
         SizedBox(
           width: 250,
           child: Text(
-            event.name!,
+            event.name ?? "",
             style: const TextStyle(
               color: AppColors.black,
               fontWeight: FontWeight.bold,
