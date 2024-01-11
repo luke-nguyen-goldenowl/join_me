@@ -7,8 +7,11 @@ import 'package:myapp/src/locator.dart';
 
 import 'firebase_options/firebase_options_prod.dart';
 import 'src/app.dart';
+import 'package:flutter_config/flutter_config.dart';
 
 Future main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // Required by FlutterConfig
+  await FlutterConfig.loadEnvVariables();
   await initializeApp(
       name: "production",
       firebaseOptions: DefaultFirebaseOptions.currentPlatform);

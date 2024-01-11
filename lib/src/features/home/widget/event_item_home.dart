@@ -66,7 +66,7 @@ class EventItemHome extends StatelessWidget {
             ),
           ),
           Text(
-            "Starts at ${DateHelper.getTime(time: event.startDate)}",
+            "Starts at ${DateHelper.getTime(event.startDate)}",
             style: const TextStyle(fontSize: 15, color: AppColors.grey),
           )
         ],

@@ -11,10 +11,7 @@ class UserRepositoryImpl extends UserRepository {
   Future<MResult<MUser>> getUser(String id) async {
     try {
       final result = await usersRef.getUser(id);
-      // final result = FirebaseAuth.instance.currentUser;
-      if (result.isError) {
-        return MResult.error('Not user login');
-      }
+
       if (result.isSuccess) {
         final user = MUser(
           id: result.data!.id,
@@ -22,11 +19,10 @@ class UserRepositoryImpl extends UserRepository {
           name: result.data!.name,
           avatar: result.data!.avatar,
           followers: result.data!.followers,
-          followed: result.data!.followed,
         );
         return MResult.success(user);
       }
-      return result;
+      return MResult.error('Not user login');
     } catch (e) {
       return MResult.exception(e);
     }
