@@ -47,6 +47,12 @@ class DetailEventPage extends StatelessWidget {
                             current.event != previous.event,
                         builder: ((context, state) {
                           return SliverAppBarCustomDetailEvent(
+                            leading: IconButton(
+                              onPressed: () {
+                                context.read<DetailEventBloc>().goBack();
+                              },
+                              icon: const Icon(Icons.arrow_back),
+                            ),
                             indexPageImage: state.indexPageImage,
                             images: state.event?.images ?? [],
                             controller:

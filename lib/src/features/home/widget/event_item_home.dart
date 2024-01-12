@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:myapp/src/features/home/logic/home_bloc.dart';
 import 'package:myapp/src/features/home/logic/home_state.dart';
 import 'package:myapp/src/network/model/event/event.dart';
-import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
 import 'package:myapp/src/utils/date/date_helper.dart';
 
@@ -19,7 +20,7 @@ class EventItemHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        AppCoordinator.showEventDetails(id: event.id ?? "");
+        context.read<HomeBloc>().goDetailEvent(index, event);
       },
       child: Container(
         width: 300,

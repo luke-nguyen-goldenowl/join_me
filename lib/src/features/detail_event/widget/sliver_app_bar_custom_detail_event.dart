@@ -11,6 +11,7 @@ class SliverAppBarCustomDetailEvent extends StatelessWidget {
     required this.setIndexPageImage,
     required this.indexPageImage,
     required this.controller,
+    this.leading,
   });
 
   final List<String> images;
@@ -18,10 +19,12 @@ class SliverAppBarCustomDetailEvent extends StatelessWidget {
   final int indexPageImage;
   final PageController controller;
   final List<Widget>? actions;
+  final Widget? leading;
 
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+      leading: leading,
       pinned: true,
       foregroundColor: AppColors.white,
       expandedHeight: 200,

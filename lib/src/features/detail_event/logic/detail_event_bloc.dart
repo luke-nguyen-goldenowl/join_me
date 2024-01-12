@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/network/model/user/user.dart';
+import 'package:myapp/src/router/coordinator.dart';
 
 class DetailEventBloc extends Cubit<DetailEventState> {
   DetailEventBloc({required String eventId}) : super(DetailEventState()) {
@@ -35,6 +36,10 @@ class DetailEventBloc extends Cubit<DetailEventState> {
     } catch (e) {
       print(e);
     }
+  }
+
+  void goBack() {
+    AppCoordinator.pop(state.event);
   }
 
   void onPressedFollowHost() async {
