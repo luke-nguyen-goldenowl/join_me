@@ -1,15 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
-
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:myapp/src/features/event/logic/map_page_state.dart';
 import 'package:myapp/src/network/domain_manager.dart';
 
 class MapPageBloc extends Cubit<MapPageState> {
   MapPageBloc() : super(MapPageState(events: []));
-  MapController mapController = MapController();
+  // MapController mapController = MapController();
 
   DomainManager domain = DomainManager();
 
@@ -61,7 +59,6 @@ class MapPageBloc extends Cubit<MapPageState> {
 
   @override
   Future<void> close() {
-    mapController.dispose();
     return super.close();
   }
 }

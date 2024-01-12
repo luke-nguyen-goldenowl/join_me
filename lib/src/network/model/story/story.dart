@@ -73,8 +73,8 @@ class MStory {
       time: map['time'] != null ? DateTime.parse(map['time']) : null,
       host: MUser(id: map['host']),
       event: MEvent(id: map['event']),
-      likers: map['liker'] ?? [],
-      viewers: map['viewers'] ?? [],
+      likers: List<String>.from(map['likers']),
+      viewers: List<String>.from(map['viewers']),
     );
   }
 

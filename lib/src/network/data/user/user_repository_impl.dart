@@ -11,18 +11,18 @@ class UserRepositoryImpl extends UserRepository {
   Future<MResult<MUser>> getUser(String id) async {
     try {
       final result = await usersRef.getUser(id);
-      // final result = FirebaseAuth.instance.currentUser;
-      if (result.isError) {
-        return MResult.error('Not user login');
+
+      if (result.isSuccess) {
+        final user = MUser(
+          id: result.data!.id,
+          email: result.data!.email,
+          name: result.data!.name,
+          avatar: result.data!.avatar,
+          followers: result.data!.followers,
+        );
+        return MResult.success(user);
       }
-      final user = MUser(
-        id: result.data!.id,
-        email: result.data!.email,
-        name: result.data!.name,
-        avatar: result.data!.avatar,
-        followers: result.data!.followers,
-      );
-      return MResult.success(user);
+      return MResult.error('Not user login');
     } catch (e) {
       return MResult.exception(e);
     }
@@ -44,5 +44,17 @@ class UserRepositoryImpl extends UserRepository {
   @override
   Future<MResult<List<MUser>>> getUsers() {
     return usersRef.getUsers();
+  }
+
+  Future<MResult<List<MUser>>> getUsersBySearch(String search, String userId,
+      [MUser? lastUser]) async {
+    return usersRef.getUsersBySearch(search, userId, lastUser);
+  }
+
+  Future<MResult<int>> getCountUsersBySearch(
+    String search,
+    String userId,
+  ) async {
+    return usersRef.getCountUsersBySearch(search, userId);
   }
 }

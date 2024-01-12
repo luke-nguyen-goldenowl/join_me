@@ -8,8 +8,8 @@ class UserReference extends BaseCollectionReference<MUser> {
       : super(
           FirebaseFirestore.instance.collection('users').withConverter<MUser>(
                 fromFirestore: (snapshot, options) =>
-                    MUser.fromJson(snapshot.data() as Map<String, dynamic>),
-                toFirestore: (chatRoom, _) => chatRoom.toJson(),
+                    MUser.fromMap(snapshot.data() as Map<String, dynamic>),
+                toFirestore: (chatRoom, _) => chatRoom.toMap(),
               ),
           getObjectId: (e) => e.id,
           setObjectId: (e, id) => e.copyWith(id: id),
@@ -34,15 +34,20 @@ class UserReference extends BaseCollectionReference<MUser> {
     bool isFollowed,
   ) async {
     try {
-      final result = await update(hostId, {
+      final resultFollower = await update(hostId, {
         'followers': isFollowed
             ? FieldValue.arrayRemove([followerId])
             : FieldValue.arrayUnion([followerId])
       });
-      if (result.isError == false) {
-        return result;
+      final resultFollowed = await update(followerId, {
+        'followed': isFollowed
+            ? FieldValue.arrayRemove([hostId])
+            : FieldValue.arrayUnion([hostId])
+      });
+      if (!resultFollower.isError && !resultFollowed.isError) {
+        return resultFollower;
       } else {
-        return MResult.success(result.data);
+        return MResult.success(resultFollower.data);
       }
     } catch (e) {
       return MResult.exception(e);
@@ -51,7 +56,7 @@ class UserReference extends BaseCollectionReference<MUser> {
 
   Future<MResult<MUser>> getOrAddUser(MUser user) async {
     try {
-      final result = await get(user.id);
+      final MResult<MUser> result = await get(user.id);
       if (result.isError == false) {
         return result;
       } else {
@@ -69,6 +74,52 @@ class UserReference extends BaseCollectionReference<MUser> {
           await ref.get().timeout(const Duration(seconds: 10));
       final docs = query.docs.map((e) => e.data()).toList();
       return MResult.success(docs);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<List<MUser>>> getUsersByIds(List<String> userIds) async {
+    try {
+      final result = await getDataByIds(userIds);
+      if (result.isError == false) {
+        return result;
+      } else {
+        return MResult.success(result.data);
+      }
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<List<MUser>>> getUsersBySearch(String search, String userId,
+      [MUser? lastUser]) async {
+    try {
+      final QuerySnapshot<MUser> querySnapshot = await ref
+          .where('id', isNotEqualTo: userId)
+          .where('caseSearchName', arrayContains: search)
+          .get()
+          .timeout(const Duration(seconds: 10));
+      final docs = querySnapshot.docs.map((e) => e.data()).toList();
+      return MResult.success(docs);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<int>> getCountUsersBySearch(
+    String search,
+    String userId,
+  ) async {
+    try {
+      final AggregateQuerySnapshot querySnapshot = await ref
+          .where('id', isNotEqualTo: userId)
+          .where('caseSearchName', arrayContains: search)
+          .count()
+          .get()
+          .timeout(const Duration(seconds: 10));
+      final result = querySnapshot.count;
+      return MResult.success(result);
     } catch (e) {
       return MResult.exception(e);
     }

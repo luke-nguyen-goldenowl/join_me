@@ -42,4 +42,32 @@ class EventRepositoryImpl {
   ) {
     return eventReference.getCountEventsHostByUser(userId);
   }
+
+  Future<MResult<List<MEvent>>> getEventsPopular(String userId) {
+    return eventReference.getEventsPopular(userId);
+  }
+
+  Future<MResult<List<MEvent>>> getEventsUpcoming(String userId) {
+    return eventReference.getEventsUpcoming(userId);
+  }
+
+  Future<MResult<List<MEvent>>> getEventsPeople(List<String> people) {
+    return eventReference.getEventsPeople(people);
+  }
+
+  Future<MResult<List<MEvent>>> getEventsFollow(String userId) {
+    return eventReference.getEventsFollow(userId);
+  }
+
+  Future<MResult<List<MEvent>>> getEventsBySearch(String search, String userId,
+      [MEvent? lastEvent]) {
+    return eventReference.getEventsBySearch(search, userId);
+  }
+
+  Future<MResult<int>> getCountEventsPastByUser(
+    String search,
+    String userId,
+  ) async {
+    return eventReference.getCountEventsBySearch(search, userId);
+  }
 }

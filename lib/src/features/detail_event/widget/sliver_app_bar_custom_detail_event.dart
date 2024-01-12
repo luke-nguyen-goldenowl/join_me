@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/src/features/detail_event/widget/background_widget.dart';
 import 'package:myapp/src/theme/colors.dart';
+import 'package:myapp/widgets/image/image_network.dart';
 
 class SliverAppBarCustomDetailEvent extends StatelessWidget {
   const SliverAppBarCustomDetailEvent({
+    super.key,
     this.actions,
     required this.images,
     required this.setIndexPageImage,
@@ -30,8 +32,8 @@ class SliverAppBarCustomDetailEvent extends StatelessWidget {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                Image.asset(
-                  images[0],
+                XImageNetwork(
+                  images.isNotEmpty ? images[indexPageImage] : null,
                   fit: BoxFit.cover,
                 ),
                 Container(
