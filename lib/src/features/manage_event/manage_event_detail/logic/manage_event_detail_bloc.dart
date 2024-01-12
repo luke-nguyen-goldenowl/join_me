@@ -38,8 +38,11 @@ class ManageEventDetailBloc extends Cubit<ManageEventDetailState> {
   }
 
   void goEditEvent(String eventId) async {
-    final event = await AppCoordinator.showEditEventScreen(id: eventId);
-    emit(state.copyWith(event: event as MEvent?));
+    final result = await AppCoordinator.showEditEventScreen(id: eventId);
+    final MEvent event = result as MEvent;
+    await mapController?.moveCamera(
+        CameraUpdate.newLatLng(event.location ?? const LatLng(0, 0)));
+    emit(state.copyWith(event: event));
   }
 
   void backScreen() {

@@ -100,7 +100,7 @@ class ManageEventDetailPage extends StatelessWidget {
                     const SizedBox(height: 20),
                     BlocBuilder<ManageEventDetailBloc, ManageEventDetailState>(
                       buildWhen: (previous, current) =>
-                          previous.event.location != current.event.location,
+                          previous.event != current.event,
                       builder: ((context, state) {
                         return AddressEvent(
                           location: state.event.location,
