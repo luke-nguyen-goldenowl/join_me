@@ -172,7 +172,7 @@ class DetailPage extends StatelessWidget {
                   return XInput(
                     key: const Key('addEvent_deadlineEventInput_textField'),
                     readOnly: true,
-                    value: DateHelper.getFullDateTypeVN(state.event.deadline!),
+                    value: DateHelper.getFullDateTypeVN(state.event.deadline),
                     decoration: const InputDecoration(
                       labelText: "Registration expiration date",
                     ),

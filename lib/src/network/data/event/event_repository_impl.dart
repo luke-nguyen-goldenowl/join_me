@@ -70,4 +70,8 @@ class EventRepositoryImpl {
   ) async {
     return eventReference.getCountEventsBySearch(search, userId);
   }
+
+  Future<MResult<MEvent>> updateEvent(MEvent event) {
+    return eventReference.updateEvent(event);
+  }
 }

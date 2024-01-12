@@ -5,6 +5,7 @@ import 'package:myapp/src/features/manage_event/manage_event_detail/logic/manage
 import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/network/model/user/user.dart';
+import 'package:myapp/src/router/coordinator.dart';
 
 class ManageEventDetailBloc extends Cubit<ManageEventDetailState> {
   ManageEventDetailBloc({required eventId})
@@ -34,6 +35,15 @@ class ManageEventDetailBloc extends Cubit<ManageEventDetailState> {
     } catch (e) {
       print(e);
     }
+  }
+
+  void goEditEvent(String eventId) async {
+    final event = await AppCoordinator.showEditEventScreen(id: eventId);
+    emit(state.copyWith(event: event as MEvent?));
+  }
+
+  void backScreen() {
+    AppCoordinator.pop(state.event);
   }
 
   Future<void> getFollowers(String eventId) async {

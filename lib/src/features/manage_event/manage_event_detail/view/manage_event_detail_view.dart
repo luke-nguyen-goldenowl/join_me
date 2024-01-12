@@ -10,7 +10,6 @@ import 'package:myapp/src/features/manage_event/manage_event_detail/logic/manage
 import 'package:myapp/src/features/manage_event/manage_event_detail/logic/manage_event_detail_state.dart';
 import 'package:myapp/src/features/manage_event/manage_event_detail/widget/list_follower_event.dart';
 import 'package:myapp/src/features/manage_event/manage_event_detail/widget/time_event_manage_event_detail.dart';
-import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
 
 class ManageEventDetailView extends StatelessWidget {
@@ -48,6 +47,11 @@ class ManageEventDetailPage extends StatelessWidget {
                       !listEquals(previous.event.images, current.event.images),
                   builder: ((context, state) {
                     return SliverAppBarCustomDetailEvent(
+                      leading: IconButton(
+                          onPressed: () {
+                            context.read<ManageEventDetailBloc>().backScreen();
+                          },
+                          icon: const Icon(Icons.arrow_back)),
                       indexPageImage: state.indexPageImage,
                       images: state.event.images ?? [],
                       controller:
@@ -117,7 +121,7 @@ class ManageEventDetailPage extends StatelessWidget {
             alignment: Alignment.center,
             child: ElevatedButton(
               onPressed: () {
-                AppCoordinator.showEditEventScreen(id: id);
+                context.read<ManageEventDetailBloc>().goEditEvent(id);
               },
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(150, 50),

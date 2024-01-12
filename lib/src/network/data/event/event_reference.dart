@@ -33,6 +33,18 @@ class EventReference extends BaseCollectionReference<MEvent> {
     }
   }
 
+  Future<MResult<MEvent>> updateEvent(MEvent event) async {
+    try {
+      final MResult<MEvent> result = await set(event);
+      if (result.isSuccess) {
+        return MResult.success(result.data);
+      }
+      return MResult.error("update event fail");
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
   Future<MResult<MEvent>> getEvent(String eventId) async {
     try {
       UserReference userReference = UserReference();
