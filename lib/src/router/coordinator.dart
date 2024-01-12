@@ -77,10 +77,12 @@ class AppCoordinator {
         pathParameters: {AppRouteNames.detailEvent.paramName!: id},
       );
 
-  static Future<T?> showStoryScreen<T extends Object?>({required String id}) =>
+  static Future<T?> showStoryScreen<T extends Object?>(
+          {required String id, extra}) =>
       context.pushNamed<T>(
         AppRouteNames.story.name,
         pathParameters: {AppRouteNames.story.paramName!: id},
+        extra: extra,
       );
   static Future<T?> showProfileOtherUser<T extends Object?>(
           {required String id}) =>

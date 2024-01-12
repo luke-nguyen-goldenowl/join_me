@@ -7,9 +7,12 @@ import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/network/model/story/story.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 import 'package:myapp/src/network/model/user_story/user_story.dart';
+import 'package:myapp/src/router/coordinator.dart';
 
 class HomeBloc extends Cubit<HomeState> {
-  HomeBloc() : super(HomeState.ds());
+  HomeBloc() : super(HomeState.ds()) {
+    getDateHome();
+  }
   DomainManager domain = DomainManager();
 
   void getDateHome() {
@@ -97,6 +100,13 @@ class HomeBloc extends Cubit<HomeState> {
       default:
         return state.popular;
     }
+  }
+
+  void goStoryView(String hostId) async {
+    AppCoordinator.showStoryScreen(id: hostId, extra: [
+      [...state.userStory],
+      handleSeenStory,
+    ]);
   }
 
   void handleSeenStory(int indexUser, int indexStory) {

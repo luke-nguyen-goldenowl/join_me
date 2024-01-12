@@ -2,9 +2,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
+import 'package:myapp/src/network/model/user_story/user_story.dart';
 import 'package:story_view/story_view.dart';
-import 'package:myapp/src/features/home/logic/home_bloc.dart';
 import 'package:myapp/src/features/home/story/logic/story_widget_bloc.dart';
 import 'package:myapp/src/features/home/story/logic/story_widget_state.dart';
 import 'package:myapp/src/features/home/story/widget/event_item_story.dart';
@@ -24,15 +23,16 @@ class StoryWidget extends StatelessWidget {
     required this.user,
     required this.controller,
     required this.stories,
+    required this.userStory,
+    required this.handleSeenStory,
   });
-
+  final Function(int, int) handleSeenStory;
+  final List<MUserStory> userStory;
   void _handleCompleted() {
     controller.nextPage(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeIn,
     );
-
-    final userStory = GetIt.I<HomeBloc>().state.userStory;
 
     final currentIndex =
         userStory.indexWhere((element) => element.user.id == user.id);
@@ -69,9 +69,8 @@ class StoryWidget extends StatelessWidget {
                   },
                   onStoryShow: (storyItem) {
                     final index = state.storyItems.indexOf(storyItem);
-                    context
-                        .read<StoryWidgetBloc>()
-                        .handleOnStoryShow(stories, index);
+                    context.read<StoryWidgetBloc>().handleOnStoryShow(
+                        stories, index, handleSeenStory, userStory);
                   },
                 ),
               ),

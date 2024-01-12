@@ -27,10 +27,9 @@ import 'package:myapp/src/features/sample/view/sample_list_view.dart';
 import 'package:myapp/src/features/search/view/search_view.dart';
 import 'package:myapp/src/features/home/story/view/add_story_view.dart';
 import 'package:myapp/src/features/home/story/view/story_view.dart';
+import 'package:myapp/src/network/model/user_story/user_story.dart';
 import '../features/common/view/not_found_view.dart';
-// import '../features/photo_view/photo_view_page.dart';
 import 'coordinator.dart';
-// import 'extras/photo_view_extra.dart';
 import 'route_name.dart';
 
 class AppRouter {
@@ -101,7 +100,14 @@ class AppRouter {
                 builder: (_, state) {
                   final id =
                       state.pathParameters[AppRouteNames.story.paramName]!;
-                  return StoryView(id: id);
+                  final extra = state.extra! as List<dynamic>;
+                  final userStory = extra[0] as List<MUserStory>;
+                  final handleSeenStory = extra[1] as Function(int, int);
+                  return StoryView(
+                    id: id,
+                    userStory: userStory,
+                    handleSeenStory: handleSeenStory,
+                  );
                 },
               ),
               GoRoute(
@@ -178,7 +184,6 @@ class AppRouter {
           ),
         ],
       ),
-
       GoRoute(
         parentNavigatorKey: AppCoordinator.navigatorKey,
         path: AppRouteNames.account.path,
@@ -201,7 +206,6 @@ class AppRouter {
           )
         ],
       ),
-
       GoRoute(
         parentNavigatorKey: AppCoordinator.navigatorKey,
         path: AppRouteNames.addEvent.path,
@@ -239,19 +243,6 @@ class AppRouter {
           return DetailEventView(id: id);
         },
       )
-
-      // GoRoute(
-      //   parentNavigatorKey: AppCoordinator.navigatorKey,
-      //   path: AppRouteNames.photoView.path,
-      //   name: AppRouteNames.photoView.name,
-      //   builder: (_, state) {
-      //     PhotoViewExtra extra = state.extra as PhotoViewExtra;
-      //     return PhotoViewPage(
-      //       galleryItems: extra.galleryItems,
-      //       initialIndex: extra.initialIndex,
-      //     );
-      //   },
-      // ),
     ],
     errorBuilder: (_, __) => const NotFoundView(),
   );
