@@ -1,3 +1,5 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,21 +12,28 @@ class PeopleTabSearch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SearchBloc, SearchState>(buildWhen: (previous, current) {
-      return previous.searchValue != current.searchValue ||
-          previous.type != current.type ||
-          !listEquals(current.resultPerson, previous.resultPerson);
-    }, builder: ((context, state) {
-      return state.resultPerson.isEmpty && state.searchValue.isNotEmpty
-          ? const Center(
-              child: Text("Not found!"),
-            )
-          : ListView.builder(
-              itemCount: state.resultPerson.length,
-              itemBuilder: (context, index) {
-                return PersonSearchWidget(person: state.resultPerson[index]);
-              },
-            );
-    }));
+    return BlocBuilder<SearchBloc, SearchState>(
+      buildWhen: (previous, current) =>
+          previous.isLoading != current.isLoading ||
+          !listEquals(previous.resultPerson, current.resultPerson) ||
+          previous.isNotFound != current.isNotFound,
+      builder: ((context, state) {
+        if (state.isLoading) {
+          return Container(
+              alignment: Alignment.center,
+              child: const CircularProgressIndicator());
+        } else if (state.isNotFound)
+          return const Center(
+            child: Text("Not found!"),
+          );
+        else
+          return ListView.builder(
+            itemCount: state.resultPerson.length,
+            itemBuilder: (context, index) {
+              return PersonSearchWidget(person: state.resultPerson[index]);
+            },
+          );
+      }),
+    );
   }
 }

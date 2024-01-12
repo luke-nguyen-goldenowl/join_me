@@ -95,7 +95,7 @@ class EventItemHome extends StatelessWidget {
             ),
           ),
           Text(
-            DateHelper.getShortMonth(date: event.startDate),
+            DateHelper.getShortMonth(event.startDate),
             style: const TextStyle(
               fontSize: 15,
               color: AppColors.grey,
