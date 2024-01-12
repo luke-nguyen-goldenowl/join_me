@@ -5,22 +5,22 @@ import 'package:myapp/src/network/model/common/result.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 
 List<MUser> listUser = [
-  const MUser(
+  MUser(
     id: '1',
     avatar: 'assets/images/images/avatar.png',
     name: 'Keith',
   ),
-  const MUser(
+  MUser(
     id: '1',
     avatar: 'assets/images/images/avatar.png',
     name: 'jessica',
   ),
-  const MUser(
+  MUser(
     id: '1',
     avatar: 'assets/images/images/avatar.png',
     name: 'Iron',
   ),
-  const MUser(
+  MUser(
     id: '1',
     avatar: 'assets/images/images/avatar.png',
     name: 'Thor',

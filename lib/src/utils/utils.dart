@@ -69,6 +69,17 @@ class Utils {
     }
     return result;
   }
+
+  static List<String> getCaseSearch(String value) {
+    List<String> caseSearchList = [];
+    String caseSearch = value.toLowerCase();
+    String temp = "";
+    for (int i = 0; i < caseSearch.length; i++) {
+      temp = temp + caseSearch[i];
+      caseSearchList.add(temp);
+    }
+    return caseSearchList;
+  }
 }
 
 bool isNullOrEmpty(Object? object) {

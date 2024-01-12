@@ -24,14 +24,14 @@ class MFollowUser {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'user': user.toJson(),
+      'user': user.toMap(),
     };
   }
 
   factory MFollowUser.fromMap(Map<String, dynamic> map) {
     return MFollowUser(
       id: map['id'] as String,
-      user: MUser.fromJson(map['user'] as Map<String, dynamic>),
+      user: MUser.fromMap(map['user'] as Map<String, dynamic>),
     );
   }
 

@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:myapp/src/dialogs/alert_wrapper.dart';
 import 'package:myapp/src/dialogs/widget/alert_dialog.dart';
+import 'package:myapp/src/features/home/logic/home_bloc.dart';
 import 'package:myapp/src/localization/localization_utils.dart';
 import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/model/user/user.dart';
@@ -35,6 +37,8 @@ class AccountBloc extends Cubit<AccountState> {
 
   void onLoginSuccess(MUser user) {
     onUserChange(state.login(user));
+    final homeBloc = GetIt.I<HomeBloc>();
+    homeBloc.getDateHome();
   }
 
   void onEditProfileSuccess({required String name}) {

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/gen/assets.gen.dart';
-import 'package:myapp/src/features/detail_event/widget/address_event.dart';
-
-import 'package:myapp/src/features/detail_event/widget/description_event.dart';
 import 'package:myapp/src/features/detail_event/widget/sliver_app_bar_custom_detail_event.dart';
 
 import 'package:myapp/src/features/manage_event/manage_event_detail/logic/manage_event_detail_bloc.dart';
@@ -126,9 +123,9 @@ class ManageEventDetailPage extends StatelessWidget {
                           })),
                     ),
                     const SizedBox(height: 20),
-                    const DescriptionEvent(),
+                    // const DescriptionEvent(),
                     const SizedBox(height: 20),
-                    const AddressEvent()
+                    // const AddressEvent()
                   ]),
                 )
               ],

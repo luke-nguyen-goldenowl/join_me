@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:myapp/src/network/data/user/user_reference.dart';
 import 'package:myapp/src/network/firebase/base_collection.dart';
 import 'package:myapp/src/network/model/common/pagination/pagination.dart';
 import 'package:myapp/src/network/model/common/result.dart';
 import 'package:myapp/src/network/model/event/event.dart';
+import 'package:myapp/src/network/data/user/user_reference.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 import 'package:myapp/src/services/firebase_storage.dart';
 

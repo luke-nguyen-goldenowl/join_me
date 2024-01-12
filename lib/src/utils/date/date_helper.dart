@@ -164,12 +164,41 @@ class DateHelper {
     return DateFormat('MMMM dd, yyyy').format(date);
   }
 
-  static String getTime({required DateTime time}) {
+  static String getFullDateTypeVN({required DateTime date}) {
+    return DateFormat('dd/MM/yyyy').format(date);
+  }
+
+  static String getTime(DateTime? time) {
+    if (time == null) return "";
     return DateFormat('h:MM a').format(time);
   }
 
+  static String getShortMonth({required DateTime? date}) {
+    if (date == null) return "";
+    return DateFormat('MMM').format(date);
+  }
+
+  static String getFormatStoryTime(DateTime? inputDateTime) {
+    if (inputDateTime == null) return "";
+    final now = DateTime.now();
+    final difference = now.difference(inputDateTime);
+
+    if (difference.inMinutes < 1) {
+      return 'Just now';
+    } else if (difference.inHours < 1) {
+      final minutes = difference.inMinutes;
+      return '$minutes minute${minutes > 1 ? 's' : ''} ago';
+    } else if (difference.inDays < 1) {
+      final hours = difference.inHours;
+      return '$hours hour${hours > 1 ? 's' : ''} ago';
+    } else {
+      final days = difference.inDays;
+      return '$days day${days > 1 ? 's' : ''} ago';
+    }
+  }
+
   static String getFullDateTime({required DateTime? date}) {
-    if (date != null) return DateFormat('MM dd, yyyy - HH:mm a').format(date);
+    if (date != null) return DateFormat('MMM dd, yyyy - HH:mm a').format(date);
     return "";
   }
 }
