@@ -45,4 +45,16 @@ class UserRepositoryImpl extends UserRepository {
   Future<MResult<List<MUser>>> getUsers() {
     return usersRef.getUsers();
   }
+
+  Future<MResult<List<MUser>>> getUsersBySearch(String search, String userId,
+      [MUser? lastUser]) async {
+    return usersRef.getUsersBySearch(search, userId, lastUser);
+  }
+
+  Future<MResult<int>> getCountUsersBySearch(
+    String search,
+    String userId,
+  ) async {
+    return usersRef.getCountUsersBySearch(search, userId);
+  }
 }

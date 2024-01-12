@@ -34,15 +34,20 @@ class UserReference extends BaseCollectionReference<MUser> {
     bool isFollowed,
   ) async {
     try {
-      final result = await update(hostId, {
+      final resultFollower = await update(hostId, {
         'followers': isFollowed
             ? FieldValue.arrayRemove([followerId])
             : FieldValue.arrayUnion([followerId])
       });
-      if (result.isError == false) {
-        return result;
+      final resultFollowed = await update(followerId, {
+        'followed': isFollowed
+            ? FieldValue.arrayRemove([hostId])
+            : FieldValue.arrayUnion([hostId])
+      });
+      if (!resultFollower.isError && !resultFollowed.isError) {
+        return resultFollower;
       } else {
-        return MResult.success(result.data);
+        return MResult.success(resultFollower.data);
       }
     } catch (e) {
       return MResult.exception(e);
@@ -82,6 +87,39 @@ class UserReference extends BaseCollectionReference<MUser> {
       } else {
         return MResult.success(result.data);
       }
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<List<MUser>>> getUsersBySearch(String search, String userId,
+      [MUser? lastUser]) async {
+    try {
+      final QuerySnapshot<MUser> querySnapshot = await ref
+          .where('id', isNotEqualTo: userId)
+          .where('caseSearchName', arrayContains: search)
+          .get()
+          .timeout(const Duration(seconds: 10));
+      final docs = querySnapshot.docs.map((e) => e.data()).toList();
+      return MResult.success(docs);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<int>> getCountUsersBySearch(
+    String search,
+    String userId,
+  ) async {
+    try {
+      final AggregateQuerySnapshot querySnapshot = await ref
+          .where('id', isNotEqualTo: userId)
+          .where('caseSearchName', arrayContains: search)
+          .count()
+          .get()
+          .timeout(const Duration(seconds: 10));
+      final result = querySnapshot.count;
+      return MResult.success(result);
     } catch (e) {
       return MResult.exception(e);
     }
