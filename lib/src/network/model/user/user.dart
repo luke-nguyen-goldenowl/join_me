@@ -1,23 +1,79 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:myapp/src/utils/utils.dart';
 
-part 'user.freezed.dart';
-part 'user.g.dart';
+class MUser {
+  String id;
+  String? name;
+  String? avatar;
+  String? email;
+  List<String>? followers;
+  List<String>? followed;
+  MUser({
+    required this.id,
+    this.name,
+    this.avatar,
+    this.email,
+    this.followers,
+    this.followed,
+  });
 
-@freezed
-class MUser with _$MUser {
-  const MUser._();
-  const factory MUser({
-    required String id,
+  factory MUser.empty() {
+    return MUser(id: '');
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'name': name,
+      'avatar': avatar,
+      'email': email,
+      'followers': followers ?? [],
+      'followed': followed ?? [],
+      'caseSearchName': _getCaseSearchName,
+    };
+  }
+
+  List<String> get _getCaseSearchName {
+    if (name == null || name == "") return [];
+
+    List<String> listWord = name!.split(' ');
+    String word = listWord.removeLast();
+    List<String> result = Utils.getCaseSearch(word);
+
+    listWord.reversed.toList().forEach((element) {
+      word = "$element $word";
+      result.addAll(Utils.getCaseSearch(word));
+    });
+
+    return result;
+  }
+
+  factory MUser.fromMap(Map<String, dynamic> map) {
+    return MUser(
+      id: map['id'],
+      name: map['name'],
+      avatar: map['avatar'],
+      email: map['email'],
+      followers: List<String>.from((map['followers'])),
+      followed: List<String>.from((map['followed'])),
+    );
+  }
+
+  MUser copyWith({
+    String? id,
     String? name,
     String? avatar,
     String? email,
     List<String>? followers,
     List<String>? followed,
-  }) = _MUser;
-
-  factory MUser.empty() {
-    return const MUser(id: '');
+  }) {
+    return MUser(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      avatar: avatar ?? this.avatar,
+      email: email ?? this.email,
+      followers: followers ?? this.followers,
+      followed: followed ?? this.followed,
+    );
   }
-
-  factory MUser.fromJson(Map<String, Object?> json) => _$MUserFromJson(json);
 }

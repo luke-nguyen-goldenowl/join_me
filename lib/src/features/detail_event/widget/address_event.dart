@@ -1,12 +1,20 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:flutter_map/flutter_map.dart';
+// import 'package:latlong2/latlong.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:myapp/src/features/detail_event/logic/detail_event_bloc.dart';
 import 'package:myapp/src/theme/colors.dart';
 
 class AddressEvent extends StatelessWidget {
   const AddressEvent({
     super.key,
+    required this.location,
   });
+
+  final LatLng? location;
 
   @override
   Widget build(BuildContext context) {
@@ -24,43 +32,30 @@ class AddressEvent extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          SizedBox(
-            height: 500,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: FlutterMap(
-                options: MapOptions(
-                  center: LatLng(10.7857855, 106.6673794),
-                  zoom: 17,
-                ),
-                children: [
-                  TileLayer(
-                    urlTemplate:
-                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                    userAgentPackageName: 'com.example.app',
-                  ),
-                  MarkerLayer(
-                    markers: [
+          if (location != null)
+            SizedBox(
+              height: 300,
+              child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: GoogleMap(
+                    mapType: MapType.terrain,
+                    onMapCreated: context.read<DetailEventBloc>().onMapCreate,
+                    initialCameraPosition: CameraPosition(
+                      target: location!,
+                      zoom: 16,
+                    ),
+                    gestureRecognizers: Set()
+                      ..add(Factory<PanGestureRecognizer>(
+                          () => PanGestureRecognizer())),
+                    markers: {
                       Marker(
-                        rotate: true,
-                        width: 30,
-                        height: 30,
-                        point: LatLng(10.7857855, 106.6673794),
-                        builder: (BuildContext context) {
-                          return const Icon(
-                            Icons.location_pin,
-                            color: Colors.red,
-                            size: 50,
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                        markerId: const MarkerId('my location'),
+                        position: location!,
+                      )
+                    },
+                  )),
             ),
-          ),
-          const SizedBox(height: 50),
+          const SizedBox(height: 20),
         ],
       ),
     );

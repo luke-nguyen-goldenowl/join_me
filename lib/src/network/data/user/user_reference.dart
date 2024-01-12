@@ -8,8 +8,8 @@ class UserReference extends BaseCollectionReference<MUser> {
       : super(
           FirebaseFirestore.instance.collection('users').withConverter<MUser>(
                 fromFirestore: (snapshot, options) =>
-                    MUser.fromJson(snapshot.data() as Map<String, dynamic>),
-                toFirestore: (chatRoom, _) => chatRoom.toJson(),
+                    MUser.fromMap(snapshot.data() as Map<String, dynamic>),
+                toFirestore: (chatRoom, _) => chatRoom.toMap(),
               ),
           getObjectId: (e) => e.id,
           setObjectId: (e, id) => e.copyWith(id: id),
@@ -56,7 +56,7 @@ class UserReference extends BaseCollectionReference<MUser> {
 
   Future<MResult<MUser>> getOrAddUser(MUser user) async {
     try {
-      final result = await get(user.id);
+      final MResult<MUser> result = await get(user.id);
       if (result.isError == false) {
         return result;
       } else {

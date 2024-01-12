@@ -30,7 +30,7 @@ class MFollowEvent {
     return <String, dynamic>{
       'id': id,
       'event': event.toMap(),
-      'user': user.toJson(),
+      'user': user.toMap(),
     };
   }
 
@@ -38,7 +38,7 @@ class MFollowEvent {
     return MFollowEvent(
       id: map['id'] as String,
       event: MEvent.fromMap(map['event'] as Map<String, dynamic>, ""),
-      user: MUser.fromJson(map['user'] as Map<String, dynamic>),
+      user: MUser.fromMap(map['user'] as Map<String, dynamic>),
     );
   }
 
