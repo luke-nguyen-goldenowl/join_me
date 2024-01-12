@@ -1,12 +1,15 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:myapp/gen/assets.gen.dart';
+import 'package:myapp/src/features/detail_event/widget/address_event.dart';
+import 'package:myapp/src/features/detail_event/widget/description_event.dart';
+
 import 'package:myapp/src/features/detail_event/widget/sliver_app_bar_custom_detail_event.dart';
 
 import 'package:myapp/src/features/manage_event/manage_event_detail/logic/manage_event_detail_bloc.dart';
 import 'package:myapp/src/features/manage_event/manage_event_detail/logic/manage_event_detail_state.dart';
+import 'package:myapp/src/features/manage_event/manage_event_detail/widget/list_follower_event.dart';
 import 'package:myapp/src/features/manage_event/manage_event_detail/widget/time_event_manage_event_detail.dart';
-import 'package:myapp/src/network/data/event/event_repository_mock.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
 
@@ -16,7 +19,7 @@ class ManageEventDetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => ManageEventDetailBloc(),
+      create: (_) => ManageEventDetailBloc(eventId: id),
       child: ManageEventDetailPage(
         id: id,
       ),
@@ -41,11 +44,12 @@ class ManageEventDetailPage extends StatelessWidget {
               slivers: [
                 BlocBuilder<ManageEventDetailBloc, ManageEventDetailState>(
                   buildWhen: (previous, current) =>
-                      previous.indexPageImage != current.indexPageImage,
+                      previous.indexPageImage != current.indexPageImage ||
+                      !listEquals(previous.event.images, current.event.images),
                   builder: ((context, state) {
                     return SliverAppBarCustomDetailEvent(
                       indexPageImage: state.indexPageImage,
-                      images: listImage,
+                      images: state.event.images ?? [],
                       controller:
                           context.read<ManageEventDetailBloc>().controller,
                       setIndexPageImage: context
@@ -57,75 +61,50 @@ class ManageEventDetailPage extends StatelessWidget {
                 SliverList(
                   delegate: SliverChildListDelegate([
                     const SizedBox(height: 20),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Text(
-                        "Let's play different famous board games, get together every Sunday",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                    BlocBuilder<ManageEventDetailBloc, ManageEventDetailState>(
+                      buildWhen: (previous, current) =>
+                          previous.event.name != current.event.name,
+                      builder: ((context, state) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Text(
+                            state.event.name ?? "",
+                            textAlign: TextAlign.left,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        );
+                      }),
                     ),
                     const SizedBox(height: 20),
                     const TimeEventMangeEventDetail(),
                     const SizedBox(height: 20),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Text(
-                        "17/20 people",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 80,
-                      child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 15,
-                          itemBuilder: ((context, index) {
-                            return Container(
-                              margin: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                              ),
-                              width: 50,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    height: 50,
-                                    width: 50,
-                                    padding: const EdgeInsets.all(2),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(18),
-                                      color: AppColors.white,
-                                    ),
-                                    child: InkWell(
-                                      onTap: () {},
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(12),
-                                        child:
-                                            Assets.images.images.avatar.image(),
-                                      ),
-                                    ),
-                                  ),
-                                  const Text(
-                                    'Keith',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  )
-                                ],
-                              ),
-                            );
-                          })),
+                    const ListAttendee(),
+                    const SizedBox(height: 20),
+                    BlocBuilder<ManageEventDetailBloc, ManageEventDetailState>(
+                      buildWhen: (previous, current) =>
+                          previous.event.description !=
+                          current.event.description,
+                      builder: ((context, state) {
+                        return DescriptionEvent(
+                          description: state.event.description ?? "",
+                        );
+                      }),
                     ),
                     const SizedBox(height: 20),
-                    // const DescriptionEvent(),
-                    const SizedBox(height: 20),
-                    // const AddressEvent()
+                    BlocBuilder<ManageEventDetailBloc, ManageEventDetailState>(
+                      buildWhen: (previous, current) =>
+                          previous.event.location != current.event.location,
+                      builder: ((context, state) {
+                        return AddressEvent(
+                          location: state.event.location,
+                          onMapCreate:
+                              context.read<ManageEventDetailBloc>().onMapCreate,
+                        );
+                      }),
+                    ),
                   ]),
                 )
               ],

@@ -104,6 +104,8 @@ class DetailEventPage extends StatelessWidget {
                           const SizedBox(height: 20),
                           AddressEvent(
                             location: state.event?.location,
+                            onMapCreate:
+                                context.read<DetailEventBloc>().onMapCreate,
                           )
                         ]),
                       )
