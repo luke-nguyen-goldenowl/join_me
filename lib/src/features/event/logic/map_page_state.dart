@@ -1,50 +1,37 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:flutter/foundation.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'package:myapp/src/features/event/logic/data_marker.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 
 class MapPageState {
   LatLng? currentLocation;
   bool isLoadingCurrentLocation;
+  List<Marker> markers;
+  List<DataMarker> dataMarker;
   List<MEvent> events;
-  int currentEvent;
   MapPageState({
     this.currentLocation,
     this.isLoadingCurrentLocation = true,
     required this.events,
-    this.currentEvent = -1,
+    required this.markers,
+    required this.dataMarker,
   });
 
   MapPageState copyWith({
     LatLng? currentLocation,
     bool? isLoadingCurrentLocation,
     List<MEvent>? events,
-    int? currentEvent,
+    List<Marker>? markers,
+    List<DataMarker>? dataMarker,
   }) {
     return MapPageState(
       currentLocation: currentLocation ?? this.currentLocation,
       isLoadingCurrentLocation:
           isLoadingCurrentLocation ?? this.isLoadingCurrentLocation,
       events: events ?? this.events,
-      currentEvent: currentEvent ?? this.currentEvent,
+      markers: markers ?? this.markers,
+      dataMarker: dataMarker ?? this.dataMarker,
     );
-  }
-
-  @override
-  bool operator ==(covariant MapPageState other) {
-    if (identical(this, other)) return true;
-
-    return other.currentLocation == currentLocation &&
-        other.isLoadingCurrentLocation == isLoadingCurrentLocation &&
-        listEquals(other.events, events) &&
-        other.currentEvent == currentEvent;
-  }
-
-  @override
-  int get hashCode {
-    return currentLocation.hashCode ^
-        isLoadingCurrentLocation.hashCode ^
-        events.hashCode ^
-        currentEvent.hashCode;
   }
 }

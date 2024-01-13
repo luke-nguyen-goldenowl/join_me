@@ -1,5 +1,6 @@
 // ignore_for_file: curly_braces_in_flow_control_structures
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/src/features/event/logic/event_view_bloc.dart';
@@ -64,6 +65,7 @@ class EventHomePage extends StatelessWidget {
             const SizedBox(height: 10),
             BlocBuilder<EventViewBloc, EventViewState>(
               buildWhen: (previousState, currentState) =>
+                  !listEquals(previousState.events, currentState.events) ||
                   previousState.typeShow != currentState.typeShow ||
                   previousState.firstDate != currentState.firstDate ||
                   previousState.lastDate != currentState.lastDate,
