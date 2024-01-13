@@ -7,7 +7,6 @@ import 'package:myapp/src/network/domain_manager.dart';
 
 class MapPageBloc extends Cubit<MapPageState> {
   MapPageBloc() : super(MapPageState(events: []));
-  // MapController mapController = MapController();
 
   DomainManager domain = DomainManager();
 
