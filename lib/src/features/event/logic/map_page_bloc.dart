@@ -1,45 +1,32 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:ui';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:myapp/src/features/event/logic/data_marker.dart';
 import 'package:myapp/src/features/event/logic/map_page_state.dart';
-import 'package:myapp/src/features/event/widget/event_location.dart';
 import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/utils/date/date_helper.dart';
+import 'dart:typed_data';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class MapPageBloc extends Cubit<MapPageState> {
   MapPageBloc({required List<MEvent> events})
-      : super(MapPageState(events: events, markers: [], dataMarker: [])) {
+      : super(MapPageState(events: events, markers: [])) {
     getCurrentLocation();
-    getDataToEvent(events);
+  }
+
+  void updateData(List<MEvent> events) {
+    emit(state.copyWith(events: events, isLoadingCurrentLocation: true));
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await onBuildCompleted();
     });
-  }
-
-  void getDataToEvent(List<MEvent> events) {
-    final List<DataMarker> data = events
-        .map(
-          (e) => DataMarker(
-            id: e.id ?? "",
-            globalKey: GlobalKey(),
-            position: e.location ?? const LatLng(0, 0),
-            widget: EventLocation(event: e),
-            title: e.name ?? "",
-            snippet: DateHelper.getFullDateTime(e.startDate),
-          ),
-        )
-        .toList();
-
-    emit(state.copyWith(dataMarker: data));
   }
 
   DomainManager domain = DomainManager();
@@ -83,42 +70,35 @@ class MapPageBloc extends Cubit<MapPageState> {
   }
 
   Future<void> onBuildCompleted() async {
-    final List<Marker> markers =
-        await Future.wait(state.dataMarker.map((value) async {
+    final markers = await Future.wait(state.events.map((value) async {
       return await generateMarkersFromWidgets(value);
     }));
     emit(state.copyWith(markers: markers, isLoadingCurrentLocation: false));
   }
 
-  Future<Marker> generateMarkersFromWidgets(DataMarker data) async {
-    RenderRepaintBoundary boundary = data.globalKey.currentContext
-        ?.findRenderObject() as RenderRepaintBoundary;
-    final image = await boundary.toImage(pixelRatio: 3);
-    ByteData? byteData = await image.toByteData(
+  Future<Marker> generateMarkersFromWidgets(MEvent event) async {
+    const int size = 100;
+    final File markerImageFile =
+        await DefaultCacheManager().getSingleFile(event.images?[0] ?? "");
+    final Uint8List markerImageBytes = await markerImageFile.readAsBytes();
+    final Codec markerImageCodec = await instantiateImageCodec(markerImageBytes,
+        targetWidth: size, targetHeight: size);
+    final FrameInfo frameInfo = await markerImageCodec.getNextFrame();
+    final ByteData? byteData = await frameInfo.image.toByteData(
       format: ImageByteFormat.png,
     );
-    if (byteData != null) {
-      return Marker(
-        markerId: MarkerId(data.id),
-        position: data.position,
-        icon: BitmapDescriptor.fromBytes(byteData.buffer.asUint8List()),
-        infoWindow: InfoWindow(
-          title: data.title,
-          snippet: data.snippet,
-          onTap: () {
-            AppCoordinator.showEventDetails(id: data.id);
-          },
-        ),
-      );
-    }
+    final Uint8List resizedMarkerImageBytes = byteData!.buffer.asUint8List();
+
     return Marker(
-      markerId: MarkerId(data.id),
-      position: data.position,
+      markerId: MarkerId(event.id ?? ""),
+      position: event.location ?? const LatLng(0, 0),
+      icon: BitmapDescriptor.fromBytes(resizedMarkerImageBytes,
+          size: const Size.square(0.5)),
       infoWindow: InfoWindow(
-        title: data.title,
-        snippet: data.snippet,
+        title: event.name,
+        snippet: DateHelper.getFullDateTime(event.startDate),
         onTap: () {
-          AppCoordinator.showEventDetails(id: data.id);
+          AppCoordinator.showEventDetails(id: event.id ?? "");
         },
       ),
     );

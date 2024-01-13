@@ -1,21 +1,18 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import 'package:myapp/src/features/event/logic/data_marker.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 
 class MapPageState {
   LatLng? currentLocation;
   bool isLoadingCurrentLocation;
   List<Marker> markers;
-  List<DataMarker> dataMarker;
   List<MEvent> events;
   MapPageState({
     this.currentLocation,
     this.isLoadingCurrentLocation = true,
     required this.events,
     required this.markers,
-    required this.dataMarker,
   });
 
   MapPageState copyWith({
@@ -23,7 +20,6 @@ class MapPageState {
     bool? isLoadingCurrentLocation,
     List<MEvent>? events,
     List<Marker>? markers,
-    List<DataMarker>? dataMarker,
   }) {
     return MapPageState(
       currentLocation: currentLocation ?? this.currentLocation,
@@ -31,7 +27,6 @@ class MapPageState {
           isLoadingCurrentLocation ?? this.isLoadingCurrentLocation,
       events: events ?? this.events,
       markers: markers ?? this.markers,
-      dataMarker: dataMarker ?? this.dataMarker,
     );
   }
 }

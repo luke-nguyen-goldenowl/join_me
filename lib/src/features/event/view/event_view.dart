@@ -64,16 +64,16 @@ class EventHomePage extends StatelessWidget {
             const CalendarEventWidget(),
             const SizedBox(height: 10),
             BlocBuilder<EventViewBloc, EventViewState>(
-              buildWhen: (previousState, currentState) =>
-                  !listEquals(previousState.events, currentState.events) ||
-                  previousState.typeShow != currentState.typeShow ||
-                  previousState.firstDate != currentState.firstDate ||
-                  previousState.lastDate != currentState.lastDate,
-              builder: ((context, stateEventView) {
+              buildWhen: (previous, current) =>
+                  !listEquals(previous.events, current.events) ||
+                  previous.typeShow != current.typeShow,
+              // previous.firstDate != current.firstDate ||
+              // previous.lastDate != current.lastDate,
+              builder: ((context, state) {
                 return Expanded(
-                  child: stateEventView.typeShow == TypeShow.list
+                  child: state.typeShow == TypeShow.list
                       ? const ListEventItemEventView()
-                      : const MapPage(),
+                      : MapPage(events: state.events),
                 );
               }),
             )
