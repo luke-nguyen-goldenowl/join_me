@@ -17,12 +17,11 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class MapPageBloc extends Cubit<MapPageState> {
   MapPageBloc({required List<MEvent> events})
-      : super(MapPageState(events: events, markers: [])) {
-    getCurrentLocation();
-  }
+      : super(MapPageState(events: events, markers: []));
 
   void updateData(List<MEvent> events) {
     emit(state.copyWith(events: events, isLoadingCurrentLocation: true));
+    getCurrentLocation();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await onBuildCompleted();
@@ -61,7 +60,8 @@ class MapPageBloc extends Cubit<MapPageState> {
       currentLocation = await Geolocator.getCurrentPosition();
       final locationLatLng =
           LatLng(currentLocation.latitude, currentLocation.longitude);
-      emit(state.copyWith(currentLocation: locationLatLng));
+      emit(state.copyWith(
+          currentLocation: locationLatLng, isLoadingCurrentLocation: false));
     } catch (e) {
       if (kDebugMode) {
         print("Error: $e");
@@ -73,7 +73,7 @@ class MapPageBloc extends Cubit<MapPageState> {
     final markers = await Future.wait(state.events.map((value) async {
       return await generateMarkersFromWidgets(value);
     }));
-    emit(state.copyWith(markers: markers, isLoadingCurrentLocation: false));
+    emit(state.copyWith(markers: markers));
   }
 
   Future<Marker> generateMarkersFromWidgets(MEvent event) async {
