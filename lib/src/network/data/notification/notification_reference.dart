@@ -5,6 +5,7 @@ import 'package:myapp/src/network/firebase/base_collection.dart';
 import 'package:myapp/src/network/model/common/result.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/network/model/notification/follow_event.dart';
+import 'package:myapp/src/network/model/notification/follow_user.dart';
 import 'package:myapp/src/network/model/notification/notification_model.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 import 'package:myapp/src/services/firebase_message.dart';
@@ -44,6 +45,7 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
     try {
       NotificationModel notification = NotificationModel(
         type: TypeNotify.followEvent,
+        hostId: event.host?.id ?? "",
         data: MFollowEvent(event: event, user: user),
       );
       final result = await add(notification);
@@ -53,7 +55,7 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
           "notification": {
             "title": 'Your event has a new follower',
             "body": '${user.name} has been followed ${event.name}',
-            'image': event.host?.avatar ?? ""
+            'image': user.avatar ?? ""
           },
         };
 
@@ -74,6 +76,7 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
     try {
       NotificationModel notification = NotificationModel(
         type: TypeNotify.favoriteEvent,
+        hostId: event.host?.id ?? "",
         data: MFollowEvent(event: event, user: user),
       );
       final result = await add(notification);
@@ -83,10 +86,41 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
           "notification": {
             "title": 'Your event has a new favorite person',
             "body": '${user.name} has been liked ${event.name}',
-            'image': event.host?.avatar ?? ""
+            'image': user.avatar ?? ""
           },
         };
 
+        final res = await pushNotification(body);
+
+        log('Response status: ${res.statusCode}');
+        log('Response body: ${res.body}');
+        return MResult.success(result.data);
+      }
+      return MResult.error('some error');
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<NotificationModel>> sendNotificationFollowUser(
+      MUser host, MUser follower) async {
+    try {
+      NotificationModel notification = NotificationModel(
+        type: TypeNotify.favoriteEvent,
+        hostId: host.id,
+        data: MFollowUser(host: host, follower: follower),
+      );
+
+      final result = await add(notification);
+      if (result.isSuccess) {
+        final body = {
+          "to": host.FCMToken ?? "",
+          "notification": {
+            "title": 'You have a new follower',
+            "body": '${follower.name} has been followed you',
+            'image': follower.avatar ?? ""
+          },
+        };
         final res = await pushNotification(body);
 
         log('Response status: ${res.statusCode}');

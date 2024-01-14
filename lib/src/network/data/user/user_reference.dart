@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:myapp/src/network/data/notification/notification_reference.dart';
 import 'package:myapp/src/network/firebase/base_collection.dart';
 import 'package:myapp/src/services/firebase_message.dart';
 import '../../model/common/result.dart';
@@ -15,7 +16,7 @@ class UserReference extends BaseCollectionReference<MUser> {
           getObjectId: (e) => e.id,
           setObjectId: (e, id) => e.copyWith(id: id),
         );
-
+  final NotificationReference notificationReference = NotificationReference();
   Future<MResult<MUser>> getUser(String userId) async {
     try {
       final result = await get(userId);
@@ -46,6 +47,10 @@ class UserReference extends BaseCollectionReference<MUser> {
             : FieldValue.arrayUnion([host.id])
       });
       if (!resultFollower.isError && !resultFollowed.isError) {
+        if (!isFollowed) {
+          await notificationReference.sendNotificationFollowUser(
+              host, follower);
+        }
         return resultFollower;
       } else {
         return MResult.success(resultFollower.data);

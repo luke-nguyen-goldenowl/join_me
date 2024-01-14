@@ -13,6 +13,7 @@ import 'package:myapp/src/network/model/user/user.dart';
 final List<NotificationModel> notifies = [
   NotificationModel(
     id: '1',
+    hostId: "1",
     type: TypeNotify.changeEvent,
     data: MChangeEvent(
       id: '1',
@@ -33,6 +34,7 @@ final List<NotificationModel> notifies = [
   ),
   NotificationModel(
     id: '1',
+    hostId: "1",
     type: TypeNotify.followEvent,
     data: MFollowEvent(
       event: MEvent(
@@ -54,10 +56,12 @@ final List<NotificationModel> notifies = [
   ),
   NotificationModel(
     id: '1',
+    hostId: "1",
     type: TypeNotify.followUser,
     data: MFollowUser(
-      id: '3',
-      user: MUser(
+      host: MUser(
+          id: '2', name: 'NaNa', avatar: "assets/images/images/avatar.png"),
+      follower: MUser(
           id: '2', name: 'NaNa', avatar: "assets/images/images/avatar.png"),
     ),
     dateTime: DateTime.now(),

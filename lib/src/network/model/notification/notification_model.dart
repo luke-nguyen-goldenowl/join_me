@@ -42,11 +42,13 @@ enum TypeNotify {
 
 class NotificationModel {
   String? id;
+  String hostId;
   TypeNotify type;
   dynamic data;
   DateTime? dateTime;
   NotificationModel({
     this.id,
+    required this.hostId,
     required this.type,
     required this.data,
     this.dateTime,
@@ -54,12 +56,14 @@ class NotificationModel {
 
   NotificationModel copyWith({
     String? id,
+    String? hostId,
     TypeNotify? type,
     dynamic data,
     DateTime? dateTime,
   }) {
     return NotificationModel(
       id: id ?? this.id,
+      hostId: hostId ?? this.hostId,
       type: type ?? this.type,
       data: data ?? this.data,
       dateTime: dateTime ?? this.dateTime,
@@ -69,6 +73,7 @@ class NotificationModel {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'type': type.name,
+      'hostId': hostId,
       'data': data.toMap(),
       'dateTime': DateTime.now().toIso8601String(),
       'isSeen': false
@@ -78,6 +83,7 @@ class NotificationModel {
   factory NotificationModel.fromMap(Map<String, dynamic> map, String id) {
     return NotificationModel(
         id: id,
+        hostId: map['hostId'],
         type: TypeNotify.getTypeNotifyFromString(map['type']),
         data: TypeNotify.getModelNotify(map['data'], map['type']),
         dateTime: DateTime.parse(map['dateTime']));

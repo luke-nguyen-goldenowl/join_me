@@ -13,14 +13,14 @@ class NotificationFollowUser extends StatelessWidget {
         leading: ClipRRect(
           borderRadius: BorderRadius.circular(12),
           child: Image.asset(
-            followUser.user.avatar!,
+            followUser.follower.avatar!,
             height: 50,
             width: 50,
             fit: BoxFit.cover,
           ),
         ),
         title: Text(
-          '"${followUser.user.name}"  has followed you',
+          '"${followUser.follower.name}"  has followed you',
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         onTap: () {
