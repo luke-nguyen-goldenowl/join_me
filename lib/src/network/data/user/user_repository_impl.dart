@@ -63,4 +63,8 @@ class UserRepositoryImpl extends UserRepository {
   ) async {
     return usersRef.updateFCMTokenUser(userId);
   }
+
+  Future<MResult<List<MUser>>> getUsersByIds(List<String> userIds) async {
+    return usersRef.getUsersByIds(userIds);
+  }
 }

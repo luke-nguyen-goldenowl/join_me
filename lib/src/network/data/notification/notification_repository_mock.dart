@@ -16,7 +16,6 @@ final List<NotificationModel> notifies = [
     hostId: "1",
     type: TypeNotify.changeEvent,
     data: MChangeEvent(
-      id: '1',
       event: MEvent(
         id: '1',
         name: "Happy birthday",

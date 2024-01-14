@@ -1,9 +1,10 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/firebase/base_collection.dart';
 import 'package:myapp/src/network/model/common/result.dart';
 import 'package:myapp/src/network/model/event/event.dart';
+import 'package:myapp/src/network/model/notification/change_event.dart';
 import 'package:myapp/src/network/model/notification/follow_event.dart';
 import 'package:myapp/src/network/model/notification/follow_user.dart';
 import 'package:myapp/src/network/model/notification/notification_model.dart';
@@ -11,6 +12,8 @@ import 'package:myapp/src/network/model/user/user.dart';
 import 'package:myapp/src/services/firebase_message.dart';
 import 'package:http/http.dart';
 import 'dart:io';
+
+import 'package:myapp/src/utils/date/date_helper.dart';
 
 class NotificationReference extends BaseCollectionReference<NotificationModel> {
   NotificationReference()
@@ -126,6 +129,93 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
         log('Response status: ${res.statusCode}');
         log('Response body: ${res.body}');
         return MResult.success(result.data);
+      }
+      return MResult.error('some error');
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<NotificationModel>> sendNotificationChangeEvent(
+      MEvent event) async {
+    try {
+      List<Future<MResult<NotificationModel>>> listSnapshot = [];
+
+      event.host?.followers?.forEach((element) {
+        NotificationModel notification = NotificationModel(
+          type: TypeNotify.favoriteEvent,
+          hostId: element,
+          data: MChangeEvent(event: event),
+        );
+
+        listSnapshot.add(add(notification));
+      });
+      final result = await Future.wait(listSnapshot);
+      if (result.every((element) => element.isSuccess)) {
+        final followers = await DomainManager()
+            .user
+            .getUsersByIds(event.host?.followers ?? []);
+        if (followers.isSuccess) {
+          List<Future<Response>> listNotification = followers.data!.map((e) {
+            final body = {
+              "to": e.FCMToken ?? "",
+              "notification": {
+                "title": 'The event you are following  ',
+                "body": '${event.name} has  has changed',
+                'image': event.images?[0] ?? ""
+              },
+            };
+            return pushNotification(body);
+          }).toList();
+
+          await Future.wait(listNotification);
+
+          return MResult.success(result[0].data);
+        }
+      }
+      return MResult.error('some error');
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<NotificationModel>> sendNotificationNewEvent(
+      MEvent event) async {
+    try {
+      List<Future<MResult<NotificationModel>>> listSnapshot = [];
+
+      event.host?.followers?.forEach((element) {
+        NotificationModel notification = NotificationModel(
+          type: TypeNotify.favoriteEvent,
+          hostId: element,
+          data: MChangeEvent(event: event),
+        );
+
+        listSnapshot.add(add(notification));
+      });
+      final result = await Future.wait(listSnapshot);
+      if (result.every((element) => element.isSuccess)) {
+        final followers = await DomainManager()
+            .user
+            .getUsersByIds(event.host?.followers ?? []);
+        if (followers.isSuccess) {
+          List<Future<Response>> listNotification = followers.data!.map((e) {
+            final body = {
+              "to": e.FCMToken ?? "",
+              "notification": {
+                "title": '${event.host?.name ?? ""} added a new event',
+                "body":
+                    "${event.name} will take place on ${DateHelper.getFullDateTime(event.startDate)}",
+                'image': event.images?[0] ?? ""
+              },
+            };
+            return pushNotification(body);
+          }).toList();
+
+          await Future.wait(listNotification);
+
+          return MResult.success(result[0].data);
+        }
       }
       return MResult.error('some error');
     } catch (e) {

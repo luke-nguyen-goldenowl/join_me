@@ -28,7 +28,11 @@ class EventReference extends BaseCollectionReference<MEvent> {
           await firebaseStorage.uploadImages(event.images ?? [], "events");
       MEvent newEvent = event.copyWith(images: listImage);
       final MResult<MEvent> result = await add(newEvent);
-      return MResult.success(result.data);
+      if (result.isSuccess) {
+        await notificationReference.sendNotificationNewEvent(newEvent);
+        return MResult.success(result.data);
+      }
+      return MResult.error('Add event fail');
     } catch (e) {
       return MResult.exception(e);
     }

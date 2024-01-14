@@ -25,13 +25,15 @@ class MFollowEvent {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'event': event.toMap(),
+      'eventId': event.id ?? "",
       'user': user.toMap(),
     };
   }
 
   factory MFollowEvent.fromMap(Map<String, dynamic> map) {
     return MFollowEvent(
-      event: MEvent.fromMap(map['event'] as Map<String, dynamic>, ""),
+      event:
+          MEvent.fromMap(map['event'] as Map<String, dynamic>, map['eventId']),
       user: MUser.fromMap(map['user'] as Map<String, dynamic>),
     );
   }
