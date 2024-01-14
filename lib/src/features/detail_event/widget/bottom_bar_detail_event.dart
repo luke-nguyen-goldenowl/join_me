@@ -23,7 +23,8 @@ class BottomBarDetailEvent extends StatelessWidget {
       alignment: Alignment.center,
       child: ElevatedButton(
         onPressed:
-            context.watch<DetailEventBloc>().state.isExpiredRegisterEvent()
+            (context.watch<DetailEventBloc>().state.isExpiredRegisterEvent() ||
+                    GetIt.I<AccountBloc>().state.user.id == event?.host?.id)
                 ? null
                 : () {
                     context.read<DetailEventBloc>().onPressedFollowEvent();

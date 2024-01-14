@@ -51,9 +51,11 @@ class HostEvent extends StatelessWidget {
               height: 35,
               width: 120,
               child: ElevatedButton(
-                onPressed: () {
-                  context.read<DetailEventBloc>().onPressedFollowHost();
-                },
+                onPressed: GetIt.I<AccountBloc>().state.user.id != user.id
+                    ? () {
+                        context.read<DetailEventBloc>().onPressedFollowHost();
+                      }
+                    : null,
                 style: ElevatedButton.styleFrom(
                   elevation: 0,
                   backgroundColor: AppColors.rosyPink.withOpacity(0.1),
