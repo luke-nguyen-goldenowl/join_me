@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:myapp/src/network/firebase/base_collection.dart';
+import 'package:myapp/src/services/firebase_message.dart';
 import '../../model/common/result.dart';
 import '../../model/user/user.dart';
 
@@ -29,20 +30,20 @@ class UserReference extends BaseCollectionReference<MUser> {
   }
 
   Future<MResult> updateFollowers(
-    String hostId,
-    String followerId,
+    MUser host,
+    MUser follower,
     bool isFollowed,
   ) async {
     try {
-      final resultFollower = await update(hostId, {
+      final resultFollower = await update(host.id, {
         'followers': isFollowed
-            ? FieldValue.arrayRemove([followerId])
-            : FieldValue.arrayUnion([followerId])
+            ? FieldValue.arrayRemove([follower.id])
+            : FieldValue.arrayUnion([follower.id])
       });
-      final resultFollowed = await update(followerId, {
+      final resultFollowed = await update(follower.id, {
         'followed': isFollowed
-            ? FieldValue.arrayRemove([hostId])
-            : FieldValue.arrayUnion([hostId])
+            ? FieldValue.arrayRemove([host.id])
+            : FieldValue.arrayUnion([host.id])
       });
       if (!resultFollower.isError && !resultFollowed.isError) {
         return resultFollower;
@@ -120,6 +121,22 @@ class UserReference extends BaseCollectionReference<MUser> {
           .timeout(const Duration(seconds: 10));
       final result = querySnapshot.count;
       return MResult.success(result);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult> updateFCMTokenUser(
+    String userId,
+  ) async {
+    try {
+      final result = await update(
+          userId, {'FCMToken': XFirebaseMessage.instance.currentToken});
+      if (result.isError == false) {
+        return result;
+      } else {
+        return MResult.success(result.data);
+      }
     } catch (e) {
       return MResult.exception(e);
     }

@@ -37,7 +37,7 @@ class SignRepositoryImpl extends SignRepository {
         followed: [],
       );
       final userResult = await DomainManager().user.getOrAddUser(newUser);
-
+      await DomainManager().user.updateFCMTokenUser(newUser.id);
       return MResult.success(userResult.data ?? newUser);
     } catch (e) {
       return MResult.exception(e);
@@ -62,7 +62,9 @@ class SignRepositoryImpl extends SignRepository {
         followers: [],
         followed: [],
       );
+
       final userResult = await DomainManager().user.getOrAddUser(newUser);
+      await DomainManager().user.updateFCMTokenUser(newUser.id);
 
       return MResult.success(userResult.data ?? newUser);
     } catch (e) {
@@ -110,6 +112,7 @@ class SignRepositoryImpl extends SignRepository {
         followed: [],
       );
       final userResult = await DomainManager().user.getOrAddUser(newUser);
+      await DomainManager().user.updateFCMTokenUser(newUser.id);
       return MResult.success(userResult.data ?? newUser);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -192,6 +195,7 @@ class SignRepositoryImpl extends SignRepository {
         followed: [],
       );
       final userResult = await DomainManager().user.getOrAddUser(newUser);
+      await DomainManager().user.updateFCMTokenUser(newUser.id);
       return MResult.success(userResult.data ?? newUser);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {

@@ -31,7 +31,8 @@ class MChangeEvent {
   factory MChangeEvent.fromMap(Map<String, dynamic> map) {
     return MChangeEvent(
       id: map['id'] as String,
-      event: MEvent.fromMap(map['event'] as Map<String, dynamic>, ""),
+      event: MEvent.fromMap(
+          map['event'] as Map<String, dynamic>, map['event']['id']),
     );
   }
 

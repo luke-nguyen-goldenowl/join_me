@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:myapp/src/network/data/notification/notification_reference.dart';
 import 'package:myapp/src/network/firebase/base_collection.dart';
 import 'package:myapp/src/network/model/common/pagination/pagination.dart';
 import 'package:myapp/src/network/model/common/result.dart';
@@ -20,7 +21,7 @@ class EventReference extends BaseCollectionReference<MEvent> {
         );
 
   final XFirebaseStorage firebaseStorage = XFirebaseStorage();
-
+  final NotificationReference notificationReference = NotificationReference();
   Future<MResult<MEvent>> addEvent(MEvent event) async {
     try {
       final listImage =
@@ -68,19 +69,22 @@ class EventReference extends BaseCollectionReference<MEvent> {
   }
 
   Future<MResult> updateFollowEvent(
-    String eventId,
-    String userId,
+    MEvent event,
+    MUser user,
     bool isFollowed,
   ) async {
     try {
-      final result = await update(eventId, {
+      final result = await update(event.id, {
         'followersId': isFollowed
-            ? FieldValue.arrayRemove([userId])
-            : FieldValue.arrayUnion([userId]),
+            ? FieldValue.arrayRemove([user.id])
+            : FieldValue.arrayUnion([user.id]),
         'countFollowers':
             isFollowed ? FieldValue.increment(-1) : FieldValue.increment(1),
       });
       if (result.isError == false) {
+        if (!isFollowed) {
+          await notificationReference.sendNotificationFollowEvent(event, user);
+        }
         return result;
       } else {
         return MResult.success(result.data);
@@ -91,15 +95,15 @@ class EventReference extends BaseCollectionReference<MEvent> {
   }
 
   Future<MResult> updateFavoriteEvent(
-    String eventId,
-    String userId,
+    MEvent event,
+    MUser user,
     bool isFavorite,
   ) async {
     try {
-      final result = await update(eventId, {
+      final result = await update(event.id, {
         'favoritesId': isFavorite
-            ? FieldValue.arrayRemove([userId])
-            : FieldValue.arrayUnion([userId]),
+            ? FieldValue.arrayRemove([user.id])
+            : FieldValue.arrayUnion([user.id]),
         'countFavorites':
             isFavorite ? FieldValue.increment(-1) : FieldValue.increment(1),
       });
