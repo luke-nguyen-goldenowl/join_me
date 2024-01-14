@@ -54,6 +54,7 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
           "notification": {
             "title": 'Your event have a new follower',
             "body": '${user.name} has been followed ${event.name}',
+            'image': event.host?.avatar ?? ""
           },
         };
 
