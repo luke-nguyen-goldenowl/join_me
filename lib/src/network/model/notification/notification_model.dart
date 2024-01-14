@@ -7,6 +7,7 @@ enum TypeNotify {
   followEvent,
   followUser,
   favoriteEvent,
+  newEvent,
   changeEvent;
 
   static TypeNotify getTypeNotifyFromString(String typeNotifyString) {
@@ -19,14 +20,21 @@ enum TypeNotify {
         return TypeNotify.followUser;
       case 'favoriteEvent':
         return TypeNotify.favoriteEvent;
+      case 'newEvent':
+        return TypeNotify.newEvent;
       default:
         return TypeNotify.changeEvent;
     }
   }
 
-  static dynamic getModelNotify(dynamic data, String type) {
+  static dynamic getModelNotify(Map<String, dynamic>? data, String type) {
+    if (data == null) {
+      return null;
+    }
     switch (getTypeNotifyFromString(type)) {
       case TypeNotify.changeEvent:
+        return MChangeEvent.fromMap(data);
+      case TypeNotify.newEvent:
         return MChangeEvent.fromMap(data);
       case TypeNotify.followEvent:
         return MFollowEvent.fromMap(data);
@@ -85,7 +93,10 @@ class NotificationModel {
         id: id,
         hostId: map['hostId'],
         type: TypeNotify.getTypeNotifyFromString(map['type']),
-        data: TypeNotify.getModelNotify(map['data'], map['type']),
+        data: map['data'] != null
+            ? TypeNotify.getModelNotify(
+                map['data'] as Map<String, dynamic>, map['type'])
+            : null,
         dateTime: DateTime.parse(map['dateTime']));
   }
 }

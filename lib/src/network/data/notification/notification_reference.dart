@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/firebase/base_collection.dart';
+import 'package:myapp/src/network/model/common/pagination/pagination.dart';
 import 'package:myapp/src/network/model/common/result.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/network/model/notification/change_event.dart';
@@ -109,7 +110,7 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
       MUser host, MUser follower) async {
     try {
       NotificationModel notification = NotificationModel(
-        type: TypeNotify.favoriteEvent,
+        type: TypeNotify.followUser,
         hostId: host.id,
         data: MFollowUser(host: host, follower: follower),
       );
@@ -143,9 +144,9 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
 
       event.host?.followers?.forEach((element) {
         NotificationModel notification = NotificationModel(
-          type: TypeNotify.favoriteEvent,
+          type: TypeNotify.changeEvent,
           hostId: element,
-          data: MChangeEvent(event: event),
+          data: MChangeEvent(event: event, host: event.host ?? MUser.empty()),
         );
 
         listSnapshot.add(add(notification));
@@ -186,9 +187,9 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
 
       event.host?.followers?.forEach((element) {
         NotificationModel notification = NotificationModel(
-          type: TypeNotify.favoriteEvent,
+          type: TypeNotify.newEvent,
           hostId: element,
-          data: MChangeEvent(event: event),
+          data: MChangeEvent(event: event, host: event.host ?? MUser.empty()),
         );
 
         listSnapshot.add(add(notification));
@@ -218,6 +219,78 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
         }
       }
       return MResult.error('some error');
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<List<NotificationModel>>> getNotification(String hostId,
+      [NotificationModel? lastNotification]) async {
+    try {
+      final QuerySnapshot<NotificationModel> querySnapshot;
+      if (lastNotification != null) {
+        querySnapshot = await ref
+            .where('hostId', isEqualTo: hostId)
+            .orderBy('dateTime', descending: true)
+            .orderBy('type')
+            .startAfter([
+              lastNotification.dateTime?.toIso8601String(),
+              lastNotification.type.name
+            ])
+            .limit(MPagination.defaultPageLimit)
+            .get()
+            .timeout(const Duration(seconds: 10));
+      } else {
+        querySnapshot = await ref
+            .where('hostId', isEqualTo: hostId)
+            .orderBy('dateTime', descending: true)
+            .orderBy('type')
+            .limit(MPagination.defaultPageLimit)
+            .get()
+            .timeout(const Duration(seconds: 10));
+      }
+      final docs = querySnapshot.docs.map((e) => e.data()).toList();
+
+      return MResult.success(docs);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<int>> getCountNotification(
+    String hostId,
+  ) async {
+    try {
+      final AggregateQuerySnapshot querySnapshot = await ref
+          .where('hostId', isEqualTo: hostId)
+          .orderBy('dateTime', descending: true)
+          .orderBy('type')
+          .count()
+          .get()
+          .timeout(const Duration(seconds: 10));
+      final result = querySnapshot.count;
+
+      return MResult.success(result);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<int>> getCountNotificationNotSeen(
+    String hostId,
+  ) async {
+    try {
+      final AggregateQuerySnapshot querySnapshot = await ref
+          .where('hostId', isEqualTo: hostId)
+          .where('isSeen', isEqualTo: false)
+          .orderBy('dateTime', descending: true)
+          .orderBy('type')
+          .count()
+          .get()
+          .timeout(const Duration(seconds: 10));
+      final result = querySnapshot.count;
+
+      return MResult.success(result);
     } catch (e) {
       return MResult.exception(e);
     }

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:myapp/src/network/data/notification/notification_reference.dart';
+import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/firebase/base_collection.dart';
 import 'package:myapp/src/network/model/common/pagination/pagination.dart';
 import 'package:myapp/src/network/model/common/result.dart';
@@ -21,7 +21,7 @@ class EventReference extends BaseCollectionReference<MEvent> {
         );
 
   final XFirebaseStorage firebaseStorage = XFirebaseStorage();
-  final NotificationReference notificationReference = NotificationReference();
+
   Future<MResult<MEvent>> addEvent(MEvent event) async {
     try {
       final listImage =
@@ -29,7 +29,7 @@ class EventReference extends BaseCollectionReference<MEvent> {
       MEvent newEvent = event.copyWith(images: listImage);
       final MResult<MEvent> result = await add(newEvent);
       if (result.isSuccess) {
-        await notificationReference.sendNotificationNewEvent(newEvent);
+        await DomainManager().notification.sendNotificationNewEvent(newEvent);
         return MResult.success(result.data);
       }
       return MResult.error('Add event fail');
@@ -87,7 +87,9 @@ class EventReference extends BaseCollectionReference<MEvent> {
       });
       if (result.isError == false) {
         if (!isFollowed) {
-          await notificationReference.sendNotificationFollowEvent(event, user);
+          await DomainManager()
+              .notification
+              .sendNotificationFollowEvent(event, user);
         }
         return result;
       } else {
@@ -113,8 +115,9 @@ class EventReference extends BaseCollectionReference<MEvent> {
       });
       if (result.isError == false) {
         if (!isFavorite) {
-          await notificationReference.sendNotificationFavoriteEvent(
-              event, user);
+          await DomainManager()
+              .notification
+              .sendNotificationFavoriteEvent(event, user);
         }
         return result;
       } else {

@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/src/network/model/notification/change_event.dart';
+import 'package:myapp/src/network/model/notification/follow_event.dart';
 import 'package:myapp/src/theme/colors.dart';
 import 'package:myapp/src/utils/date/date_helper.dart';
 import 'package:myapp/widgets/image/image_network.dart';
 
-class NotificationChangeEvent extends StatelessWidget {
-  const NotificationChangeEvent(
-      {super.key, required this.changeEvent, this.dateTime});
+class NotificationFavoriteEvent extends StatelessWidget {
+  const NotificationFavoriteEvent(
+      {super.key, required this.followEvent, this.dateTime});
   final DateTime? dateTime;
-  final MChangeEvent changeEvent;
-
+  final MFollowEvent followEvent;
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(8.0),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
       child: Column(
         children: [
           ListTile(
             leading: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: XImageNetwork(
-                changeEvent.event.images?[0],
+                followEvent.user.avatar,
                 height: 50,
                 width: 50,
                 fit: BoxFit.cover,
@@ -28,16 +31,15 @@ class NotificationChangeEvent extends StatelessWidget {
             ),
             title: Expanded(
               child: Text(
-                '${changeEvent.event.name}',
+                '"${followEvent.user.name}"  has liked',
                 style: const TextStyle(fontWeight: FontWeight.bold),
-                maxLines: 2,
+                maxLines: 3,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            subtitle: const Expanded(
+            subtitle: Expanded(
               child: Text(
-                'has been adjusted',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                followEvent.event.name ?? "",
               ),
             ),
           ),

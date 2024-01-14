@@ -4,16 +4,20 @@ import 'package:myapp/src/theme/colors.dart';
 import 'package:myapp/src/utils/date/date_helper.dart';
 import 'package:myapp/widgets/image/image_network.dart';
 
-class NotificationChangeEvent extends StatelessWidget {
-  const NotificationChangeEvent(
-      {super.key, required this.changeEvent, this.dateTime});
-  final DateTime? dateTime;
-  final MChangeEvent changeEvent;
+class NotificationNewEvent extends StatelessWidget {
+  const NotificationNewEvent(
+      {super.key, required this.changeEvent, required this.dateTime});
 
+  final MChangeEvent changeEvent;
+  final DateTime? dateTime;
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(8.0),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: const BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
       child: Column(
         children: [
           ListTile(
@@ -34,10 +38,9 @@ class NotificationChangeEvent extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            subtitle: const Expanded(
+            subtitle: Expanded(
               child: Text(
-                'has been adjusted',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                'has been created by ${changeEvent.host.name ?? ""}',
               ),
             ),
           ),
