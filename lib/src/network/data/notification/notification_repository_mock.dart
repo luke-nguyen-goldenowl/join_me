@@ -8,7 +8,6 @@ import 'package:myapp/src/network/model/notification/change_event.dart';
 import 'package:myapp/src/network/model/notification/follow_event.dart';
 import 'package:myapp/src/network/model/notification/follow_user.dart';
 import 'package:myapp/src/network/model/notification/notification_model.dart';
-import 'package:myapp/src/network/model/notification/upcoming_event.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 
 final List<NotificationModel> notifies = [
@@ -16,26 +15,6 @@ final List<NotificationModel> notifies = [
     id: '1',
     type: TypeNotify.changeEvent,
     data: MChangeEvent(
-      id: '1',
-      event: MEvent(
-        id: '1',
-        name: "Happy birthday",
-        description: "this is description",
-        images: ["assets/images/images/bg-event.jpg"],
-        startDate: DateTime.now(),
-        deadline: DateTime.now(),
-        location: const LatLng(11.2501, 107.4229),
-        host: MUser(
-            id: '1', name: 'Keith', avatar: "assets/images/images/avatar.png"),
-        type: TypeEvent.sport,
-      ),
-    ),
-    dateTime: DateTime.now(),
-  ),
-  NotificationModel(
-    id: '1',
-    type: TypeNotify.upcomingEvent,
-    data: MUpcomingEvent(
       id: '1',
       event: MEvent(
         id: '1',

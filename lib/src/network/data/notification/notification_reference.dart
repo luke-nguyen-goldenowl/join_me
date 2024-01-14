@@ -25,7 +25,6 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
           setObjectId: (e, id) => e.copyWith(id: id),
         );
 
-  // static const String url = '';
   static XFirebaseMessage firebaseMessage = XFirebaseMessage();
 
   Future<Response> pushNotification(body) async {
@@ -52,8 +51,38 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
         final body = {
           "to": event.host?.FCMToken ?? "",
           "notification": {
-            "title": 'Your event have a new follower',
+            "title": 'Your event has a new follower',
             "body": '${user.name} has been followed ${event.name}',
+            'image': event.host?.avatar ?? ""
+          },
+        };
+
+        final res = await pushNotification(body);
+
+        log('Response status: ${res.statusCode}');
+        log('Response body: ${res.body}');
+        return MResult.success(result.data);
+      }
+      return MResult.error('some error');
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<NotificationModel>> sendNotificationFavoriteEvent(
+      MEvent event, MUser user) async {
+    try {
+      NotificationModel notification = NotificationModel(
+        type: TypeNotify.favoriteEvent,
+        data: MFollowEvent(event: event, user: user),
+      );
+      final result = await add(notification);
+      if (result.isSuccess) {
+        final body = {
+          "to": event.host?.FCMToken ?? "",
+          "notification": {
+            "title": 'Your event has a new favorite person',
+            "body": '${user.name} has been liked ${event.name}',
             'image': event.host?.avatar ?? ""
           },
         };

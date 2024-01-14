@@ -2,12 +2,11 @@
 import 'package:myapp/src/network/model/notification/change_event.dart';
 import 'package:myapp/src/network/model/notification/follow_event.dart';
 import 'package:myapp/src/network/model/notification/follow_user.dart';
-import 'package:myapp/src/network/model/notification/upcoming_event.dart';
 
 enum TypeNotify {
   followEvent,
   followUser,
-  upcomingEvent,
+  favoriteEvent,
   changeEvent;
 
   static TypeNotify getTypeNotifyFromString(String typeNotifyString) {
@@ -18,8 +17,8 @@ enum TypeNotify {
         return TypeNotify.followEvent;
       case 'followUser':
         return TypeNotify.followUser;
-      case 'upcomingEvent':
-        return TypeNotify.upcomingEvent;
+      case 'favoriteEvent':
+        return TypeNotify.favoriteEvent;
       default:
         return TypeNotify.changeEvent;
     }
@@ -33,8 +32,8 @@ enum TypeNotify {
         return MFollowEvent.fromMap(data);
       case TypeNotify.followUser:
         return MFollowUser.fromMap(data);
-      case TypeNotify.upcomingEvent:
-        return MUpcomingEvent.fromMap(data);
+      case TypeNotify.favoriteEvent:
+        return MFollowEvent.fromMap(data);
       default:
         return MFollowEvent.fromMap(data);
     }

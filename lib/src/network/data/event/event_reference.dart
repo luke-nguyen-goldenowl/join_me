@@ -108,6 +108,10 @@ class EventReference extends BaseCollectionReference<MEvent> {
             isFavorite ? FieldValue.increment(-1) : FieldValue.increment(1),
       });
       if (result.isError == false) {
+        if (!isFavorite) {
+          await notificationReference.sendNotificationFavoriteEvent(
+              event, user);
+        }
         return result;
       } else {
         return MResult.success(result.data);

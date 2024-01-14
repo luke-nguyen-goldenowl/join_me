@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/src/features/notification/logic/notify_bloc.dart';
 import 'package:myapp/src/features/notification/logic/notify_state.dart';
 import 'package:myapp/src/features/notification/widget/notfication_change_event.dart';
-import 'package:myapp/src/features/notification/widget/notifcation_upcoming_event.dart';
 import 'package:myapp/src/features/notification/widget/notification_follow_event.dart';
 import 'package:myapp/src/features/notification/widget/notification_follow_user.dart';
 import 'package:myapp/src/network/model/notification/notification_model.dart';
@@ -50,9 +49,9 @@ class NotificationView extends StatelessWidget {
                       return NotificationFollowUser(
                           followUser: state.data.data[index].data);
 
-                    case TypeNotify.upcomingEvent:
-                      return NotificationUpcomingEvent(
-                          upcomingEvent: state.data.data[index].data);
+                    case TypeNotify.favoriteEvent:
+                      return NotificationFollowEvent(
+                          followEvent: state.data.data[index].data);
                   }
                 }
               }),
