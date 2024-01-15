@@ -20,6 +20,7 @@ class XInput extends StatefulWidget {
     this.maxLines = 1,
     this.minLines,
     this.onTap,
+    this.onEditingComplete,
   });
   final String value;
   final TextInputType? keyboardType;
@@ -32,6 +33,7 @@ class XInput extends StatefulWidget {
   final int? minLines;
   final int? maxLines;
   final ValueChanged<String>? onChanged;
+  final Function()? onEditingComplete;
   final InputDecoration? decoration;
   final int? maxLength;
   final bool autofocus;
@@ -143,6 +145,7 @@ class _XInputState extends State<XInput> {
         errorStyle: const TextStyle(fontSize: 14, letterSpacing: 0.25),
         suffixIcon: buildActions(),
       ),
+      onEditingComplete: widget.onEditingComplete,
     );
   }
 }

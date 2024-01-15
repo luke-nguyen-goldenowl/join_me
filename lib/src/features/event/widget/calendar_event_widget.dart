@@ -30,7 +30,7 @@ class CalendarEventWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${DateFormat('MMMM dd').format(state.firstDate!)} - ${DateFormat('MMMM dd').format(state.lastDate!)}',
+                  '${DateFormat('MMMM dd').format(state.firstDate)} - ${DateFormat('MMMM dd').format(state.lastDate)}',
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -57,7 +57,7 @@ class CalendarEventWidget extends StatelessWidget {
               ],
             ),
             Text(
-              DateFormat('MMMM, yyyy').format(state.firstDate!),
+              DateFormat('MMMM, yyyy').format(state.firstDate),
               style: const TextStyle(
                 fontSize: 15,
                 color: AppColors.grey,

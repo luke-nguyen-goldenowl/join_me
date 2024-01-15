@@ -108,7 +108,8 @@ class DetailPage extends StatelessWidget {
                     },
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
-                      labelText: "Maximum number of attendees",
+                      labelText:
+                          "Number of people you expect to follow your event",
                     ),
                   );
                 }),
