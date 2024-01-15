@@ -1,6 +1,4 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:myapp/src/network/model/common/pagination/meta/pagination_meta.dart';
-import 'package:myapp/src/network/model/common/pagination/pagination.dart';
 import 'package:myapp/src/network/model/common/pagination/pagination_response.dart';
 import 'package:myapp/src/network/model/common/result.dart';
 import 'package:myapp/src/network/model/event/event.dart';
@@ -83,12 +81,6 @@ class NotificationRepositoryMock {
     final List<NotificationModel> notify = notifies;
     final result = MPaginationResponse(
       data: notify,
-      meta: const MPaginationMeta(
-        pageSize: MPagination.defaultPageLimit,
-        totalCount: 50,
-        pageNumber: 4,
-        lastPage: 5,
-      ),
     );
     return MResult.success(result);
   }

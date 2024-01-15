@@ -3,6 +3,7 @@ import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
 import 'package:myapp/src/utils/date/date_helper.dart';
+import 'package:myapp/widgets/image/image_network.dart';
 
 class Ticket extends StatelessWidget {
   const Ticket({super.key, required this.event});
@@ -29,7 +30,7 @@ class Ticket extends StatelessWidget {
             builder: (BuildContext context, BoxConstraints constraints) {
           return InkWell(
             onTap: () {
-              AppCoordinator.showEventDetails(id: '1');
+              AppCoordinator.showEventDetails(id: event.id ?? "");
             },
             child: Container(
               padding: const EdgeInsets.all(10),
@@ -133,27 +134,13 @@ class HeaderTicket extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: event.images != null
-              ? Container(
-                  height: 60,
-                  width: 60,
-                  color: AppColors.grey,
-                  alignment: Alignment.center,
-                  child: const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                      )),
-                )
-              : Image.asset(
-                  event.images![0],
-                  height: 60,
-                  width: 60,
-                  fit: BoxFit.cover,
-                ),
-        ),
+            borderRadius: BorderRadius.circular(20),
+            child: XImageNetwork(
+              event.images?[0] ?? "",
+              height: 60,
+              width: 60,
+              fit: BoxFit.cover,
+            )),
         const SizedBox(width: 10),
         SizedBox(
           width: 250,
