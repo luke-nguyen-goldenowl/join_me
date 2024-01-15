@@ -14,28 +14,31 @@ class ListFollowing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ListFollowingBloc, ListFollowingState>(
-      buildWhen: (previous, current) =>
-          !listEquals(previous.followings, current.followings),
-      builder: ((context, state) {
-        return Column(
-          children: [
-            Expanded(
-              child: Container(
-                color: AppColors.white,
-                child: ListView.builder(
-                  itemCount: state.followings.length,
-                  itemBuilder: ((context, index) {
-                    return PersonSearchWidget(
-                      person: state.followings[index],
-                    );
-                  }),
+    return BlocProvider(
+      create: (_) => ListFollowingBloc(),
+      child: BlocBuilder<ListFollowingBloc, ListFollowingState>(
+        buildWhen: (previous, current) =>
+            !listEquals(previous.followings, current.followings),
+        builder: ((context, state) {
+          return Column(
+            children: [
+              Expanded(
+                child: Container(
+                  color: AppColors.white,
+                  child: ListView.builder(
+                    itemCount: state.followings.length,
+                    itemBuilder: ((context, index) {
+                      return PersonSearchWidget(
+                        person: state.followings[index],
+                      );
+                    }),
+                  ),
                 ),
               ),
-            ),
-          ],
-        );
-      }),
+            ],
+          );
+        }),
+      ),
     );
   }
 }

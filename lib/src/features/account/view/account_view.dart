@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:myapp/src/features/account/logic/account_bloc.dart';
-import 'package:myapp/src/features/account/logic/list_event_favorite_bloc.dart';
-import 'package:myapp/src/features/account/logic/list_follower_bloc.dart';
-import 'package:myapp/src/features/account/logic/list_following_bloc.dart';
+
 import 'package:myapp/src/features/account/widget/info_user.dart';
 import 'package:myapp/src/features/account/widget/list_event_favorite.dart';
 import 'package:myapp/src/features/account/widget/list_follower.dart';
@@ -19,27 +17,6 @@ class AccountHomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const space = SizedBox(height: 10);
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) => ListEventFavoriteBloc()),
-        BlocProvider(create: (_) => ListFollowerBloc()),
-        BlocProvider(create: (_) => ListFollowingBloc())
-      ],
-      child: const AccountHomePage(space: space),
-    );
-  }
-}
-
-class AccountHomePage extends StatelessWidget {
-  const AccountHomePage({
-    super.key,
-    required this.space,
-  });
-
-  final SizedBox space;
-
-  @override
-  Widget build(BuildContext context) {
     return BlocBuilder<AccountBloc, AccountState>(
         buildWhen: (previous, current) => previous.user != current.user,
         builder: (context, AccountState state) {
