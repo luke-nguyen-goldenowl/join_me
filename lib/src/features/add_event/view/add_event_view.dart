@@ -5,7 +5,7 @@ import 'package:myapp/src/features/add_event/logic/add_event_state.dart';
 import 'package:myapp/src/features/add_event/widget/address_page.dart';
 import 'package:myapp/src/features/add_event/widget/detail_page.dart';
 import 'package:myapp/src/features/add_event/widget/upload_image_page.dart';
-import 'package:myapp/src/router/coordinator.dart';
+
 import 'package:myapp/src/theme/colors.dart';
 import 'package:myapp/widgets/appbar/app_bar_custom.dart';
 
@@ -31,40 +31,57 @@ class AddEventPage extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return BlocBuilder<AddEventBloc, AddEventState>(
       builder: (context, state) {
-        return Scaffold(
-          backgroundColor: AppColors.white,
-          appBar: const AppBarCustom(
-            title: Text("Create New Event"),
-          ),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  3,
-                  (index) => _buildIndicator(state.currentPage == index, size),
+        return Stack(
+          children: [
+            Scaffold(
+              backgroundColor: AppColors.white,
+              appBar: const AppBarCustom(
+                title: Text("Create New Event"),
+              ),
+              body: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                      3,
+                      (index) =>
+                          _buildIndicator(state.currentPage == index, size),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  Expanded(
+                    child: PageView(
+                      onPageChanged: (value) {
+                        context.read<AddEventBloc>().setCurrentPage(value);
+                      },
+                      physics: const NeverScrollableScrollPhysics(),
+                      controller: context.read<AddEventBloc>().controller,
+                      children: const [
+                        UploadImagePage(),
+                        AddressPage(),
+                        DetailPage(),
+                      ],
+                    ),
+                  ),
+                  _buildBottomEvent(
+                      context,
+                      context.read<AddEventBloc>().controller,
+                      state.currentPage)
+                ],
+              ),
+            ),
+            if (state.isPosting)
+              Container(
+                color: AppColors.black.withOpacity(0.5),
+                height: double.infinity,
+                width: double.infinity,
+                alignment: Alignment.center,
+                child: const CircularProgressIndicator(
+                  color: AppColors.rosyPink,
                 ),
               ),
-              const SizedBox(height: 15),
-              Expanded(
-                child: PageView(
-                  onPageChanged: (value) {
-                    context.read<AddEventBloc>().setCurrentPage(value);
-                  },
-                  physics: const NeverScrollableScrollPhysics(),
-                  controller: context.read<AddEventBloc>().controller,
-                  children: const [
-                    UploadImagePage(),
-                    AddressPage(),
-                    DetailPage(),
-                  ],
-                ),
-              ),
-              _buildBottomEvent(context,
-                  context.read<AddEventBloc>().controller, state.currentPage)
-            ],
-          ),
+          ],
         );
       },
     );
@@ -101,16 +118,21 @@ class AddEventPage extends StatelessWidget {
             ),
           ),
           ElevatedButton(
-            onPressed: () {
-              if (currentPage != 2) {
-                controller.nextPage(
-                  duration: const Duration(milliseconds: 250),
-                  curve: Curves.easeInOut,
-                );
-              } else {
-                AppCoordinator.pop();
-              }
-            },
+            onPressed: context.watch<AddEventBloc>().state.checkValidate()
+                ? () {
+                    if (currentPage != 2) {
+                      controller.nextPage(
+                        duration: const Duration(milliseconds: 250),
+                        curve: Curves.easeInOut,
+                      );
+                      if (currentPage == 0) {
+                        context.read<AddEventBloc>().getCurrentLocation();
+                      }
+                    } else {
+                      context.read<AddEventBloc>().addEvent();
+                    }
+                  }
+                : null,
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.rosyPink,
               minimumSize: const Size(100, 50),

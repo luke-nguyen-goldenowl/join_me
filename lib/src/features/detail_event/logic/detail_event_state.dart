@@ -6,13 +6,26 @@ class DetailEventState {
 
   MEvent? event;
 
-  DetailEventState({this.indexPageImage = 0, this.event});
+  DetailEventState({
+    this.indexPageImage = 0,
+    this.event,
+  });
 
-  DetailEventState copyWith({indexPageImage, event}) {
+  DetailEventState copyWith({
+    int? indexPageImage,
+    MEvent? event,
+  }) {
     return DetailEventState(
       indexPageImage: indexPageImage ?? this.indexPageImage,
       event: event ?? this.event,
     );
+  }
+
+  bool isExpiredRegisterEvent() {
+    if (event == null) return true;
+    if ((event!.deadline?.isBefore(DateTime.now()) ?? false) ||
+        event!.maxAttendee < (event!.favoritesId?.length ?? 0)) return true;
+    return false;
   }
 
   @override

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 
 import 'package:myapp/src/features/manage_event/edit_event/logic/edit_event_bloc.dart';
 import 'package:myapp/src/features/manage_event/edit_event/logic/edit_event_state.dart';
@@ -33,7 +34,7 @@ class AddressPageEditEvent extends StatelessWidget {
                       mapController:
                           context.read<EditEventBloc>().mapController,
                       options: MapOptions(
-                        center: state.event.location!,
+                        center: state.event.location! as LatLng,
                         zoom: 13.0,
                         onTap: ((tapPosition, point) {
                           context.read<EditEventBloc>().handleTap(point);
@@ -51,7 +52,7 @@ class AddressPageEditEvent extends StatelessWidget {
                               rotate: true,
                               width: 50.0,
                               height: 50.0,
-                              point: state.event.location!,
+                              point: state.event.location! as LatLng,
                               builder: (BuildContext context) {
                                 return const Icon(
                                   Icons.location_pin,

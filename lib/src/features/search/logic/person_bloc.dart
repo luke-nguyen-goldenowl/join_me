@@ -10,9 +10,9 @@ class PersonBloc extends Cubit<PersonState> {
   DomainManager domain = DomainManager();
   void onPressedFollowHost() async {
     try {
-      List<String> newFollower = [...state.person.followers!];
+      List<String> newFollower = [...state.person.followers ?? []];
       final user = GetIt.I<AccountBloc>().state.user.copyWith();
-      List<String> newFollowed = [...user.followed!];
+      List<String> newFollowed = [...user.followed ?? []];
       final bool isFollowed;
       if (newFollower.contains(user.id)) {
         newFollower.remove(user.id);

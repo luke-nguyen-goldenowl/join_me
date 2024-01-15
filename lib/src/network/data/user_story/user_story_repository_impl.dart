@@ -24,9 +24,11 @@ class UserStoryRepositoryImpl {
       }
       for (int i = 0; i < listStories.length; i++) {
         if (listStories[i].isSuccess) {
-          result.add(MUserStory(
-              user: users.data?[i] ?? MUser.empty(),
-              stories: listStories[i].data ?? []));
+          if (listStories[i].data?.isNotEmpty ?? false) {
+            result.add(MUserStory(
+                user: users.data?[i] ?? MUser.empty(),
+                stories: listStories[i].data ?? []));
+          }
         }
       }
       return MResult.success(result);

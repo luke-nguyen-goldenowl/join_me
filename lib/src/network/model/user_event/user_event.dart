@@ -36,14 +36,14 @@ class MUserEvent {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'user': user.toJson(),
+      'user': user.toMap(),
       'events': events.map((x) => x.toMap()).toList(),
     };
   }
 
   factory MUserEvent.fromMap(Map<String, dynamic> map) {
     return MUserEvent(
-      user: MUser.fromJson(map['user'] as Map<String, dynamic>),
+      user: MUser.fromMap(map['user'] as Map<String, dynamic>),
       events: List<MEvent>.from(
         (map['events'] as List<int>).map<MEvent>(
           (x) => MEvent.fromMap(x as Map<String, dynamic>, '1'),

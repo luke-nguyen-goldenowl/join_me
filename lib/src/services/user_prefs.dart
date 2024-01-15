@@ -40,7 +40,7 @@ class UserPrefs {
     if (value == null) {
       _prefs.remove(_keys.user);
     } else {
-      _prefs.setString(_keys.user, jsonEncode(value.toJson()));
+      _prefs.setString(_keys.user, jsonEncode(value.toMap()));
     }
   }
 
@@ -54,7 +54,7 @@ class UserPrefs {
         if (map['id'] == null) {
           return null;
         } else {
-          return MUser.fromJson(map);
+          return MUser.fromMap(map);
         }
       }
     } catch (e) {

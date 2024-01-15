@@ -1,138 +1,108 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:myapp/gen/assets.gen.dart';
-import 'package:myapp/src/features/home/logic/event_item_bloc.dart';
-import 'package:myapp/src/features/home/logic/event_item_state.dart';
+import 'package:myapp/src/features/home/logic/home_state.dart';
+import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
+import 'package:myapp/src/utils/date/date_helper.dart';
 
 class EventItemHome extends StatelessWidget {
-  const EventItemHome({super.key, required this.id});
-  final String id;
+  const EventItemHome(
+      {super.key,
+      required this.event,
+      required this.index,
+      required this.type});
+  final MEvent event;
+  final int index;
+  final TypeListEventHome type;
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        AppCoordinator.showEventDetails(id: "4f");
+        AppCoordinator.showEventDetails(id: event.id ?? "");
       },
       child: Container(
         width: 300,
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
             image: DecorationImage(
-              image: Assets.images.images.bgEvent.provider(),
+              image: Image.network(event.images?[0] ?? "").image,
               fit: BoxFit.cover,
             ),
             borderRadius: const BorderRadius.all(Radius.circular(20))),
-        child: const Column(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            HeaderEvent(),
-            BottomEvent(),
+            _buildHeaderEvent(),
+            _buildBottomEvent(),
           ],
         ),
       ),
     );
   }
-}
 
-class BottomEvent extends StatelessWidget {
-  const BottomEvent({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildBottomEvent() {
     return Container(
       padding: const EdgeInsets.all(15),
       width: double.infinity,
-      height: 130,
+      // height: 130,
+
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(10),
       ),
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            "California Art Festival: Drawings on the pavement",
+            event.name ?? "",
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w900,
             ),
           ),
           Text(
-            "Starts at 9:00 AM",
-            style: TextStyle(fontSize: 15, color: AppColors.grey),
+            "Starts at ${DateHelper.getTime(event.startDate)}",
+            style: const TextStyle(fontSize: 15, color: AppColors.grey),
           )
         ],
       ),
     );
   }
-}
 
-class HeaderEvent extends StatelessWidget {
-  const HeaderEvent({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<EventItemBloc, EventItemState>(
-        buildWhen: (previous, current) {
-      return previous.isLiked != current.isLiked;
-    }, builder: (context, state) {
-      return Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget _buildHeaderEvent() {
+    return Container(
+      alignment: Alignment.center,
+      height: 55,
+      width: 55,
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            alignment: Alignment.center,
-            height: 55,
-            width: 55,
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: const Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  "12",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  "Dec",
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: AppColors.grey,
-                  ),
-                ),
-              ],
+          Text(
+            event.startDate?.day.toString() ?? "",
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          IconButton(
-            onPressed: () {
-              context.read<EventItemBloc>().setIsLike();
-            },
-            icon: Icon(state.isLiked
-                ? Icons.favorite
-                : Icons.favorite_border_outlined),
-            style: IconButton.styleFrom(
-              foregroundColor:
-                  state.isLiked ? AppColors.rosyPink : AppColors.white,
+          Text(
+            DateHelper.getShortMonth(event.startDate),
+            style: const TextStyle(
+              fontSize: 15,
+              color: AppColors.grey,
             ),
-            iconSize: 30,
-          )
+          ),
         ],
-      );
-    });
+      ),
+    );
   }
 }

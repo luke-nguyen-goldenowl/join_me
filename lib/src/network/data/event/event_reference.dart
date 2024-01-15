@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:myapp/src/network/data/user/user_reference.dart';
 import 'package:myapp/src/network/firebase/base_collection.dart';
 import 'package:myapp/src/network/model/common/pagination/pagination.dart';
 import 'package:myapp/src/network/model/common/result.dart';
 import 'package:myapp/src/network/model/event/event.dart';
+import 'package:myapp/src/network/data/user/user_reference.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 import 'package:myapp/src/services/firebase_storage.dart';
 
@@ -320,6 +320,43 @@ class EventReference extends BaseCollectionReference<MEvent> {
           .timeout(const Duration(seconds: 10));
       final docs = querySnapshot.docs.map((e) => e.data()).toList();
       return MResult.success(docs);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<List<MEvent>>> getEventsBySearch(String search, String userId,
+      [MEvent? lastEvent]) async {
+    try {
+      final QuerySnapshot<MEvent> querySnapshot = await ref
+          .where('host', isNotEqualTo: userId)
+          .where('caseSearchName', arrayContains: search)
+          .orderBy('host')
+          .orderBy('startDate')
+          .get()
+          .timeout(const Duration(seconds: 10));
+      final docs = querySnapshot.docs.map((e) => e.data()).toList();
+      return MResult.success(docs);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<int>> getCountEventsBySearch(
+    String search,
+    String userId,
+  ) async {
+    try {
+      final AggregateQuerySnapshot querySnapshot = await ref
+          .where('host', isNotEqualTo: userId)
+          .where('caseSearchName', arrayContains: search)
+          .orderBy('host')
+          .orderBy('startDate')
+          .count()
+          .get()
+          .timeout(const Duration(seconds: 10));
+      final result = querySnapshot.count;
+      return MResult.success(result);
     } catch (e) {
       return MResult.exception(e);
     }
