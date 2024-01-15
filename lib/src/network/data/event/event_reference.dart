@@ -186,11 +186,7 @@ class EventReference extends BaseCollectionReference<MEvent> {
           .limit(15)
           .get()
           .timeout(const Duration(seconds: 10));
-      final docs = querySnapshot.docs
-          .where((document) => document['host'] != userId)
-          .toList()
-          .map((e) => e.data())
-          .toList();
+      final docs = querySnapshot.docs.map((e) => e.data()).toList();
       return MResult.success(docs);
     } catch (e) {
       return MResult.exception(e);
@@ -210,11 +206,7 @@ class EventReference extends BaseCollectionReference<MEvent> {
           .limit(15)
           .get()
           .timeout(const Duration(seconds: 10));
-      final docs = querySnapshot.docs
-          .where((document) => document['host'] != userId)
-          .toList()
-          .map((e) => e.data())
-          .toList();
+      final docs = querySnapshot.docs.map((e) => e.data()).toList();
       return MResult.success(docs);
     } catch (e) {
       return MResult.exception(e);
