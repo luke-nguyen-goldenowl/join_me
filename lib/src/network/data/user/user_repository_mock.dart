@@ -1,5 +1,3 @@
-import 'package:myapp/src/network/model/common/pagination/meta/pagination_meta.dart';
-import 'package:myapp/src/network/model/common/pagination/pagination.dart';
 import 'package:myapp/src/network/model/common/pagination/pagination_response.dart';
 import 'package:myapp/src/network/model/common/result.dart';
 import 'package:myapp/src/network/model/user/user.dart';
@@ -41,12 +39,6 @@ class UserRepositoryMock {
     final List<MUser> users = listUser;
     final result = MPaginationResponse(
       data: users,
-      meta: const MPaginationMeta(
-        pageSize: MPagination.defaultPageLimit,
-        totalCount: 50,
-        pageNumber: 4,
-        lastPage: 5,
-      ),
     );
     return MResult.success(result);
   }
