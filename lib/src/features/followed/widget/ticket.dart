@@ -87,7 +87,7 @@ class BottomTicket extends StatelessWidget {
               ),
             ),
             Text(
-              DateHelper.getFullDate(date: event.startDate!),
+              DateHelper.getFullDate(event.startDate),
               style: const TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
@@ -108,7 +108,7 @@ class BottomTicket extends StatelessWidget {
               ),
             ),
             Text(
-              DateHelper.getTime(event.startDate!),
+              DateHelper.getTime(event.startDate),
               style: const TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,

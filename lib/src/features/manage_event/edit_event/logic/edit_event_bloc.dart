@@ -1,28 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_map/flutter_map.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:myapp/src/dialogs/alert_wrapper.dart';
+import 'package:myapp/src/dialogs/toast_wrapper.dart';
 import 'package:myapp/src/features/manage_event/edit_event/logic/edit_event_state.dart';
+import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/model/event/event.dart';
+import 'package:myapp/src/router/coordinator.dart';
 
 class EditEventBloc extends Cubit<EditEventState> {
-  EditEventBloc() : super(EditEventState.ds());
+  EditEventBloc({required String eventId}) : super(EditEventState.ds()) {
+    getEvent(eventId);
+  }
 
   PageController controller = PageController(initialPage: 0);
-  MapController mapController = MapController();
+  GoogleMapController? mapController;
+  DomainManager domain = DomainManager();
 
-  void initState(MEvent event) {
-    emit(state.copyWith(
-      event: event,
-      time: TimeOfDay.fromDateTime(event.startDate!),
-    ));
+  void onMapCreate(GoogleMapController controller) {
+    mapController ??= controller;
+  }
+
+  void getEvent(String eventId) async {
+    final result = await domain.event.getEvent(eventId);
+    if (result.isSuccess) {
+      MEvent event = result.data!;
+      emit(state.copyWith(
+        event: event,
+        time: TimeOfDay.fromDateTime(event.startDate!),
+      ));
+    }
   }
 
   void setCurrentPage(int index) {
     emit(state.copyWith(currentPage: index));
   }
 
-  void handleTap(point) {
-    emit(state.copyWith(event: state.event.copyWith(location: point)));
+  void handlePressMap(point) {
+    if (!isClosed) {
+      emit(state.copyWith(event: state.event.copyWith(location: point)));
+    }
   }
 
   void setNameEvent(value) {
@@ -45,9 +62,42 @@ class EditEventBloc extends Cubit<EditEventState> {
     emit(state.copyWith(time: value));
   }
 
+  void saveEvent() async {
+    if (!isClosed) emit(state.copyWith(isSaving: true));
+
+    DateTime? startDate;
+    if (state.event.startDate != null && state.time != null) {
+      startDate = DateTime(
+        state.event.startDate!.year,
+        state.event.startDate!.month,
+        state.event.startDate!.day,
+        state.time!.hour,
+        state.time!.minute,
+      );
+    }
+    final MEvent event = state.event.copyWith(
+      startDate: startDate,
+    );
+
+    final result = await domain.event.updateEvent(event);
+
+    if (!isClosed) emit(state.copyWith(isSaving: false));
+
+    if (result.isSuccess) {
+      AppCoordinator.pop(event);
+      XToast.success('Update event success');
+    } else {
+      XAlert.show(title: 'Update event fail', body: result.error);
+    }
+  }
+
+  void backScreen() {
+    AppCoordinator.pop(null);
+  }
+
   @override
   Future<void> close() {
-    mapController.dispose();
+    mapController?.dispose();
     controller.dispose();
     return super.close();
   }

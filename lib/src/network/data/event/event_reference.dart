@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:myapp/src/network/firebase/base_collection.dart';
 import 'package:myapp/src/network/model/common/pagination/pagination.dart';
+import 'package:myapp/src/network/model/common/pagination/pagination_response.dart';
 import 'package:myapp/src/network/model/common/result.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/network/data/user/user_reference.dart';
@@ -31,6 +32,10 @@ class EventReference extends BaseCollectionReference<MEvent> {
     } catch (e) {
       return MResult.exception(e);
     }
+  }
+
+  Future<MResult<MEvent>> updateEvent(MEvent event) async {
+    return await set(event);
   }
 
   Future<MResult<MEvent>> getEvent(String eventId) async {
@@ -130,6 +135,31 @@ class EventReference extends BaseCollectionReference<MEvent> {
     }
   }
 
+  Future<MResult<MPaginationResponse<MEvent>>> getEventsHostByUser(
+      String userId,
+      [MEvent? lastEvent]) async {
+    try {
+      final QuerySnapshot<MEvent> querySnapshot = await ref
+          .where('host', isEqualTo: userId)
+          .orderBy('startDate')
+          .orderBy('deadline')
+          .startAfter(lastEvent != null
+              ? [
+                  lastEvent.startDate?.toIso8601String(),
+                  lastEvent.deadline?.toIso8601String()
+                ]
+              : [0])
+          .limit(MPagination.defaultPageLimit)
+          .get()
+          .timeout(const Duration(seconds: 10));
+      final docs = querySnapshot.docs.map((e) => e.data()).toList();
+      final paginationResponse = MPaginationResponse<MEvent>(data: docs);
+      return MResult.success(paginationResponse);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
   Future<MResult<List<MEvent>>> getEventsPopular(String userId) async {
     try {
       DateTime currentDate = DateTime.now();
@@ -214,7 +244,8 @@ class EventReference extends BaseCollectionReference<MEvent> {
     }
   }
 
-  Future<MResult<List<MEvent>>> getEventsUpcomingByUser(String userId,
+  Future<MResult<MPaginationResponse<MEvent>>> getEventsUpcomingByUser(
+      String userId,
       [MEvent? lastEvent]) async {
     try {
       DateTime currentDate = DateTime.now();
@@ -231,7 +262,26 @@ class EventReference extends BaseCollectionReference<MEvent> {
           .get()
           .timeout(const Duration(seconds: 10));
       final docs = querySnapshot.docs.map((e) => e.data()).toList();
-      return MResult.success(docs);
+      final paginationResponse = MPaginationResponse<MEvent>(data: docs);
+      return MResult.success(paginationResponse);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<int>> getCountEventsHostByUser(
+    String userId,
+  ) async {
+    try {
+      final AggregateQuerySnapshot querySnapshot = await ref
+          .where('host', isEqualTo: userId)
+          .orderBy('startDate')
+          .orderBy('deadline')
+          .count()
+          .get()
+          .timeout(const Duration(seconds: 10));
+      final result = querySnapshot.count;
+      return MResult.success(result);
     } catch (e) {
       return MResult.exception(e);
     }
@@ -258,7 +308,8 @@ class EventReference extends BaseCollectionReference<MEvent> {
     }
   }
 
-  Future<MResult<List<MEvent>>> getEventsPastByUser(String userId,
+  Future<MResult<MPaginationResponse<MEvent>>> getEventsPastByUser(
+      String userId,
       [MEvent? lastEvent]) async {
     try {
       DateTime currentDate = DateTime.now();
@@ -275,7 +326,8 @@ class EventReference extends BaseCollectionReference<MEvent> {
           .get()
           .timeout(const Duration(seconds: 10));
       final docs = querySnapshot.docs.map((e) => e.data()).toList();
-      return MResult.success(docs);
+      final paginationResponse = MPaginationResponse<MEvent>(data: docs);
+      return MResult.success(paginationResponse);
     } catch (e) {
       return MResult.exception(e);
     }
@@ -302,7 +354,8 @@ class EventReference extends BaseCollectionReference<MEvent> {
     }
   }
 
-  Future<MResult<List<MEvent>>> getEventsFavoriteByUser(String userId,
+  Future<MResult<MPaginationResponse<MEvent>>> getEventsFavoriteByUser(
+      String userId,
       [MEvent? lastEvent]) async {
     try {
       final QuerySnapshot<MEvent> querySnapshot = await ref
@@ -319,7 +372,8 @@ class EventReference extends BaseCollectionReference<MEvent> {
           .get()
           .timeout(const Duration(seconds: 10));
       final docs = querySnapshot.docs.map((e) => e.data()).toList();
-      return MResult.success(docs);
+      final paginationResponse = MPaginationResponse<MEvent>(data: docs);
+      return MResult.success(paginationResponse);
     } catch (e) {
       return MResult.exception(e);
     }
@@ -380,7 +434,8 @@ class EventReference extends BaseCollectionReference<MEvent> {
     }
   }
 
-  Future<MResult<List<MEvent>>> getEventsFollowedByUser(String userId,
+  Future<MResult<MPaginationResponse<MEvent>>> getEventsFollowedByUser(
+      String userId,
       [MEvent? lastEvent]) async {
     try {
       final QuerySnapshot<MEvent> querySnapshot = await ref
@@ -397,7 +452,8 @@ class EventReference extends BaseCollectionReference<MEvent> {
           .get()
           .timeout(const Duration(seconds: 10));
       final docs = querySnapshot.docs.map((e) => e.data()).toList();
-      return MResult.success(docs);
+      final paginationResponse = MPaginationResponse<MEvent>(data: docs);
+      return MResult.success(paginationResponse);
     } catch (e) {
       return MResult.exception(e);
     }
@@ -451,46 +507,46 @@ class EventReference extends BaseCollectionReference<MEvent> {
     }
   }
 
-  Future<MResult<List<MEvent>>> getEventsHostByUser(String userId,
-      [MEvent? lastEvent]) async {
-    try {
-      final QuerySnapshot<MEvent> querySnapshot = await ref
-          .where('host', isEqualTo: userId)
-          .orderBy('startDate')
-          .orderBy('deadline')
-          .startAfter(lastEvent != null
-              ? [
-                  lastEvent.startDate?.toIso8601String(),
-                  lastEvent.deadline?.toIso8601String()
-                ]
-              : [0])
-          .limit(MPagination.defaultPageLimit)
-          .get()
-          .timeout(const Duration(seconds: 10));
-      final docs = querySnapshot.docs.map((e) => e.data()).toList();
-      return MResult.success(docs);
-    } catch (e) {
-      return MResult.exception(e);
-    }
-  }
+  // Future<MResult<List<MEvent>>> getEventsHostByUser(String userId,
+  //     [MEvent? lastEvent]) async {
+  //   try {
+  //     final QuerySnapshot<MEvent> querySnapshot = await ref
+  //         .where('host', isEqualTo: userId)
+  //         .orderBy('startDate')
+  //         .orderBy('deadline')
+  //         .startAfter(lastEvent != null
+  //             ? [
+  //                 lastEvent.startDate?.toIso8601String(),
+  //                 lastEvent.deadline?.toIso8601String()
+  //               ]
+  //             : [0])
+  //         .limit(MPagination.defaultPageLimit)
+  //         .get()
+  //         .timeout(const Duration(seconds: 10));
+  //     final docs = querySnapshot.docs.map((e) => e.data()).toList();
+  //     return MResult.success(docs);
+  //   } catch (e) {
+  //     return MResult.exception(e);
+  //   }
+  // }
 
-  Future<MResult<int>> getCountEventsHostByUser(
-    String userId,
-  ) async {
-    try {
-      final AggregateQuerySnapshot querySnapshot = await ref
-          .where('host', isEqualTo: userId)
-          .orderBy('startDate')
-          .orderBy('deadline')
-          .count()
-          .get()
-          .timeout(const Duration(seconds: 10));
-      final result = querySnapshot.count;
-      return MResult.success(result);
-    } catch (e) {
-      return MResult.exception(e);
-    }
-  }
+  // Future<MResult<int>> getCountEventsHostByUser(
+  //   String userId,
+  // ) async {
+  //   try {
+  //     final AggregateQuerySnapshot querySnapshot = await ref
+  //         .where('host', isEqualTo: userId)
+  //         .orderBy('startDate')
+  //         .orderBy('deadline')
+  //         .count()
+  //         .get()
+  //         .timeout(const Duration(seconds: 10));
+  //     final result = querySnapshot.count;
+  //     return MResult.success(result);
+  //   } catch (e) {
+  //     return MResult.exception(e);
+  //   }
+  // }
 
   Future<MResult<int>> getCountEventsByFilter(
     List<TypeEvent> types,

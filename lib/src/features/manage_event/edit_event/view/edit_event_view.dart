@@ -4,8 +4,6 @@ import 'package:myapp/src/features/manage_event/edit_event/logic/edit_event_bloc
 import 'package:myapp/src/features/manage_event/edit_event/logic/edit_event_state.dart';
 import 'package:myapp/src/features/manage_event/edit_event/widget/address_page_edit_event.dart';
 import 'package:myapp/src/features/manage_event/edit_event/widget/detail_page_edit_event.dart';
-import 'package:myapp/src/network/data/event/event_repository_mock.dart';
-import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
 import 'package:myapp/widgets/appbar/app_bar_custom.dart';
 
@@ -15,7 +13,7 @@ class EditEvent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => EditEventBloc()..initState(listEvent[0]),
+      create: (_) => EditEventBloc(eventId: id),
       child: const EditEventPage(),
     );
   }
@@ -29,25 +27,34 @@ class EditEventPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return BlocBuilder<EditEventBloc, EditEventState>(
-      buildWhen: (previous, current) =>
-          previous.currentPage != current.currentPage ||
-          previous.event != previous.event,
-      builder: ((context, state) {
-        return Scaffold(
+    return Stack(
+      children: [
+        Scaffold(
           backgroundColor: AppColors.white,
-          appBar: const AppBarCustom(
-            title: Text("Edit Event"),
+          appBar: AppBarCustom(
+            title: const Text("Edit Event"),
+            leading: IconButton(
+                onPressed: () {
+                  context.read<EditEventBloc>().backScreen();
+                },
+                icon: const Icon(Icons.arrow_back)),
           ),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  2,
-                  (index) => _buildIndicator(state.currentPage == index, size),
-                ),
+              BlocBuilder<EditEventBloc, EditEventState>(
+                buildWhen: (previous, current) =>
+                    previous.currentPage != current.currentPage,
+                builder: ((context, state) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                      2,
+                      (index) =>
+                          _buildIndicator(state.currentPage == index, size),
+                    ),
+                  );
+                }),
               ),
               const SizedBox(height: 15),
               Expanded(
@@ -63,12 +70,40 @@ class EditEventPage extends StatelessWidget {
                   ],
                 ),
               ),
-              _buildBottomEvent(context,
-                  context.read<EditEventBloc>().controller, state.currentPage)
+              BlocBuilder<EditEventBloc, EditEventState>(
+                buildWhen: (previous, current) =>
+                    previous.currentPage != current.currentPage,
+                builder: ((context, state) {
+                  return _buildBottomEvent(
+                      context,
+                      context.read<EditEventBloc>().controller,
+                      state.currentPage);
+                }),
+              ),
             ],
           ),
-        );
-      }),
+        ),
+        BlocBuilder<EditEventBloc, EditEventState>(
+          buildWhen: (previous, current) =>
+              previous.currentPage != current.currentPage ||
+              previous.isSaving != current.isSaving,
+          builder: ((context, state) {
+            if (state.isSaving) {
+              return Container(
+                color: AppColors.black.withOpacity(0.5),
+                height: double.infinity,
+                width: double.infinity,
+                alignment: Alignment.center,
+                child: const CircularProgressIndicator(
+                  color: AppColors.rosyPink,
+                ),
+              );
+            } else {
+              return const SizedBox.shrink();
+            }
+          }),
+        ),
+      ],
     );
   }
 
@@ -103,16 +138,18 @@ class EditEventPage extends StatelessWidget {
             ),
           ),
           ElevatedButton(
-            onPressed: () {
-              if (currentPage != 1) {
-                controller.nextPage(
-                  duration: const Duration(milliseconds: 250),
-                  curve: Curves.easeInOut,
-                );
-              } else {
-                AppCoordinator.pop();
-              }
-            },
+            onPressed: context.watch<EditEventBloc>().state.checkValidate()
+                ? () {
+                    if (currentPage != 1) {
+                      controller.nextPage(
+                        duration: const Duration(milliseconds: 250),
+                        curve: Curves.easeInOut,
+                      );
+                    } else {
+                      context.read<EditEventBloc>().saveEvent();
+                    }
+                  }
+                : null,
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.rosyPink,
               minimumSize: const Size(100, 50),

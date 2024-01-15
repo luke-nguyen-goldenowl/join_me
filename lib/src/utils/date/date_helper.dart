@@ -160,17 +160,19 @@ class DateHelper {
         : mondayWeekDayList.indexOf(weekdayValueForFirstValidDay);
   }
 
-  static String getFullDate({required DateTime date}) {
+  static String getFullDate(DateTime? date) {
+    if (date == null) return "";
     return DateFormat('MMMM dd, yyyy').format(date);
   }
 
-  static String getFullDateTypeVN({required DateTime date}) {
+  static String getFullDateTypeVN(DateTime? date) {
+    if (date == null) return "";
     return DateFormat('dd/MM/yyyy').format(date);
   }
 
   static String getTime(DateTime? time) {
     if (time == null) return "";
-    return DateFormat('h:MM a').format(time);
+    return DateFormat('hh:mm a').format(time);
   }
 
   static String getShortMonth(DateTime? date) {
@@ -198,7 +200,7 @@ class DateHelper {
   }
 
   static String getFullDateTime(DateTime? date) {
-    if (date != null) return DateFormat('MMM dd, yyyy - HH:mm a').format(date);
+    if (date != null) return DateFormat('MMM dd, yyyy - hh:mm a').format(date);
     return "";
   }
 }
