@@ -26,14 +26,10 @@ class ManageEventDetailBloc extends Cubit<ManageEventDetailState> {
   }
 
   Future<void> getEvent(String eventId) async {
-    try {
-      final result = await domain.event.getEvent(eventId);
-      if (result.isSuccess) {
-        MEvent event = result.data!;
-        emit(state.copyWith(event: event));
-      }
-    } catch (e) {
-      print(e);
+    final result = await domain.event.getEvent(eventId);
+    if (result.isSuccess) {
+      MEvent event = result.data!;
+      emit(state.copyWith(event: event));
     }
   }
 
@@ -50,15 +46,11 @@ class ManageEventDetailBloc extends Cubit<ManageEventDetailState> {
   }
 
   Future<void> getFollowers(String eventId) async {
-    try {
-      final result =
-          await domain.user.getUsersByIds(state.event.followersId ?? []);
-      if (result.isSuccess) {
-        final List<MUser> followers = result.data!;
-        emit(state.copyWith(followers: followers));
-      }
-    } catch (e) {
-      print(e);
+    final result =
+        await domain.user.getUsersByIds(state.event.followersId ?? []);
+    if (result.isSuccess) {
+      final List<MUser> followers = result.data!;
+      emit(state.copyWith(followers: followers));
     }
   }
 

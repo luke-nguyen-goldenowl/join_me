@@ -22,17 +22,13 @@ class EditEventBloc extends Cubit<EditEventState> {
   }
 
   void getEvent(String eventId) async {
-    try {
-      final result = await domain.event.getEvent(eventId);
-      if (result.isSuccess) {
-        MEvent event = result.data!;
-        emit(state.copyWith(
-          event: event,
-          time: TimeOfDay.fromDateTime(event.startDate!),
-        ));
-      }
-    } catch (e) {
-      print(e);
+    final result = await domain.event.getEvent(eventId);
+    if (result.isSuccess) {
+      MEvent event = result.data!;
+      emit(state.copyWith(
+        event: event,
+        time: TimeOfDay.fromDateTime(event.startDate!),
+      ));
     }
   }
 
