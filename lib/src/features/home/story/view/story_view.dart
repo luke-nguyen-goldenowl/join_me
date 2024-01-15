@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/src/features/home/story/logic/story_view_bloc.dart';
@@ -20,12 +21,11 @@ class StoryView extends StatelessWidget {
     return BlocProvider(
       create: (_) => StoryViewBloc()..initState(id, userStory),
       child: BlocBuilder<StoryViewBloc, StoryViewState>(
+        buildWhen: (previous, current) =>
+            !listEquals(previous.userStory, current.userStory),
         builder: (context, state) {
           return PageView.builder(
             controller: context.read<StoryViewBloc>().controller,
-            onPageChanged: ((value) {
-              print('chuyển page nè $value');
-            }),
             itemCount: state.userStory.length,
             itemBuilder: (context, index) {
               return StoryWidget(

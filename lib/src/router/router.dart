@@ -16,6 +16,7 @@ import 'package:myapp/src/features/event/view/event_view.dart';
 import 'package:myapp/src/features/followed/past/view/past_event_followed_view.dart';
 import 'package:myapp/src/features/followed/upcoming/view/upcoming_event_followed_view.dart';
 import 'package:myapp/src/features/followed/view/followed_view.dart';
+import 'package:myapp/src/features/home/story/logic/story_view_extra.dart';
 import 'package:myapp/src/features/home/view/home_view.dart';
 import 'package:myapp/src/features/manage_event/edit_event/view/edit_event_view.dart';
 import 'package:myapp/src/features/manage_event/manage_event_detail/view/manage_event_detail_view.dart';
@@ -27,7 +28,6 @@ import 'package:myapp/src/features/sample/view/sample_list_view.dart';
 import 'package:myapp/src/features/search/view/search_view.dart';
 import 'package:myapp/src/features/home/story/view/add_story_view.dart';
 import 'package:myapp/src/features/home/story/view/story_view.dart';
-import 'package:myapp/src/network/model/user_story/user_story.dart';
 import '../features/common/view/not_found_view.dart';
 import 'coordinator.dart';
 import 'route_name.dart';
@@ -100,13 +100,12 @@ class AppRouter {
                 builder: (_, state) {
                   final id =
                       state.pathParameters[AppRouteNames.story.paramName]!;
-                  final extra = state.extra! as List<dynamic>;
-                  final userStory = extra[0] as List<MUserStory>;
-                  final handleSeenStory = extra[1] as Function(int, int);
+                  final extra = state.extra as StoryViewExtra;
+
                   return StoryView(
                     id: id,
-                    userStory: userStory,
-                    handleSeenStory: handleSeenStory,
+                    userStory: extra.userStory,
+                    handleSeenStory: extra.handleSeenStory,
                   );
                 },
               ),

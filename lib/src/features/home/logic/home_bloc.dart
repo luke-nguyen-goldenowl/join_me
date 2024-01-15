@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:myapp/src/features/account/logic/account_bloc.dart';
 import 'package:myapp/src/features/home/logic/home_state.dart';
+import 'package:myapp/src/features/home/story/logic/story_view_extra.dart';
 import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/network/model/story/story.dart';
@@ -105,10 +106,10 @@ class HomeBloc extends Cubit<HomeState> {
   }
 
   void goStoryView(String hostId) async {
-    AppCoordinator.showStoryScreen(id: hostId, extra: [
-      [...state.userStory],
-      handleSeenStory,
-    ]);
+    AppCoordinator.showStoryScreen(
+        id: hostId,
+        extra: StoryViewExtra(
+            userStory: [...state.userStory], handleSeenStory: handleSeenStory));
   }
 
   void goDetailEvent(int indexEvent, MEvent event) async {
