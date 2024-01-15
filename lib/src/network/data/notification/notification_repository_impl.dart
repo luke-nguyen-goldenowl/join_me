@@ -9,107 +9,43 @@ class NotificationRepositoryImpl {
   NotificationReference notificationReference = NotificationReference();
 
   Future<MResult<NotificationModel>> sendNotificationFollowEvent(
-      MEvent event, MUser user) async {
-    try {
-      final result =
-          await notificationReference.sendNotificationFollowEvent(event, user);
-      if (result.isSuccess) {
-        return MResult.success(result.data);
-      }
-      return MResult.error(result.error);
-    } catch (e) {
-      return MResult.exception(e);
-    }
+      MEvent event, MUser user) {
+    return notificationReference.sendNotificationFollowEvent(event, user);
   }
 
   Future<MResult<NotificationModel>> sendNotificationFavoriteEvent(
-      MEvent event, MUser user) async {
-    try {
-      final result = await notificationReference.sendNotificationFavoriteEvent(
-          event, user);
-      if (result.isSuccess) {
-        return MResult.success(result.data);
-      }
-      return MResult.error(result.error);
-    } catch (e) {
-      return MResult.exception(e);
-    }
+      MEvent event, MUser user) {
+    return notificationReference.sendNotificationFavoriteEvent(event, user);
   }
 
   Future<MResult<NotificationModel>> sendNotificationFollowUser(
-      MUser host, MUser follower) async {
-    try {
-      final result = await notificationReference.sendNotificationFollowUser(
-          host, follower);
-      if (result.isSuccess) {
-        return MResult.success(result.data);
-      }
-      return MResult.error(result.error);
-    } catch (e) {
-      return MResult.exception(e);
-    }
+      MUser host, MUser follower) {
+    return notificationReference.sendNotificationFollowUser(host, follower);
   }
 
-  Future<MResult<NotificationModel>> sendNotificationChangeEvent(
-      MEvent event) async {
-    try {
-      final result =
-          await notificationReference.sendNotificationChangeEvent(event);
-      if (result.isSuccess) {
-        return MResult.success(result.data);
-      }
-      return MResult.error(result.error);
-    } catch (e) {
-      return MResult.exception(e);
-    }
+  Future<MResult<NotificationModel>> sendNotificationChangeEvent(MEvent event) {
+    return notificationReference.sendNotificationChangeEvent(event);
   }
 
-  Future<MResult<NotificationModel>> sendNotificationNewEvent(
-      MEvent event) async {
-    try {
-      final result =
-          await notificationReference.sendNotificationNewEvent(event);
-      if (result.isSuccess) {
-        return MResult.success(result.data);
-      }
-      return MResult.error(result.error);
-    } catch (e) {
-      return MResult.exception(e);
-    }
+  Future<MResult<NotificationModel>> sendNotificationNewEvent(MEvent event) {
+    return notificationReference.sendNotificationNewEvent(event);
   }
 
   Future<MResult<MPaginationResponse<NotificationModel>>> getNotification(
       String hostId,
-      [NotificationModel? lastNotification]) async {
+      [NotificationModel? lastNotification]) {
     return notificationReference.getNotification(hostId, lastNotification);
   }
 
   Future<MResult<int>> getCountNotification(
     String hostId,
-  ) async {
-    try {
-      final result = await notificationReference.getCountNotification(hostId);
-      if (result.isSuccess) {
-        return MResult.success(result.data);
-      }
-      return MResult.error(result.error);
-    } catch (e) {
-      return MResult.exception(e);
-    }
+  ) {
+    return notificationReference.getCountNotification(hostId);
   }
 
   Future<MResult<int>> getCountNotificationNotSeen(
     String hostId,
-  ) async {
-    try {
-      final result =
-          await notificationReference.getCountNotificationNotSeen(hostId);
-      if (result.isSuccess) {
-        return MResult.success(result.data);
-      }
-      return MResult.error(result.error);
-    } catch (e) {
-      return MResult.exception(e);
-    }
+  ) {
+    return notificationReference.getCountNotificationNotSeen(hostId);
   }
 }
