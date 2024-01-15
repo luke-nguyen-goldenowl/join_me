@@ -55,7 +55,7 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
       final result = await add(notification);
       if (result.isSuccess) {
         final body = {
-          "to": event.host?.FCMToken ?? "",
+          "to": event.host?.fcmToken ?? "",
           "notification": {
             "title": 'Your event has a new follower',
             "body": '${user.name} has been followed ${event.name}',
@@ -86,7 +86,7 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
       final result = await add(notification);
       if (result.isSuccess) {
         final body = {
-          "to": event.host?.FCMToken ?? "",
+          "to": event.host?.fcmToken ?? "",
           "notification": {
             "title": 'Your event has a new favorite person',
             "body": '${user.name} has been liked ${event.name}',
@@ -118,7 +118,7 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
       final result = await add(notification);
       if (result.isSuccess) {
         final body = {
-          "to": host.FCMToken ?? "",
+          "to": host.fcmToken ?? "",
           "notification": {
             "title": 'You have a new follower',
             "body": '${follower.name} has been followed you',
@@ -159,7 +159,7 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
         if (followers.isSuccess) {
           List<Future<Response>> listNotification = followers.data!.map((e) {
             final body = {
-              "to": e.FCMToken ?? "",
+              "to": e.fcmToken ?? "",
               "notification": {
                 "title": 'The event you are following  ',
                 "body": '${event.name} has  has changed',
@@ -202,7 +202,7 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
         if (followers.isSuccess) {
           List<Future<Response>> listNotification = followers.data!.map((e) {
             final body = {
-              "to": e.FCMToken ?? "",
+              "to": e.fcmToken ?? "",
               "notification": {
                 "title": '${event.host?.name ?? ""} added a new event',
                 "body":

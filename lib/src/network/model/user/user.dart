@@ -9,7 +9,7 @@ class MUser {
   String? email;
   List<String>? followers;
   List<String>? followed;
-  String? FCMToken;
+  String? fcmToken;
   MUser({
     required this.id,
     this.name,
@@ -17,7 +17,7 @@ class MUser {
     this.email,
     this.followers,
     this.followed,
-    this.FCMToken,
+    this.fcmToken,
   });
 
   factory MUser.empty() {
@@ -33,7 +33,7 @@ class MUser {
       'followers': followers ?? [],
       'followed': followed ?? [],
       'caseSearchName': _getCaseSearchName,
-      'FCMToken': XFirebaseMessage.instance.currentToken,
+      'fcmToken': XFirebaseMessage.instance.currentToken,
     };
   }
 
@@ -60,7 +60,7 @@ class MUser {
       email: map['email'],
       followers: List<String>.from((map['followers'])),
       followed: List<String>.from((map['followed'])),
-      FCMToken: map['FCMToken'],
+      fcmToken: map['fcmToken'],
     );
   }
 
@@ -71,7 +71,7 @@ class MUser {
     String? email,
     List<String>? followers,
     List<String>? followed,
-    String? FCMToken,
+    String? fcmToken,
   }) {
     return MUser(
       id: id ?? this.id,
@@ -80,7 +80,7 @@ class MUser {
       email: email ?? this.email,
       followers: followers ?? this.followers,
       followed: followed ?? this.followed,
-      FCMToken: FCMToken ?? this.FCMToken,
+      fcmToken: fcmToken ?? this.fcmToken,
     );
   }
 }
