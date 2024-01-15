@@ -43,8 +43,7 @@ class StoryReference extends BaseCollectionReference<MStory> {
           .where('host', isEqualTo: userId)
           .where('time', isGreaterThan: twentyFourHoursAgo.toIso8601String())
           .orderBy('time')
-          .get()
-          .timeout(const Duration(seconds: 10));
+          .get();
 
       final docs = querySnapshot.docs.map((e) => e.data()).toList();
       List<Future<MResult<MEvent>>> futures = docs.map((story) {

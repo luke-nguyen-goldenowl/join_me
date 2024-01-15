@@ -16,7 +16,7 @@ import 'package:myapp/src/features/event/view/event_view.dart';
 import 'package:myapp/src/features/followed/past/view/past_event_followed_view.dart';
 import 'package:myapp/src/features/followed/upcoming/view/upcoming_event_followed_view.dart';
 import 'package:myapp/src/features/followed/view/followed_view.dart';
-import 'package:myapp/src/features/home/story/logic/story_view_extra.dart';
+import 'package:myapp/src/router/extras/story_view_extra.dart';
 import 'package:myapp/src/features/home/view/home_view.dart';
 import 'package:myapp/src/features/manage_event/edit_event/view/edit_event_view.dart';
 import 'package:myapp/src/features/manage_event/manage_event_detail/view/manage_event_detail_view.dart';
@@ -95,15 +95,12 @@ class AppRouter {
               // _detailEventRoute,
               GoRoute(
                 parentNavigatorKey: AppCoordinator.navigatorKey,
-                path: AppRouteNames.story.buildSubPathParam,
+                path: AppRouteNames.story.subPath,
                 name: AppRouteNames.story.name,
                 builder: (_, state) {
-                  final id =
-                      state.pathParameters[AppRouteNames.story.paramName]!;
                   final extra = state.extra as StoryViewExtra;
-
                   return StoryView(
-                    id: id,
+                    id: extra.id,
                     userStory: extra.userStory,
                     handleSeenStory: extra.handleSeenStory,
                   );

@@ -39,7 +39,7 @@ enum AppRouteNames {
     paramName: 'id_profile',
   ),
   search(path: '/search'),
-  story(path: 'story', paramName: 'id_story'),
+  story(path: '/story'),
   addStory(path: '/add_story');
 
   const AppRouteNames({
