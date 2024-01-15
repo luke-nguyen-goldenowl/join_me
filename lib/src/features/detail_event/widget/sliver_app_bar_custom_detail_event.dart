@@ -26,7 +26,6 @@ class SliverAppBarCustomDetailEvent extends StatelessWidget {
     return SliverAppBar(
       leading: leading,
       pinned: true,
-      leading: leading,
       foregroundColor: AppColors.white,
       expandedHeight: 200,
       actions: actions,
