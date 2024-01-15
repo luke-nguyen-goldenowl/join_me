@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,7 +12,7 @@ import 'package:myapp/src/features/account/logic/account_bloc.dart';
 import 'package:myapp/src/features/add_event/logic/add_event_state.dart';
 import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/model/event/event.dart';
-import 'package:location/location.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/services/image_picker.dart';
 
@@ -20,7 +22,7 @@ class AddEventBloc extends Cubit<AddEventState> {
   final DomainManager domain = DomainManager();
   PageController controller = PageController(initialPage: 0);
   GoogleMapController? mapController;
-
+  TextEditingController textEditingController = TextEditingController();
   void onMapCreate(GoogleMapController controller) {
     mapController ??= controller;
   }
@@ -127,34 +129,32 @@ class AddEventBloc extends Cubit<AddEventState> {
   }
 
   Future<void> getCurrentLocation() async {
-    Location location = Location();
-    LocationData currentLocation;
+    Position currentLocation;
     bool serviceEnabled;
-    PermissionStatus permissionGranted;
+    LocationPermission permission;
     try {
-      serviceEnabled = await location.serviceEnabled();
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
-        serviceEnabled = await location.requestService();
-        if (!serviceEnabled) {
-          if (!isClosed) emit(state.copyWith(isLoadingCurrentLocation: false));
-          return;
+        return Future.error('Location services are disabled.');
+      }
+
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          return Future.error('Location permissions are denied');
         }
       }
 
-      permissionGranted = await location.hasPermission();
-      if (permissionGranted == PermissionStatus.denied) {
-        permissionGranted = await location.requestPermission();
-        if (permissionGranted != PermissionStatus.granted) {
-          if (!isClosed) emit(state.copyWith(isLoadingCurrentLocation: false));
-          return;
-        }
+      if (permission == LocationPermission.deniedForever) {
+        return Future.error(
+            'Location permissions are permanently denied, we cannot request permissions.');
       }
-
-      currentLocation = await location.getLocation();
+      currentLocation = await Geolocator.getCurrentPosition();
 
       final LatLng locationLatLng = LatLng(
-        currentLocation.latitude ?? 10.790159,
-        currentLocation.longitude ?? 106.6557574,
+        currentLocation.latitude,
+        currentLocation.longitude,
       );
       if (!isClosed) {
         emit(
@@ -170,9 +170,41 @@ class AddEventBloc extends Cubit<AddEventState> {
     }
   }
 
+  Future<LatLng?> _getCoordinatesFromAddress(String address) async {
+    try {
+      List<Location> locations =
+          await locationFromAddress(address, localeIdentifier: 'vi_VN');
+      if (locations.isNotEmpty) {
+        Location location = locations.first;
+        return LatLng(location.latitude, location.longitude);
+      }
+    } catch (e) {
+      print("Error getting coordinates: $e");
+    }
+    return null;
+  }
+
+  onSearchTextChanged(search, context) async {
+    LatLng? coordinates = await _getCoordinatesFromAddress(search);
+    if (coordinates != null) {
+      handlePressMap(coordinates);
+      mapController?.animateCamera(
+        CameraUpdate.newLatLngZoom(coordinates, 16),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Address not found"),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
   @override
   Future<void> close() {
     mapController?.dispose();
+    textEditingController.dispose();
     controller.dispose();
     return super.close();
   }

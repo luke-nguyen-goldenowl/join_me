@@ -10,53 +10,83 @@ class AddressPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AddEventBloc, AddEventState>(
-        buildWhen: (previous, current) =>
-            previous.event.location != current.event.location,
-        builder: (context, state) {
-          return Container(
-            color: AppColors.white,
-            child: Column(
-              children: [
-                const Text(
-                  "Select location",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Expanded(
-                  child: !state.isLoadingCurrentLocation
-                      ? GoogleMap(
-                          mapType: MapType.terrain,
-                          onMapCreated:
-                              context.read<AddEventBloc>().onMapCreate,
-                          initialCameraPosition: CameraPosition(
-                            target: state.event.location!,
-                            zoom: 16,
-                          ),
-                          onTap: (argument) {
-                            context
-                                .read<AddEventBloc>()
-                                .handlePressMap(argument);
-                          },
-                          markers: {
-                            Marker(
-                              markerId: const MarkerId('my location'),
-                              position: state.event.location!,
-                            )
-                          },
-                        )
-                      : const Center(
-                          child: CircularProgressIndicator(
-                            color: AppColors.rosyPink,
-                          ),
-                        ),
-                ),
-              ],
+    return Container(
+      color: AppColors.white,
+      child: Column(
+        children: [
+          const Text(
+            "Select location",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
             ),
-          );
-        });
+          ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: !context.watch<AddEventBloc>().state.isLoadingCurrentLocation
+                ? Stack(
+                    children: [
+                      BlocBuilder<AddEventBloc, AddEventState>(
+                          buildWhen: (previous, current) =>
+                              previous.event.location != current.event.location,
+                          builder: (context, state) {
+                            return GoogleMap(
+                              mapType: MapType.terrain,
+                              onMapCreated:
+                                  context.read<AddEventBloc>().onMapCreate,
+                              initialCameraPosition: CameraPosition(
+                                target: state.event.location ??
+                                    const LatLng(10.790159, 106.6557574),
+                                zoom: 16,
+                              ),
+                              onTap: (argument) {
+                                context
+                                    .read<AddEventBloc>()
+                                    .handlePressMap(argument);
+                              },
+                              myLocationEnabled: true,
+                              markers: {
+                                Marker(
+                                  markerId: const MarkerId('my location'),
+                                  position: state.event.location!,
+                                )
+                              },
+                            );
+                          }),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SearchBar(
+                            controller: context
+                                .read<AddEventBloc>()
+                                .textEditingController,
+                            leading: const Icon(Icons.search),
+                            onSubmitted: (value) {
+                              context
+                                  .read<AddEventBloc>()
+                                  .onSearchTextChanged(value, context);
+                            },
+                            trailing: [
+                              IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  context
+                                      .read<AddEventBloc>()
+                                      .textEditingController
+                                      .clear();
+                                },
+                              )
+                            ]),
+                      ),
+                    ],
+                  )
+                : const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.rosyPink,
+                    ),
+                  ),
+          ),
+        ],
+      ),
+    );
   }
 }
