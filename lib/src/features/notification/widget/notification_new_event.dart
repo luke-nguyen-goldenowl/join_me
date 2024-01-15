@@ -30,18 +30,26 @@ class NotificationNewEvent extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            title: Expanded(
-              child: Text(
-                '${changeEvent.event.name}',
-                style: const TextStyle(fontWeight: FontWeight.bold),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
+            title: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    '${changeEvent.event.name}',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
             ),
-            subtitle: Expanded(
-              child: Text(
-                'has been created by ${changeEvent.host.name ?? ""}',
-              ),
+            subtitle: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'has been created by ${changeEvent.host.name ?? ""}',
+                  ),
+                ),
+              ],
             ),
           ),
           Text(

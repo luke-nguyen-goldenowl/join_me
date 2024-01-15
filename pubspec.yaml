@@ -102,3 +102,4 @@ flutter:
     - assets/images/locale/
     - assets/lotties/
     - assets/svgs/
+    - .env

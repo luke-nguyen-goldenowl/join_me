@@ -8,8 +8,10 @@ import 'package:myapp/src/locator.dart';
 import 'firebase_options/firebase_options_prod.dart';
 import 'src/app.dart';
 import 'package:flutter_config/flutter_config.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future main() async {
+  await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized(); // Required by FlutterConfig
   await FlutterConfig.loadEnvVariables();
   await initializeApp(

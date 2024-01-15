@@ -29,18 +29,26 @@ class NotificationFollowEvent extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            title: Expanded(
-              child: Text(
-                '"${followEvent.user.name}"  has followed',
-                style: const TextStyle(fontWeight: FontWeight.bold),
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-              ),
+            title: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    '"${followEvent.user.name}"  has followed',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
             ),
-            subtitle: Expanded(
-              child: Text(
-                followEvent.event.name ?? "",
-              ),
+            subtitle: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    followEvent.event.name ?? "",
+                  ),
+                ),
+              ],
             ),
           ),
           Text(
