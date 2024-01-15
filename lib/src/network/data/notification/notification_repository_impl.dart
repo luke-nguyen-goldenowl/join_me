@@ -1,4 +1,5 @@
 import 'package:myapp/src/network/data/notification/notification_reference.dart';
+import 'package:myapp/src/network/model/common/pagination/pagination_response.dart';
 import 'package:myapp/src/network/model/common/result.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/network/model/notification/notification_model.dart';
@@ -77,18 +78,10 @@ class NotificationRepositoryImpl {
     }
   }
 
-  Future<MResult<List<NotificationModel>>> getNotification(String hostId,
+  Future<MResult<MPaginationResponse<NotificationModel>>> getNotification(
+      String hostId,
       [NotificationModel? lastNotification]) async {
-    try {
-      final result =
-          await notificationReference.getNotification(hostId, lastNotification);
-      if (result.isSuccess) {
-        return MResult.success(result.data);
-      }
-      return MResult.error(result.error);
-    } catch (e) {
-      return MResult.exception(e);
-    }
+    return notificationReference.getNotification(hostId, lastNotification);
   }
 
   Future<MResult<int>> getCountNotification(

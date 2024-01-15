@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/firebase/base_collection.dart';
 import 'package:myapp/src/network/model/common/pagination/pagination.dart';
+import 'package:myapp/src/network/model/common/pagination/pagination_response.dart';
 import 'package:myapp/src/network/model/common/result.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/network/model/notification/change_event.dart';
@@ -223,7 +224,8 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
     }
   }
 
-  Future<MResult<List<NotificationModel>>> getNotification(String hostId,
+  Future<MResult<MPaginationResponse<NotificationModel>>> getNotification(
+      String hostId,
       [NotificationModel? lastNotification]) async {
     try {
       final QuerySnapshot<NotificationModel> querySnapshot;
@@ -250,7 +252,9 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
       }
       final docs = querySnapshot.docs.map((e) => e.data()).toList();
 
-      return MResult.success(docs);
+      final paginationResponse =
+          MPaginationResponse<NotificationModel>(data: docs);
+      return MResult.success(paginationResponse);
     } catch (e) {
       return MResult.exception(e);
     }

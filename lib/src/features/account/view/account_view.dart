@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:myapp/src/features/account/logic/account_bloc.dart';
+
 import 'package:myapp/src/features/account/widget/info_user.dart';
 import 'package:myapp/src/features/account/widget/list_event_favorite.dart';
 import 'package:myapp/src/features/account/widget/list_follower.dart';
+import 'package:myapp/src/features/account/widget/list_following.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
 import 'package:myapp/widgets/appbar/app_bar_custom.dart';
@@ -14,13 +16,14 @@ class AccountHomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const space = SizedBox(height: 15);
+    const space = SizedBox(height: 10);
     return BlocBuilder<AccountBloc, AccountState>(
         buildWhen: (previous, current) => previous.user != current.user,
         builder: (context, AccountState state) {
           return Scaffold(
             backgroundColor: AppColors.grey6,
             appBar: AppBarCustom(
+              title: const Text("Profile"),
               actions: [
                 IconButton(
                     onPressed: () {
@@ -30,7 +33,7 @@ class AccountHomeView extends StatelessWidget {
               ],
             ),
             body: DefaultTabController(
-              length: 2,
+              length: 3,
               child: Column(
                 children: [
                   space,
@@ -45,6 +48,9 @@ class AccountHomeView extends StatelessWidget {
                       Tab(
                         text: "Follower",
                       ),
+                      Tab(
+                        text: "Following",
+                      ),
                     ]),
                   ),
                   Expanded(
@@ -53,6 +59,9 @@ class AccountHomeView extends StatelessWidget {
                         userId: state.user.id,
                       ),
                       ListFollower(
+                        userId: state.user.id,
+                      ),
+                      ListFollowing(
                         userId: state.user.id,
                       ),
                     ]),

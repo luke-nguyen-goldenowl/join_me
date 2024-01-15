@@ -1,17 +1,8 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:myapp/src/network/model/common/pagination/meta/pagination_meta.dart';
-import 'package:myapp/src/network/model/common/pagination/pagination.dart';
 import 'package:myapp/src/network/model/common/pagination/pagination_response.dart';
 import 'package:myapp/src/network/model/common/result.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/network/model/user/user.dart';
-
-List<String> listImage = [
-  'assets/images/images/landscape2.webp',
-  'assets/images/images/landscape3.jpg',
-  'assets/images/images/landscape4.webp',
-  'assets/images/images/bg-event.jpg'
-];
 
 List<MEvent> listEvent = [
   MEvent(
@@ -66,7 +57,7 @@ List<MEvent> listEvent = [
 
 class EventRepositoryMock {
   MResult<MEvent> getEvent(String id) {
-    final MEvent result = listEvent[0];
+    final MEvent result = MEvent(id: '1');
     return MResult.success(result);
   }
 
@@ -89,12 +80,6 @@ class EventRepositoryMock {
     final List<MEvent> events = listEvent;
     final result = MPaginationResponse(
       data: events,
-      meta: const MPaginationMeta(
-        pageSize: MPagination.defaultPageLimit,
-        totalCount: 50,
-        pageNumber: 4,
-        lastPage: 5,
-      ),
     );
     return MResult.success(result);
   }

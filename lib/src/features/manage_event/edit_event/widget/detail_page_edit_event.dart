@@ -13,24 +13,26 @@ class DetailPageEditEvent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final EditEventBloc editEventBloc = BlocProvider.of<EditEventBloc>(context);
-    return BlocBuilder<EditEventBloc, EditEventState>(
-        buildWhen: (previous, current) => previous.event != current.event,
-        builder: (context, state) {
-          return SingleChildScrollView(
-            child: Container(
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                children: [
-                  const Text(
-                    "Detail event",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Column(
-                    children: [
-                      XInput(
+
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            const Text(
+              "Detail event",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Column(
+              children: [
+                BlocBuilder<EditEventBloc, EditEventState>(
+                    buildWhen: (previous, current) =>
+                        previous.event.name != current.event.name,
+                    builder: (context, state) {
+                      return XInput(
                         key: const Key('addEvent_nameEventInput_textField'),
                         value: state.event.name ?? "",
                         onChanged: (value) {
@@ -39,12 +41,17 @@ class DetailPageEditEvent extends StatelessWidget {
                         decoration: const InputDecoration(
                           labelText: "Name Event",
                         ),
-                      ),
-                      XInput(
+                      );
+                    }),
+                BlocBuilder<EditEventBloc, EditEventState>(
+                    buildWhen: (previous, current) =>
+                        previous.event.description != current.event.description,
+                    builder: (context, state) {
+                      return XInput(
                         key: const Key(
                             'addEvent_descriptionEventInput_textField'),
                         minLines: 1,
-                        maxLines: 10,
+                        maxLines: 30,
                         value: state.event.description ?? "",
                         onChanged: (value) {
                           editEventBloc.setDescriptionEvent(value);
@@ -52,8 +59,13 @@ class DetailPageEditEvent extends StatelessWidget {
                         decoration: const InputDecoration(
                           labelText: "Description",
                         ),
-                      ),
-                      XInput(
+                      );
+                    }),
+                BlocBuilder<EditEventBloc, EditEventState>(
+                    buildWhen: (previous, current) =>
+                        previous.event.startDate != current.event.startDate,
+                    builder: (context, state) {
+                      return XInput(
                         key:
                             const Key('addEvent_startDateEventInput_textField'),
                         readOnly: true,
@@ -81,8 +93,13 @@ class DetailPageEditEvent extends StatelessWidget {
                             editEventBloc.setStartDateEvent(selectedDate);
                           }
                         },
-                      ),
-                      XInput(
+                      );
+                    }),
+                BlocBuilder<EditEventBloc, EditEventState>(
+                    buildWhen: (previous, current) =>
+                        previous.time != current.time,
+                    builder: (context, state) {
+                      return XInput(
                         key: const Key('addEvent_timeEventInput_textField'),
                         readOnly: true,
                         value: state.time != null
@@ -103,8 +120,13 @@ class DetailPageEditEvent extends StatelessWidget {
                             editEventBloc.setTimeEvent(selectedTime);
                           }
                         },
-                      ),
-                      XInput(
+                      );
+                    }),
+                BlocBuilder<EditEventBloc, EditEventState>(
+                    buildWhen: (previous, current) =>
+                        previous.event.deadline != current.event.deadline,
+                    builder: (context, state) {
+                      return XInput(
                         key: const Key('addEvent_deadlineEventInput_textField'),
                         readOnly: true,
                         value: state.event.deadline != null
@@ -129,13 +151,13 @@ class DetailPageEditEvent extends StatelessWidget {
                             editEventBloc.setDeadlineEvent(selectedDate);
                           }
                         },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                      );
+                    }),
+              ],
             ),
-          );
-        });
+          ],
+        ),
+      ),
+    );
   }
 }

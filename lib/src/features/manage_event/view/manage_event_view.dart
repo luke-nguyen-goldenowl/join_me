@@ -22,25 +22,29 @@ class ManageEventView extends StatelessWidget {
             appBar: const AppBarCustom(
               title: Text("My Events"),
             ),
-            body: Expanded(
-              child: ListView.builder(
-                itemCount: state.data.data.length + 1,
-                itemBuilder: ((context, index) {
-                  if (index == state.data.data.length) {
-                    return Container(
-                      margin: const EdgeInsets.symmetric(vertical: 20),
-                      alignment: Alignment.center,
-                      child: XStatePaginationWidget(
-                        page: state.data,
-                        loadMore: context.read<ManageEventBloc>().getData,
-                        autoLoad: true,
-                      ),
-                    );
-                  } else {
-                    return ManageEventItem(event: state.data.data[index]);
-                  }
-                }),
-              ),
+            body: Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: state.data.data.length + 1,
+                    itemBuilder: ((context, index) {
+                      if (index == state.data.data.length) {
+                        return Container(
+                          margin: const EdgeInsets.symmetric(vertical: 20),
+                          alignment: Alignment.center,
+                          child: XStatePaginationWidget(
+                            page: state.data,
+                            loadMore: context.read<ManageEventBloc>().getData,
+                            autoLoad: true,
+                          ),
+                        );
+                      } else {
+                        return ManageEventItem(event: state.data.data[index]);
+                      }
+                    }),
+                  ),
+                ),
+              ],
             ),
           );
         },

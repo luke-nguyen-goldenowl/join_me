@@ -99,6 +99,27 @@ class UserReference extends BaseCollectionReference<MUser> {
     }
   }
 
+  Future<MResult> updateUser(String userId,
+      [String? imageUrl, String? name]) async {
+    try {
+      Map<String, dynamic> updateData = {};
+      if (imageUrl != null) {
+        updateData['avatar'] = imageUrl;
+      }
+      if (name != null) {
+        updateData['name'] = name;
+      }
+      final result = await update(userId, updateData);
+      if (result.isError == false) {
+        return result;
+      } else {
+        return MResult.success(result.data);
+      }
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
   Future<MResult<List<MUser>>> getUsersBySearch(String search, String userId,
       [MUser? lastUser]) async {
     try {

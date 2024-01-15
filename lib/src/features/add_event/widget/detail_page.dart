@@ -108,7 +108,8 @@ class DetailPage extends StatelessWidget {
                     },
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
-                      labelText: "Maximum number of attendees",
+                      labelText:
+                          "Number of people you expect to follow your event",
                     ),
                   );
                 }),
@@ -119,10 +120,7 @@ class DetailPage extends StatelessWidget {
                   return XInput(
                     key: const Key('addEvent_startDateEventInput_textField'),
                     readOnly: true,
-                    value: state.event.startDate != null
-                        ? DateHelper.getFullDateTypeVN(
-                            date: state.event.startDate!)
-                        : "",
+                    value: DateHelper.getFullDateTypeVN(state.event.startDate),
                     decoration: const InputDecoration(
                       labelText: "Start day",
                     ),
@@ -175,10 +173,7 @@ class DetailPage extends StatelessWidget {
                   return XInput(
                     key: const Key('addEvent_deadlineEventInput_textField'),
                     readOnly: true,
-                    value: state.event.deadline != null
-                        ? DateHelper.getFullDateTypeVN(
-                            date: state.event.deadline!)
-                        : "",
+                    value: DateHelper.getFullDateTypeVN(state.event.deadline),
                     decoration: const InputDecoration(
                       labelText: "Registration expiration date",
                     ),

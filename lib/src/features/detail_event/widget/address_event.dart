@@ -1,20 +1,18 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:flutter_map/flutter_map.dart';
-// import 'package:latlong2/latlong.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:myapp/src/features/detail_event/logic/detail_event_bloc.dart';
 import 'package:myapp/src/theme/colors.dart';
 
 class AddressEvent extends StatelessWidget {
   const AddressEvent({
     super.key,
     required this.location,
+    required this.onMapCreate,
   });
 
   final LatLng? location;
+  final Function(GoogleMapController) onMapCreate;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +37,7 @@ class AddressEvent extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   child: GoogleMap(
                     mapType: MapType.terrain,
-                    onMapCreated: context.read<DetailEventBloc>().onMapCreate,
+                    onMapCreated: onMapCreate,
                     initialCameraPosition: CameraPosition(
                       target: location!,
                       zoom: 16,
@@ -50,7 +48,7 @@ class AddressEvent extends StatelessWidget {
                     markers: {
                       Marker(
                         markerId: const MarkerId('my location'),
-                        position: location!,
+                        position: location ?? const LatLng(0, 0),
                       )
                     },
                   )),

@@ -9,7 +9,9 @@ import 'package:myapp/src/network/model/user/user.dart';
 import 'package:myapp/src/network/model/user_story/user_story.dart';
 
 class HomeBloc extends Cubit<HomeState> {
-  HomeBloc() : super(HomeState.ds());
+  HomeBloc() : super(HomeState.ds()) {
+    getDateHome();
+  }
   DomainManager domain = DomainManager();
 
   void getDateHome() {
