@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/src/features/profile_other_user/logic/attended_bloc.dart';
 import 'package:myapp/src/features/profile_other_user/logic/favorite_bloc.dart';
 import 'package:myapp/src/features/profile_other_user/logic/host_bloc.dart';
+import 'package:myapp/src/features/profile_other_user/logic/user_bloc.dart';
 import 'package:myapp/src/features/profile_other_user/widget/info_user.dart';
 import 'package:myapp/src/features/profile_other_user/widget/tab_view_profile_user.dart';
 import 'package:myapp/src/theme/colors.dart';
@@ -14,9 +15,10 @@ class ProfileOtherUserView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(providers: [
-      BlocProvider(create: (_) => AttendedBloc()),
-      BlocProvider(create: (_) => HostBloc()),
-      BlocProvider(create: (_) => FavoriteBloc()),
+      BlocProvider(create: (_) => UserBloc(userId: id)),
+      BlocProvider(create: (_) => AttendedBloc(userId: id)),
+      BlocProvider(create: (_) => HostBloc(userId: id)),
+      BlocProvider(create: (_) => FavoriteBloc(userId: id)),
     ], child: const ProfileOtherUserPage());
   }
 }

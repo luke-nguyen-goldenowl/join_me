@@ -16,6 +16,7 @@ class InfoUser extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20),
+      width: double.infinity,
       color: AppColors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -48,23 +49,11 @@ class InfoUser extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "12 Events",
-                style: TextStyle(
-                  fontSize: 15,
-                ),
-              ),
-              SizedBox(width: 20),
-              Text(
-                "200 Follower",
-                style: TextStyle(
-                  fontSize: 15,
-                ),
-              ),
-            ],
+          Text(
+            "${user.followers?.length.toString() ?? ""} followers",
+            style: const TextStyle(
+              fontSize: 15,
+            ),
           ),
         ],
       ),

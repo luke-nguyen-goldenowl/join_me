@@ -7,12 +7,12 @@ import 'package:myapp/src/network/model/common/result.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 
 class HostBloc extends PaginationBloc<HostState> {
-  HostBloc() : super(HostState(data: MPagination<MEvent>()));
+  HostBloc({required String userId})
+      : super(HostState(data: MPagination<MEvent>(), userId: userId));
   DomainManager get domain => DomainManager();
   @override
-  Future<MResult<MPaginationResponse>> get getDataAPI async {
-    await Future.delayed(const Duration(seconds: 2));
-
-    return domain.eventMock.getEventsByUser('1');
+  Future<MResult<MPaginationResponse<MEvent>>> get getDataAPI async {
+    return await domain.event
+        .getEventsHostByUser(state.userId, state.data.lastDoc);
   }
 }

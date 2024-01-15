@@ -13,7 +13,7 @@ class EventSearchWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (event.id != null) AppCoordinator.showEventDetails(id: event.id!);
+        AppCoordinator.showEventDetails(id: event.id ?? "");
       },
       child: Container(
         padding: const EdgeInsets.all(10),

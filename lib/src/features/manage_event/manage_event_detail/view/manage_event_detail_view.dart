@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/src/features/detail_event/widget/address_event.dart';
 import 'package:myapp/src/features/detail_event/widget/description_event.dart';
-
 import 'package:myapp/src/features/detail_event/widget/sliver_app_bar_custom_detail_event.dart';
-
 import 'package:myapp/src/features/manage_event/manage_event_detail/logic/manage_event_detail_bloc.dart';
 import 'package:myapp/src/features/manage_event/manage_event_detail/logic/manage_event_detail_state.dart';
 import 'package:myapp/src/features/manage_event/manage_event_detail/widget/list_follower_event.dart';

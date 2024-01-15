@@ -1,44 +1,65 @@
+import 'dart:async';
+import 'dart:io';
+import 'dart:ui';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:myapp/src/features/event/logic/map_page_state.dart';
 import 'package:myapp/src/network/domain_manager.dart';
+import 'package:myapp/src/network/model/event/event.dart';
+import 'package:myapp/src/router/coordinator.dart';
+import 'package:myapp/src/utils/date/date_helper.dart';
+import 'dart:typed_data';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class MapPageBloc extends Cubit<MapPageState> {
-  MapPageBloc() : super(MapPageState(events: []));
-  // MapController mapController = MapController();
+  MapPageBloc({required List<MEvent> events})
+      : super(MapPageState(events: events, markers: []));
+
+  void updateData(List<MEvent> events) {
+    emit(state.copyWith(events: events, isLoadingCurrentLocation: true));
+    getCurrentLocation();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await onBuildCompleted();
+    });
+  }
 
   DomainManager domain = DomainManager();
+  GoogleMapController? mapController;
 
-  Future<void> getCurrentLocation() async {
-    Location location = Location();
-    LocationData currentLocation;
+  void onMapCreate(GoogleMapController controller) {
+    mapController ??= controller;
+  }
+
+  void getCurrentLocation() async {
+    Position currentLocation;
     bool serviceEnabled;
-    PermissionStatus permissionGranted;
+    LocationPermission permission;
     try {
-      serviceEnabled = await location.serviceEnabled();
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
-        serviceEnabled = await location.requestService();
-        if (!serviceEnabled) {
-          emit(state.copyWith(isLoadingCurrentLocation: false));
-          return;
+        return Future.error('Location services are disabled.');
+      }
+
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          return Future.error('Location permissions are denied');
         }
       }
 
-      permissionGranted = await location.hasPermission();
-      if (permissionGranted == PermissionStatus.denied) {
-        permissionGranted = await location.requestPermission();
-        if (permissionGranted != PermissionStatus.granted) {
-          emit(state.copyWith(isLoadingCurrentLocation: false));
-          return;
-        }
+      if (permission == LocationPermission.deniedForever) {
+        return Future.error(
+            'Location permissions are permanently denied, we cannot request permissions.');
       }
-
-      currentLocation = await location.getLocation();
-
-      final locationLatLng = LatLng(currentLocation.latitude ?? 10.790159,
-          currentLocation.longitude ?? 106.6557574);
+      currentLocation = await Geolocator.getCurrentPosition();
+      final locationLatLng =
+          LatLng(currentLocation.latitude, currentLocation.longitude);
       emit(state.copyWith(
           currentLocation: locationLatLng, isLoadingCurrentLocation: false));
     } catch (e) {
@@ -48,17 +69,45 @@ class MapPageBloc extends Cubit<MapPageState> {
     }
   }
 
-  void selectEvent(int event) {
-    emit(state.copyWith(currentEvent: event));
+  Future<void> onBuildCompleted() async {
+    final markers = await Future.wait(state.events.map((value) async {
+      return await generateMarkersFromWidgets(value);
+    }));
+    emit(state.copyWith(markers: markers));
   }
 
-  void getEvent() {
-    final result = domain.eventMock.getAllEvent();
-    emit(state.copyWith(events: result.data));
+  Future<Marker> generateMarkersFromWidgets(MEvent event) async {
+    const int size = 100;
+    final File markerImageFile =
+        await DefaultCacheManager().getSingleFile(event.images?[0] ?? "");
+    final Uint8List markerImageBytes = await markerImageFile.readAsBytes();
+    final Codec markerImageCodec = await instantiateImageCodec(markerImageBytes,
+        targetWidth: size, targetHeight: size);
+    final FrameInfo frameInfo = await markerImageCodec.getNextFrame();
+    final ByteData? byteData = await frameInfo.image.toByteData(
+      format: ImageByteFormat.png,
+    );
+    final Uint8List resizedMarkerImageBytes = byteData!.buffer.asUint8List();
+
+    return Marker(
+      markerId: MarkerId(event.id ?? ""),
+      position: event.location ?? const LatLng(0, 0),
+      icon: BitmapDescriptor.fromBytes(resizedMarkerImageBytes,
+          size: const Size.square(0.5)),
+      infoWindow: InfoWindow(
+        title: event.name,
+        snippet: DateHelper.getFullDateTime(event.startDate),
+        onTap: () {
+          AppCoordinator.showEventDetails(id: event.id ?? "");
+        },
+      ),
+    );
   }
 
   @override
   Future<void> close() {
+    mapController?.dispose();
+
     return super.close();
   }
 }

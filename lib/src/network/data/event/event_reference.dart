@@ -354,6 +354,29 @@ class EventReference extends BaseCollectionReference<MEvent> {
     }
   }
 
+  Future<MResult<List<MEvent>>> getEventsFavoriteByUser(String userId,
+      [MEvent? lastEvent]) async {
+    try {
+      final QuerySnapshot<MEvent> querySnapshot = await ref
+          .where('favoritesId', arrayContains: userId)
+          .orderBy('startDate')
+          .orderBy('countFollowers', descending: true)
+          .startAfter(lastEvent != null
+              ? [
+                  lastEvent.startDate?.toIso8601String(),
+                  lastEvent.followersId?.length
+                ]
+              : [0])
+          .limit(MPagination.defaultPageLimit)
+          .get()
+          .timeout(const Duration(seconds: 10));
+      final docs = querySnapshot.docs.map((e) => e.data()).toList();
+      return MResult.success(docs);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
   Future<MResult<List<MEvent>>> getEventsBySearch(String search, String userId,
       [MEvent? lastEvent]) async {
     try {
@@ -381,6 +404,158 @@ class EventReference extends BaseCollectionReference<MEvent> {
           .where('caseSearchName', arrayContains: search)
           .orderBy('host')
           .orderBy('startDate')
+          .count()
+          .get()
+          .timeout(const Duration(seconds: 10));
+      final result = querySnapshot.count;
+      return MResult.success(result);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<int>> getCountEventsFavoriteByUser(
+    String userId,
+  ) async {
+    try {
+      final AggregateQuerySnapshot querySnapshot = await ref
+          .where('favoritesId', arrayContains: userId)
+          .orderBy('startDate')
+          .orderBy('countFollowers', descending: true)
+          .count()
+          .get()
+          .timeout(const Duration(seconds: 10));
+      final result = querySnapshot.count;
+      return MResult.success(result);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<List<MEvent>>> getEventsFollowedByUser(String userId,
+      [MEvent? lastEvent]) async {
+    try {
+      final QuerySnapshot<MEvent> querySnapshot = await ref
+          .where('followersId', arrayContains: userId)
+          .orderBy('startDate')
+          .orderBy('countFollowers', descending: true)
+          .startAfter(lastEvent != null
+              ? [
+                  lastEvent.startDate?.toIso8601String(),
+                  lastEvent.host?.followers?.length
+                ]
+              : [0])
+          .limit(MPagination.defaultPageLimit)
+          .get()
+          .timeout(const Duration(seconds: 10));
+      final docs = querySnapshot.docs.map((e) => e.data()).toList();
+      return MResult.success(docs);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  List<String> _typesToString(List<TypeEvent> types) {
+    if (types.isEmpty) {
+      return TypeEvent.values.map((e) => e.name).toList();
+    }
+
+    return types.map((e) => e.name).toList();
+  }
+
+  Future<MResult<List<MEvent>>> getEventsByFilter(
+      List<TypeEvent> types, DateTime firstDate, DateTime lastDate,
+      [MEvent? lastEvent]) async {
+    try {
+      final QuerySnapshot<MEvent> querySnapshot = await ref
+          .where('startDate', isGreaterThan: firstDate.toIso8601String())
+          .where('startDate', isLessThan: lastDate.toIso8601String())
+          .where('type', whereIn: _typesToString(types))
+          .orderBy('startDate')
+          .orderBy('host')
+          .startAfter(lastEvent != null
+              ? [lastEvent.startDate?.toIso8601String(), lastEvent.host?.id]
+              : [0])
+          .get()
+          .timeout(const Duration(seconds: 10));
+      final docs = querySnapshot.docs.map((e) => e.data()).toList();
+      return MResult.success(docs);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<int>> getCountEventsFollowedByUser(
+    String userId,
+  ) async {
+    try {
+      final AggregateQuerySnapshot querySnapshot = await ref
+          .where('followersId', arrayContains: userId)
+          .orderBy('startDate')
+          .orderBy('countFollowers', descending: true)
+          .count()
+          .get()
+          .timeout(const Duration(seconds: 10));
+      final result = querySnapshot.count;
+      return MResult.success(result);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<List<MEvent>>> getEventsHostByUser(String userId,
+      [MEvent? lastEvent]) async {
+    try {
+      final QuerySnapshot<MEvent> querySnapshot = await ref
+          .where('host', isEqualTo: userId)
+          .orderBy('startDate')
+          .orderBy('deadline')
+          .startAfter(lastEvent != null
+              ? [
+                  lastEvent.startDate?.toIso8601String(),
+                  lastEvent.deadline?.toIso8601String()
+                ]
+              : [0])
+          .limit(MPagination.defaultPageLimit)
+          .get()
+          .timeout(const Duration(seconds: 10));
+      final docs = querySnapshot.docs.map((e) => e.data()).toList();
+      return MResult.success(docs);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<int>> getCountEventsHostByUser(
+    String userId,
+  ) async {
+    try {
+      final AggregateQuerySnapshot querySnapshot = await ref
+          .where('host', isEqualTo: userId)
+          .orderBy('startDate')
+          .orderBy('deadline')
+          .count()
+          .get()
+          .timeout(const Duration(seconds: 10));
+      final result = querySnapshot.count;
+      return MResult.success(result);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<int>> getCountEventsByFilter(
+    List<TypeEvent> types,
+    DateTime firstDate,
+    DateTime lastDate,
+  ) async {
+    try {
+      final AggregateQuerySnapshot querySnapshot = await ref
+          .where('startDate', isGreaterThan: firstDate.toIso8601String())
+          .where('startDate', isLessThan: lastDate.toIso8601String())
+          .where('type', whereIn: _typesToString(types))
+          .orderBy('startDate')
+          .orderBy('host')
           .count()
           .get()
           .timeout(const Duration(seconds: 10));
