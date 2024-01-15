@@ -15,59 +15,55 @@ class SearchView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (_) => SearchBloc(),
-        child: BlocBuilder<SearchBloc, SearchState>(
-          buildWhen: (previous, current) {
-            return previous.searchValue != current.searchValue ||
-                previous.type != current.type ||
-                !listEquals(current.resultEvent, previous.resultEvent) ||
-                !listEquals(current.resultPerson, previous.resultPerson);
-          },
-          builder: (context, state) {
-            return DefaultTabController(
-              length: 2,
-              child: Scaffold(
-                appBar: AppBarCustom(
-                  title: XInput(
-                    value: state.searchValue,
-                    onChanged: (value) {
-                      context.read<SearchBloc>().setSearchValue(value);
-                    },
-                    decoration: const InputDecoration(
-                      hintText: "Search event or people",
-                      // prefixIcon: Icon(Icons.search),
-                      // prefixIconColor: AppColors.grey,
-                      border: InputBorder.none,
-                    ),
-                  ),
-                  bottom: TabBar(
-                    labelStyle: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    onTap: (value) {
-                      context.read<SearchBloc>().setType(value);
-                    },
-                    unselectedLabelColor: AppColors.grey,
-                    tabs: const [
-                      Tab(
-                        text: "Event",
+      create: (_) => SearchBloc(),
+      child: Builder(builder: (context) {
+        return DefaultTabController(
+          length: 2,
+          child: Scaffold(
+            appBar: AppBarCustom(
+              title: BlocBuilder<SearchBloc, SearchState>(
+                  buildWhen: (previous, current) =>
+                      previous.searchValue != current.searchValue,
+                  builder: (context, state) {
+                    return XInput(
+                      value: state.searchValue,
+                      onChanged: (value) {
+                        context.read<SearchBloc>().setSearchValue(value);
+                      },
+                      decoration: const InputDecoration(
+                        hintText: "Search event or people",
+                        border: InputBorder.none,
                       ),
-                      Tab(
-                        text: "People",
-                      ),
-                    ],
+                    );
+                  }),
+              bottom: TabBar(
+                labelStyle: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
+                onTap: (value) {
+                  context.read<SearchBloc>().setType(value);
+                },
+                unselectedLabelColor: AppColors.grey,
+                tabs: const [
+                  Tab(
+                    text: "Event",
                   ),
-                ),
-                body: const TabBarView(
-                  children: [
-                    EventTabSearch(),
-                    PeopleTabSearch(),
-                  ],
-                ),
+                  Tab(
+                    text: "People",
+                  ),
+                ],
               ),
-            );
-          },
-        ));
+            ),
+            body: const TabBarView(
+              children: [
+                EventTabSearch(),
+                PeopleTabSearch(),
+              ],
+            ),
+          ),
+        );
+      }),
+    );
   }
 }

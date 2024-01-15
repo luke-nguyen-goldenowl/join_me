@@ -65,4 +65,16 @@ class EventRepositoryImpl {
   Future<MResult<int>> getCountEventsPastByUser(String userId) {
     return eventReference.getCountEventsPastByUser(userId);
   }
+
+  Future<MResult<List<MEvent>>> getEventsBySearch(String search, String userId,
+      [MEvent? lastEvent]) {
+    return eventReference.getEventsBySearch(search, userId);
+  }
+
+  Future<MResult<int>> getCountEventsBySearch(
+    String search,
+    String userId,
+  ) async {
+    return eventReference.getCountEventsBySearch(search, userId);
+  }
 }
