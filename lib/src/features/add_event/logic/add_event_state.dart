@@ -49,8 +49,7 @@ class AddEventState {
             event.description == null ||
             (event.description?.isEmpty ?? true) ||
             event.name == null ||
-            (event.name?.isEmpty ?? true) ||
-            event.maxAttendee <= 0)) {
+            (event.name?.isEmpty ?? true))) {
       return false;
     }
 
