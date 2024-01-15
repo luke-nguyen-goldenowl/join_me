@@ -12,7 +12,7 @@ class MPagination<T> {
     this.status = MStatus.initial,
   });
 
-  static const int defaultPageLimit = 1;
+  static const int defaultPageLimit = 10;
 
   final int pageLimit;
   final bool getFirst;
