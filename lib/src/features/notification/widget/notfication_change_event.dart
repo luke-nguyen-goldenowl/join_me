@@ -26,19 +26,27 @@ class NotificationChangeEvent extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            title: Expanded(
-              child: Text(
-                '${changeEvent.event.name}',
-                style: const TextStyle(fontWeight: FontWeight.bold),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
+            title: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    '${changeEvent.event.name}',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
             ),
-            subtitle: const Expanded(
-              child: Text(
-                'has been adjusted',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+            subtitle: const Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'has been adjusted',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
             ),
           ),
           Text(

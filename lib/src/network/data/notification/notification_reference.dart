@@ -13,7 +13,7 @@ import 'package:myapp/src/network/model/user/user.dart';
 import 'package:myapp/src/services/firebase_message.dart';
 import 'package:http/http.dart';
 import 'dart:io';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:myapp/src/utils/date/date_helper.dart';
 
 class NotificationReference extends BaseCollectionReference<NotificationModel> {
@@ -34,11 +34,10 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
 
   Future<Response> pushNotification(body) async {
     return await post(
-      Uri.parse('https://fcm.googleapis.com/fcm/send'),
+      Uri.parse(dotenv.get('URL_FCM')),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
-        HttpHeaders.authorizationHeader:
-            'key=AAAAwFGIay0:APA91bGAFQcKjrlh5KoBkNia_X9DDy7PQKjQWPI6Nl5bEm3I_-g_eU40QlPA3n4sXq1hsXWWRvBJM72HUAPiWNWYRPTKH1tL1RTdu3nN93tUocS8aTMGWfWg47J6y0RQCVlOKmtal1hw'
+        HttpHeaders.authorizationHeader: 'key=${dotenv.get('HEADER_FCM_KEY')}'
       },
       body: jsonEncode(body),
     );

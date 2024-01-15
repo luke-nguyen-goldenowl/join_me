@@ -13,7 +13,7 @@ class NotificationFavoriteEvent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
@@ -29,18 +29,26 @@ class NotificationFavoriteEvent extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            title: Expanded(
-              child: Text(
-                '"${followEvent.user.name}"  has liked',
-                style: const TextStyle(fontWeight: FontWeight.bold),
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-              ),
+            title: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    '"${followEvent.user.name}"  has liked',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
             ),
-            subtitle: Expanded(
-              child: Text(
-                followEvent.event.name ?? "",
-              ),
+            subtitle: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    followEvent.event.name ?? "",
+                  ),
+                ),
+              ],
             ),
           ),
           Text(
