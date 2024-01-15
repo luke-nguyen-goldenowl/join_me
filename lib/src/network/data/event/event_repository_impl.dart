@@ -89,6 +89,59 @@ class EventRepositoryImpl {
     return eventReference.getCountEventsPastByUser(userId);
   }
 
+  Future<MResult<MPaginationResponse<MEvent>>> getEventsFavoriteByUser(
+      String userId,
+      [MEvent? lastEvent]) async {
+    final events =
+        await eventReference.getEventsFavoriteByUser(userId, lastEvent);
+    if (events.isError) return MResult.error(events.error);
+
+    final paginationResponse =
+        MPaginationResponse<MEvent>(data: events.data ?? []);
+    return MResult.success(paginationResponse);
+  }
+
+  Future<MResult<int>> getCountEventsFavoriteByUser(
+    String userId,
+  ) {
+    return eventReference.getCountEventsFavoriteByUser(userId);
+  }
+
+  Future<MResult<MPaginationResponse<MEvent>>> getEventsFollowedByUser(
+      String userId,
+      [MEvent? lastEvent]) async {
+    final events =
+        await eventReference.getEventsFollowedByUser(userId, lastEvent);
+    if (events.isError) return MResult.error(events.error);
+
+    final paginationResponse =
+        MPaginationResponse<MEvent>(data: events.data ?? []);
+    return MResult.success(paginationResponse);
+  }
+
+  Future<MResult<int>> getCountEventsFollowedByUser(
+    String userId,
+  ) {
+    return eventReference.getCountEventsFollowedByUser(userId);
+  }
+
+  Future<MResult<MPaginationResponse<MEvent>>> getEventsHostByUser(
+      String userId,
+      [MEvent? lastEvent]) async {
+    final events = await eventReference.getEventsHostByUser(userId, lastEvent);
+    if (events.isError) return MResult.error(events.error);
+
+    final paginationResponse =
+        MPaginationResponse<MEvent>(data: events.data ?? []);
+    return MResult.success(paginationResponse);
+  }
+
+  Future<MResult<int>> getCountEventsHostByUser(
+    String userId,
+  ) {
+    return eventReference.getCountEventsHostByUser(userId);
+  }
+
   Future<MResult<List<MEvent>>> getEventsBySearch(String search, String userId,
       [MEvent? lastEvent]) {
     return eventReference.getEventsBySearch(search, userId);
