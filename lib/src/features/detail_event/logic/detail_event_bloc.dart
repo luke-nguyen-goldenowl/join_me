@@ -4,10 +4,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:myapp/src/features/account/logic/account_bloc.dart';
 import 'package:myapp/src/features/detail_event/logic/detail_event_state.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/src/features/home/logic/home_bloc.dart';
 import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/network/model/user/user.dart';
+import 'package:myapp/src/router/coordinator.dart';
 
 class DetailEventBloc extends Cubit<DetailEventState> {
   DetailEventBloc({required String eventId}) : super(DetailEventState()) {
@@ -36,6 +36,10 @@ class DetailEventBloc extends Cubit<DetailEventState> {
     } catch (e) {
       print(e);
     }
+  }
+
+  void goBack() {
+    AppCoordinator.pop(state.event);
   }
 
   void onPressedFollowHost() async {
@@ -85,15 +89,6 @@ class DetailEventBloc extends Cubit<DetailEventState> {
         isFollowed,
       );
       if (result.isSuccess) {
-        final homeBloc = GetIt.I<HomeBloc>();
-        final newListFollowedHome = [...homeBloc.state.followed];
-        if (isFollowed) {
-          newListFollowedHome
-              .removeWhere((element) => element.id == newEvent.id);
-        } else {
-          newListFollowedHome.add(newEvent);
-        }
-        homeBloc.emit(homeBloc.state.copyWith(followed: newListFollowedHome));
         emit(state.copyWith(event: newEvent));
       }
     } catch (e) {

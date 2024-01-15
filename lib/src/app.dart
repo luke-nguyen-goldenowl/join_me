@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:myapp/src/features/account/logic/account_bloc.dart';
-import 'package:myapp/src/features/home/logic/home_bloc.dart';
 import 'package:myapp/src/features/settings/logic/setting_bloc.dart';
 import 'package:myapp/src/router/router.dart';
 import 'package:myapp/src/theme/screen.dart';
@@ -27,7 +26,6 @@ class _MyAppState extends State<MyApp> {
       providers: [
         BlocProvider(create: (_) => SettingBloc()),
         BlocProvider(create: (_) => GetIt.I<AccountBloc>()),
-        BlocProvider(create: (_) => GetIt.I<HomeBloc>()),
       ],
       child: BlocBuilder<SettingBloc, SettingState>(builder: (context, state) {
         return MaterialApp.router(

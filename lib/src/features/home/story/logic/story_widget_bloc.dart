@@ -1,11 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:myapp/src/features/account/logic/account_bloc.dart';
-import 'package:myapp/src/features/home/logic/home_bloc.dart';
 import 'package:myapp/src/features/home/story/logic/story_widget_state.dart';
 import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/model/story/story.dart';
 import 'package:myapp/src/network/model/user/user.dart';
+import 'package:myapp/src/network/model/user_story/user_story.dart';
 import 'package:myapp/src/utils/date/date_helper.dart';
 import 'package:story_view/story_view.dart';
 
@@ -42,16 +42,19 @@ class StoryWidgetBloc extends Cubit<StoryWidgetState> {
     return storyItems;
   }
 
-  void handleOnStoryShow(List<MStory> stories, int index) async {
+  void handleOnStoryShow(
+      List<MStory> stories,
+      int index,
+      Function(int, int) handleSeenStory,
+      final List<MUserStory> userStory) async {
     try {
       final result = await domain.story
           .updateViewerStory(stories[index].id ?? "", user.id);
 
       if (result.isSuccess) {
-        final userStory = GetIt.I<HomeBloc>().state.userStory;
         final indexUser =
             userStory.indexWhere((element) => element.user.id == state.host.id);
-        GetIt.I<HomeBloc>().handleSeenStory(indexUser, index);
+        handleSeenStory(indexUser, index);
         emit(state.copyWith(
           date: DateHelper.getFormatStoryTime(stories[index].time),
           indexStory: index,

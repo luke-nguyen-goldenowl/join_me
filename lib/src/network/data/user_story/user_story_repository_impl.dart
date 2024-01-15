@@ -25,13 +25,32 @@ class UserStoryRepositoryImpl {
       for (int i = 0; i < listStories.length; i++) {
         if (listStories[i].isSuccess) {
           if (listStories[i].data?.isNotEmpty ?? false) {
-            result.add(MUserStory(
-                user: users.data?[i] ?? MUser.empty(),
-                stories: listStories[i].data ?? []));
+            final MUser user = users.data?.firstWhere((element) =>
+                    element.id == listStories[i].data?[0].host?.id) ??
+                MUser.empty();
+            result.add(
+                MUserStory(user: user, stories: listStories[i].data ?? []));
           }
         }
       }
       return MResult.success(result);
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult<MUserStory>> getUserStoryById(String userId) async {
+    try {
+      final user = await usersRef.getUser(userId);
+      final stories = await storyReference.getStoriesByUser(userId);
+
+      if (user.isSuccess && stories.isSuccess) {
+        final MUserStory userStory =
+            MUserStory(user: user.data!, stories: stories.data!);
+        return MResult.success(userStory);
+      }
+
+      return MResult.error("Some error");
     } catch (e) {
       return MResult.exception(e);
     }

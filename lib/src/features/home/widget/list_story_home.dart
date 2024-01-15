@@ -55,7 +55,7 @@ class ListStoryHome extends StatelessWidget {
                               builder: ((context, state) {
                                 return StoryItem(
                                   host: state.userStory[index - 1].user,
-                                  hostIndex: index - 1,
+                                  stories: state.userStory[index - 1].stories,
                                 );
                               }),
                             ),
