@@ -12,13 +12,9 @@ class ListFollowingBloc extends Cubit<ListFollowingState> {
   final user = GetIt.I<AccountBloc>().state.user;
 
   void getFollowing() async {
-    try {
-      final result = await domain.user.getUsersByIds(user.followed ?? []);
-      if (result.isSuccess) {
-        emit(state.copyWith(followings: result.data));
-      }
-    } catch (e) {
-      print(e);
+    final result = await domain.user.getUsersByIds(user.followed ?? []);
+    if (result.isSuccess) {
+      emit(state.copyWith(followings: result.data));
     }
   }
 }

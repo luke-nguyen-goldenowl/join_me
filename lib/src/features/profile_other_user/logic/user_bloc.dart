@@ -11,42 +11,34 @@ class UserBloc extends Cubit<MUser> {
   DomainManager domain = DomainManager();
 
   void getUser(String userId) async {
-    try {
-      final user = await domain.user.getUser(userId);
-      if (user.isSuccess) {
-        if (!isClosed) emit(user.data ?? state);
-      }
-    } catch (e) {
-      print(e);
+    final user = await domain.user.getUser(userId);
+    if (user.isSuccess) {
+      if (!isClosed) emit(user.data ?? state);
     }
   }
 
   void onPressedFollowHost() async {
-    try {
-      List<String> newFollower = [...state.followers!];
-      final user = GetIt.I<AccountBloc>().state.user.copyWith();
-      List<String> newFollowed = [...user.followed!];
-      final bool isFollowed;
-      if (newFollower.contains(user.id)) {
-        newFollower.remove(user.id);
-        newFollowed.remove(state.id);
-        isFollowed = true;
-      } else {
-        newFollower.add(user.id);
-        newFollowed.add(state.id);
-        isFollowed = false;
-      }
+    List<String> newFollower = [...state.followers!];
+    final user = GetIt.I<AccountBloc>().state.user.copyWith();
+    List<String> newFollowed = [...user.followed!];
+    final bool isFollowed;
+    if (newFollower.contains(user.id)) {
+      newFollower.remove(user.id);
+      newFollowed.remove(state.id);
+      isFollowed = true;
+    } else {
+      newFollower.add(user.id);
+      newFollowed.add(state.id);
+      isFollowed = false;
+    }
 
-      final result =
-          await domain.user.updateFollowers(state.id, user.id, isFollowed);
-      if (result.isSuccess) {
-        emit(state.copyWith(followers: newFollower));
-        GetIt.I<AccountBloc>().emit(GetIt.I<AccountBloc>()
-            .state
-            .copyWith(user: user.copyWith(followed: newFollowed)));
-      }
-    } catch (e) {
-      print(e);
+    final result =
+        await domain.user.updateFollowers(state.id, user.id, isFollowed);
+    if (result.isSuccess) {
+      emit(state.copyWith(followers: newFollower));
+      GetIt.I<AccountBloc>().emit(GetIt.I<AccountBloc>()
+          .state
+          .copyWith(user: user.copyWith(followed: newFollowed)));
     }
   }
 }
