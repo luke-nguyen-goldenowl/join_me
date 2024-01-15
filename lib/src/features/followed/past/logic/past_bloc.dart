@@ -15,11 +15,6 @@ class PastBloc extends PaginationBloc<PastState> {
 
   @override
   Future<MResult<MPaginationResponse<MEvent>>> get getDataAPI async {
-    final data =
-        await domain.event.getEventsPastByUser(user.id, state.data.lastDoc);
-    final paginationResponse = MPaginationResponse<MEvent>(
-      data: data.data ?? [],
-    );
-    return MResult.success(paginationResponse);
+    return await domain.event.getEventsPastByUser(user.id, state.data.lastDoc);
   }
 }

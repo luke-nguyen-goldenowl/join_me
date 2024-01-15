@@ -14,11 +14,7 @@ class UpcomingBloc extends PaginationBloc<UpComingState> {
   DomainManager get domain => DomainManager();
   @override
   Future<MResult<MPaginationResponse<MEvent>>> get getDataAPI async {
-    final data =
-        await domain.event.getEventsUpcomingByUser(user.id, state.data.lastDoc);
-
-    final paginationResponse =
-        MPaginationResponse<MEvent>(data: data.data ?? []);
-    return MResult.success(paginationResponse);
+    return await domain.event
+        .getEventsUpcomingByUser(user.id, state.data.lastDoc);
   }
 }

@@ -8,14 +8,12 @@ class MPagination<T> {
     this.pageLimit = defaultPageLimit,
     this.data = const [],
     this.hasMore = true,
-    this.getFirst = false,
     this.status = MStatus.initial,
   });
 
   static const int defaultPageLimit = 10;
 
   final int pageLimit;
-  final bool getFirst;
 
   List<T> data;
   final MStatus status;
@@ -34,8 +32,7 @@ class MPagination<T> {
     final data = [...this.data, ...items];
     return this.copyWith(
       data: data,
-      hasMore: (!this.getFirst || items.length == this.pageLimit),
-      getFirst: !this.getFirst ? true : null,
+      hasMore: items.length == this.pageLimit,
       status: MStatus.initial,
     );
   }
@@ -44,8 +41,7 @@ class MPagination<T> {
     final data = [...this.data, ...model.data];
     return this.copyWith(
       data: data,
-      hasMore: (!this.getFirst || model.data.length == this.pageLimit),
-      getFirst: !this.getFirst ? true : null,
+      hasMore: model.data.length == this.pageLimit,
       status: MStatus.initial,
     );
   }
@@ -67,13 +63,12 @@ class MPagination<T> {
     int? pageLimit,
     MStatus? status,
     bool? hasMore,
-    bool? getFirst,
   }) {
     return MPagination<T>(
-        data: data ?? this.data,
-        pageLimit: pageLimit ?? this.pageLimit,
-        status: status ?? this.status,
-        hasMore: hasMore ?? this.hasMore,
-        getFirst: getFirst ?? this.getFirst);
+      data: data ?? this.data,
+      pageLimit: pageLimit ?? this.pageLimit,
+      status: status ?? this.status,
+      hasMore: hasMore ?? this.hasMore,
+    );
   }
 }

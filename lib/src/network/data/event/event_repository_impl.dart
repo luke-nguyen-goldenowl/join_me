@@ -1,4 +1,5 @@
 import 'package:myapp/src/network/data/event/event_reference.dart';
+import 'package:myapp/src/network/model/common/pagination/pagination_response.dart';
 import 'package:myapp/src/network/model/common/result.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 
@@ -48,18 +49,40 @@ class EventRepositoryImpl {
     return eventReference.getEventsFollow(userId);
   }
 
-  Future<MResult<List<MEvent>>> getEventsUpcomingByUser(String userId,
-      [MEvent? lastEvent]) {
-    return eventReference.getEventsUpcomingByUser(userId, lastEvent);
+  Future<MResult<MPaginationResponse<MEvent>>> getEventsUpcomingByUser(
+      String userId,
+      [MEvent? lastEvent]) async {
+    try {
+      final events =
+          await eventReference.getEventsUpcomingByUser(userId, lastEvent);
+      if (events.isError) return MResult.error(events.error);
+
+      final paginationResponse =
+          MPaginationResponse<MEvent>(data: events.data ?? []);
+      return MResult.success(paginationResponse);
+    } catch (e) {
+      return MResult.exception(e);
+    }
   }
 
   Future<MResult<int>> getCountEventsUpcomingByUser(String userId) {
     return eventReference.getCountEventsUpcomingByUser(userId);
   }
 
-  Future<MResult<List<MEvent>>> getEventsPastByUser(String userId,
-      [MEvent? lastEvent]) {
-    return eventReference.getEventsPastByUser(userId, lastEvent);
+  Future<MResult<MPaginationResponse<MEvent>>> getEventsPastByUser(
+      String userId,
+      [MEvent? lastEvent]) async {
+    try {
+      final events =
+          await eventReference.getEventsPastByUser(userId, lastEvent);
+      if (events.isError) return MResult.error(events.error);
+
+      final paginationResponse =
+          MPaginationResponse<MEvent>(data: events.data ?? []);
+      return MResult.success(paginationResponse);
+    } catch (e) {
+      return MResult.exception(e);
+    }
   }
 
   Future<MResult<int>> getCountEventsPastByUser(String userId) {
