@@ -18,9 +18,9 @@ class UserBloc extends Cubit<MUser> {
   }
 
   void onPressedFollowHost() async {
-    List<String> newFollower = [...state.followers!];
+    List<String> newFollower = [...state.followers ?? []];
     final user = GetIt.I<AccountBloc>().state.user.copyWith();
-    List<String> newFollowed = [...user.followed!];
+    List<String> newFollowed = [...user.followed ?? []];
     final bool isFollowed;
     if (newFollower.contains(user.id)) {
       newFollower.remove(user.id);

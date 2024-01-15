@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/gen/assets.gen.dart';
-import 'package:myapp/src/features/detail_event/widget/sliver_app_bar_custom_detail_event.dart';
-
 import 'package:myapp/src/features/manage_event/manage_event_detail/logic/manage_event_detail_bloc.dart';
-import 'package:myapp/src/features/manage_event/manage_event_detail/logic/manage_event_detail_state.dart';
 import 'package:myapp/src/features/manage_event/manage_event_detail/widget/time_event_manage_event_detail.dart';
-import 'package:myapp/src/network/data/event/event_repository_mock.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
 
@@ -39,21 +35,6 @@ class ManageEventDetailPage extends StatelessWidget {
           Expanded(
             child: CustomScrollView(
               slivers: [
-                // BlocBuilder<ManageEventDetailBloc, ManageEventDetailState>(
-                //   buildWhen: (previous, current) =>
-                //       previous.indexPageImage != current.indexPageImage,
-                //   builder: ((context, state) {
-                //     return SliverAppBarCustomDetailEvent(
-                //       indexPageImage: state.indexPageImage,
-                //       images: listImage,
-                //       controller:
-                //           context.read<ManageEventDetailBloc>().controller,
-                //       setIndexPageImage: context
-                //           .read<ManageEventDetailBloc>()
-                //           .setIndexPageImage,
-                //     );
-                //   }),
-                // ),
                 SliverList(
                   delegate: SliverChildListDelegate([
                     const SizedBox(height: 20),
