@@ -1,4 +1,4 @@
-import 'meta/pagination_meta.dart';
+// import 'meta/pagination_meta.dart';
 
 class MPaginationResponse<T> {
   factory MPaginationResponse.fromJson(Map<String, Object?> json,
@@ -7,13 +7,13 @@ class MPaginationResponse<T> {
       data: (json['data'] as List<dynamic>)
           .map((e) => jsonToObject(e as Map<String, dynamic>))
           .toList(),
-      meta: MPaginationMeta.fromJson(json['meta'] as Map<String, dynamic>),
+      // meta: MPaginationMeta.fromJson(json['meta'] as Map<String, dynamic>),
     );
   }
   MPaginationResponse({
     required this.data,
-    required this.meta,
+    // required this.meta,
   });
   final List<T> data;
-  final MPaginationMeta meta;
+  // final MPaginationMeta meta;
 }
