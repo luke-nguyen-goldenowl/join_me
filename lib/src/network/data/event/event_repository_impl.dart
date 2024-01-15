@@ -63,18 +63,8 @@ class EventRepositoryImpl {
 
   Future<MResult<MPaginationResponse<MEvent>>> getEventsUpcomingByUser(
       String userId,
-      [MEvent? lastEvent]) async {
-    try {
-      final events =
-          await eventReference.getEventsUpcomingByUser(userId, lastEvent);
-      if (events.isError) return MResult.error(events.error);
-
-      final paginationResponse =
-          MPaginationResponse<MEvent>(data: events.data ?? []);
-      return MResult.success(paginationResponse);
-    } catch (e) {
-      return MResult.exception(e);
-    }
+      [MEvent? lastEvent]) {
+    return eventReference.getEventsUpcomingByUser(userId, lastEvent);
   }
 
   Future<MResult<int>> getCountEventsUpcomingByUser(String userId) {
@@ -83,18 +73,8 @@ class EventRepositoryImpl {
 
   Future<MResult<MPaginationResponse<MEvent>>> getEventsPastByUser(
       String userId,
-      [MEvent? lastEvent]) async {
-    try {
-      final events =
-          await eventReference.getEventsPastByUser(userId, lastEvent);
-      if (events.isError) return MResult.error(events.error);
-
-      final paginationResponse =
-          MPaginationResponse<MEvent>(data: events.data ?? []);
-      return MResult.success(paginationResponse);
-    } catch (e) {
-      return MResult.exception(e);
-    }
+      [MEvent? lastEvent]) {
+    return eventReference.getEventsPastByUser(userId, lastEvent);
   }
 
   Future<MResult<int>> getCountEventsPastByUser(String userId) {

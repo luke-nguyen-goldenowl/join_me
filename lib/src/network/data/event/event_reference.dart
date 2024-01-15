@@ -244,7 +244,8 @@ class EventReference extends BaseCollectionReference<MEvent> {
     }
   }
 
-  Future<MResult<List<MEvent>>> getEventsUpcomingByUser(String userId,
+  Future<MResult<MPaginationResponse<MEvent>>> getEventsUpcomingByUser(
+      String userId,
       [MEvent? lastEvent]) async {
     try {
       DateTime currentDate = DateTime.now();
@@ -261,7 +262,8 @@ class EventReference extends BaseCollectionReference<MEvent> {
           .get()
           .timeout(const Duration(seconds: 10));
       final docs = querySnapshot.docs.map((e) => e.data()).toList();
-      return MResult.success(docs);
+      final paginationResponse = MPaginationResponse<MEvent>(data: docs);
+      return MResult.success(paginationResponse);
     } catch (e) {
       return MResult.exception(e);
     }
@@ -306,7 +308,8 @@ class EventReference extends BaseCollectionReference<MEvent> {
     }
   }
 
-  Future<MResult<List<MEvent>>> getEventsPastByUser(String userId,
+  Future<MResult<MPaginationResponse<MEvent>>> getEventsPastByUser(
+      String userId,
       [MEvent? lastEvent]) async {
     try {
       DateTime currentDate = DateTime.now();
@@ -323,7 +326,8 @@ class EventReference extends BaseCollectionReference<MEvent> {
           .get()
           .timeout(const Duration(seconds: 10));
       final docs = querySnapshot.docs.map((e) => e.data()).toList();
-      return MResult.success(docs);
+      final paginationResponse = MPaginationResponse<MEvent>(data: docs);
+      return MResult.success(paginationResponse);
     } catch (e) {
       return MResult.exception(e);
     }
