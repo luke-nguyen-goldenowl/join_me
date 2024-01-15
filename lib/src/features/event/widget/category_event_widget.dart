@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/src/features/event/logic/event_view_bloc.dart';
 import 'package:myapp/src/features/event/logic/event_view_state.dart';
-import 'package:myapp/src/features/event/logic/type_event.dart';
+import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/theme/colors.dart';
 
 class CategoryEventWidget extends StatelessWidget {
@@ -26,18 +26,18 @@ class CategoryEventWidget extends StatelessWidget {
           height: 50,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: categoryEvents.length,
+            itemCount: TypeEvent.values.length,
             itemBuilder: ((contextListView, index) {
               return Row(
                 children: [
                   ChoiceChip.elevated(
                     showCheckmark: false,
-                    avatar: Icon(categoryEvents[index].icon),
+                    avatar: Icon(TypeEvent.values[index].icon),
                     onSelected: (value) {
-                      eventBloc.updateTypes(categoryEvents[index].type);
+                      eventBloc.updateTypes(TypeEvent.values[index]);
                     },
-                    label: Text(categoryEvents[index].type.name),
-                    selected: state.types.contains(categoryEvents[index].type),
+                    label: Text(TypeEvent.values[index].text),
+                    selected: state.types.contains(TypeEvent.values[index]),
                     selectedColor: AppColors.rosyPink.withOpacity(0.7),
                     backgroundColor: AppColors.background,
                   ),

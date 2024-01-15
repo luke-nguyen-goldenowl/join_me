@@ -1,9 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/src/features/event/logic/event_view_state.dart';
+import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 
 class EventViewBloc extends Cubit<EventViewState> {
-  EventViewBloc() : super(EventViewState.ds());
+  EventViewBloc() : super(EventViewState.ds()) {
+    updateWeekDays(DateTime.now());
+  }
+
+  DomainManager get domain => DomainManager();
 
   void updateWeekDays(DateTime date) {
     DateTime firstDayOfWeek = date.subtract(Duration(days: date.weekday - 1));
@@ -19,6 +24,7 @@ class EventViewBloc extends Cubit<EventViewState> {
       firstDate: weekDays.first,
       lastDate: weekDays.last,
     ));
+    getEvent();
   }
 
   void updateTypeShow() {
@@ -34,6 +40,14 @@ class EventViewBloc extends Cubit<EventViewState> {
     }
   }
 
+  void getEvent() async {
+    final result = await domain.event
+        .getEventsByFilter(state.types, state.firstDate, state.lastDate);
+    if (result.isSuccess) {
+      emit(state.copyWith(events: result.data));
+    }
+  }
+
   void updateTypes(TypeEvent type) {
     List<TypeEvent> types = [...state.types];
     if (!types.remove(type)) types.add(type);
@@ -41,5 +55,7 @@ class EventViewBloc extends Cubit<EventViewState> {
     emit(state.copyWith(
       types: types,
     ));
+
+    getEvent();
   }
 }

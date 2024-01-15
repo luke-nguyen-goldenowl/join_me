@@ -1,3 +1,5 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,6 +7,7 @@ import 'package:myapp/src/features/event/logic/event_view_bloc.dart';
 import 'package:myapp/src/features/event/logic/event_view_state.dart';
 import 'package:myapp/src/features/event/widget/calendar_event_widget.dart';
 import 'package:myapp/src/features/event/widget/category_event_widget.dart';
+import 'package:myapp/src/features/event/widget/list_event_page.dart';
 import 'package:myapp/src/features/event/widget/map_page.dart';
 import 'package:myapp/src/theme/colors.dart';
 
@@ -16,7 +19,7 @@ class EventHomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => EventViewBloc()..updateWeekDays(DateTime.now()),
+      create: (_) => EventViewBloc(),
       child: const EventHomePage(),
     );
   }
@@ -29,21 +32,16 @@ class EventHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<EventViewBloc, EventViewState>(
-      buildWhen: (previousState, currentState) {
-        return previousState.firstDate != currentState.firstDate ||
-            previousState.lastDate != currentState.lastDate ||
-            previousState.typeShow != currentState.typeShow ||
-            !listEquals(previousState.weekDays, currentState.weekDays) ||
-            !listEquals(previousState.types, currentState.types);
-      },
-      builder: ((context, state) {
-        return Scaffold(
-          backgroundColor: AppColors.white,
-          appBar: AppBarCustom(
-            title: const Text("Events"),
-            actions: [
-              IconButton(
+    return Scaffold(
+      backgroundColor: AppColors.white,
+      appBar: AppBarCustom(
+        title: const Text("Events"),
+        actions: [
+          BlocBuilder<EventViewBloc, EventViewState>(
+            buildWhen: (previousState, currentState) =>
+                previousState.typeShow != currentState.typeShow,
+            builder: ((context, state) {
+              return IconButton(
                 onPressed: () {
                   context.read<EventViewBloc>().updateTypeShow();
                 },
@@ -53,56 +51,35 @@ class EventHomePage extends StatelessWidget {
                       : Icons.list,
                   size: 30,
                 ),
-              )
-            ],
-          ),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Column(
-              children: [
-                const CategoryEventWidget(),
-                const CalendarEventWidget(),
-                const SizedBox(height: 10),
-                Expanded(
+              );
+            }),
+          )
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: Column(
+          children: [
+            const CategoryEventWidget(),
+            const CalendarEventWidget(),
+            const SizedBox(height: 10),
+            BlocBuilder<EventViewBloc, EventViewState>(
+              buildWhen: (previous, current) =>
+                  !listEquals(previous.events, current.events) ||
+                  previous.typeShow != current.typeShow,
+              // previous.firstDate != current.firstDate ||
+              // previous.lastDate != current.lastDate,
+              builder: ((context, state) {
+                return Expanded(
                   child: state.typeShow == TypeShow.list
                       ? const ListEventItemEventView()
-                      : const MapPage(),
-                ),
-              ],
-            ),
-          ),
-        );
-      }),
-    );
-  }
-}
-
-class ListEventItemEventView extends StatelessWidget {
-  const ListEventItemEventView({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
-              return const Column(
-                children: [
-                  SizedBox(
-                    height: 250,
-                    // child: EventItemHome(id: index.toString()),
-                  ),
-                  SizedBox(height: 20),
-                ],
-              );
-            },
-            childCount: 50,
-          ),
+                      : MapPage(events: state.events),
+                );
+              }),
+            )
+          ],
         ),
-      ],
+      ),
     );
   }
 }
