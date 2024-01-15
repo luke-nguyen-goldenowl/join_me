@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:myapp/src/network/firebase/base_collection.dart';
 import 'package:myapp/src/network/model/common/pagination/pagination.dart';
+import 'package:myapp/src/network/model/common/pagination/pagination_response.dart';
 import 'package:myapp/src/network/model/common/result.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/network/data/user/user_reference.dart';
@@ -34,15 +35,7 @@ class EventReference extends BaseCollectionReference<MEvent> {
   }
 
   Future<MResult<MEvent>> updateEvent(MEvent event) async {
-    try {
-      final MResult<MEvent> result = await set(event);
-      if (result.isSuccess) {
-        return MResult.success(result.data);
-      }
-      return MResult.error("update event fail");
-    } catch (e) {
-      return MResult.exception(e);
-    }
+    return await set(event);
   }
 
   Future<MResult<MEvent>> getEvent(String eventId) async {
@@ -142,7 +135,8 @@ class EventReference extends BaseCollectionReference<MEvent> {
     }
   }
 
-  Future<MResult<List<MEvent>>> getEventsHostByUser(String userId,
+  Future<MResult<MPaginationResponse<MEvent>>> getEventsHostByUser(
+      String userId,
       [MEvent? lastEvent]) async {
     try {
       final QuerySnapshot<MEvent> querySnapshot = await ref
@@ -159,7 +153,8 @@ class EventReference extends BaseCollectionReference<MEvent> {
           .get()
           .timeout(const Duration(seconds: 10));
       final docs = querySnapshot.docs.map((e) => e.data()).toList();
-      return MResult.success(docs);
+      final paginationResponse = MPaginationResponse<MEvent>(data: docs);
+      return MResult.success(paginationResponse);
     } catch (e) {
       return MResult.exception(e);
     }

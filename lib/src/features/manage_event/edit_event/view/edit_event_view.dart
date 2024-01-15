@@ -85,7 +85,8 @@ class EditEventPage extends StatelessWidget {
         ),
         BlocBuilder<EditEventBloc, EditEventState>(
           buildWhen: (previous, current) =>
-              previous.currentPage != current.currentPage,
+              previous.currentPage != current.currentPage ||
+              previous.isSaving != current.isSaving,
           builder: ((context, state) {
             if (state.isSaving) {
               return Container(

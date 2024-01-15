@@ -33,7 +33,8 @@ class EventRepositoryImpl {
     return eventReference.getEventsByUser(userId);
   }
 
-  Future<MResult<List<MEvent>>> getEventsHostByUser(String userId,
+  Future<MResult<MPaginationResponse<MEvent>>> getEventsHostByUser(
+      String userId,
       [MEvent? lastEvent]) {
     return eventReference.getEventsHostByUser(userId, lastEvent);
   }

@@ -84,7 +84,8 @@ class AddEventPage extends StatelessWidget {
         ),
         BlocBuilder<AddEventBloc, AddEventState>(
           buildWhen: (previous, current) =>
-              previous.currentPage != current.currentPage,
+              previous.currentPage != current.currentPage ||
+              previous.isPosting != current.isPosting,
           builder: ((context, state) {
             if (state.isPosting) {
               return Container(
