@@ -74,7 +74,7 @@ class AddStoryBloc extends Cubit<AddStoryState> {
       if (!isClosed) emit(state.copyWith(isPosting: false));
 
       if (result.isSuccess) {
-        AppCoordinator.pop();
+        AppCoordinator.pop(result.data);
         XToast.success('Create story success');
       } else {
         XAlert.show(title: 'Create story fail', body: result.error);

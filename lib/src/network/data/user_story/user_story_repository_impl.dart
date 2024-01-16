@@ -33,6 +33,11 @@ class UserStoryRepositoryImpl {
           }
         }
       }
+      int index = result.indexWhere((element) => element.user.id == userIds[0]);
+      if (index != -1) {
+        MUserStory userStory = result.removeAt(index);
+        result.insert(0, userStory);
+      }
       return MResult.success(result);
     } catch (e) {
       return MResult.exception(e);

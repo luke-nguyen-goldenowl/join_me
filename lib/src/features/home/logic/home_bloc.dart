@@ -35,8 +35,8 @@ class HomeBloc extends Cubit<HomeState> {
 
   void getUsersEvents(MUser user) async {
     try {
-      final result =
-          await domain.userEvent.getUserStoryByIds(user.followed ?? []);
+      final result = await domain.userEvent
+          .getUserStoryByIds([user.id, ...user.followed ?? []]);
       if (result.isSuccess) {
         emit(state.copyWith(userStory: result.data));
       }
@@ -165,6 +165,21 @@ class HomeBloc extends Cubit<HomeState> {
       emit(state.copyWith(userStory: newUserStory));
     } catch (e) {
       print(e);
+    }
+  }
+
+  void goAddStoryScreen() async {
+    final MStory? story = await AppCoordinator.showAddStoryScreen();
+    if (story != null) {
+      final MUser user = GetIt.I<AccountBloc>().state.user;
+      if (state.userStory[0].user.id == user.id) {
+        final newStoriesOfUser = [...state.userStory[0].stories, story];
+        final MUserStory newMUserStory =
+            MUserStory(user: user, stories: newStoriesOfUser);
+        final newUserStory = [...state.userStory];
+        newUserStory[0] = newMUserStory;
+        emit(state.copyWith(userStory: newUserStory));
+      }
     }
   }
 }
