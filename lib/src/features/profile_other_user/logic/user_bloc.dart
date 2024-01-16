@@ -35,9 +35,8 @@ class UserBloc extends Cubit<MUser> {
     final result = await domain.user.updateFollowers(state, user, isFollowed);
     if (result.isSuccess) {
       emit(state.copyWith(followers: newFollower));
-      GetIt.I<AccountBloc>().emit(GetIt.I<AccountBloc>()
-          .state
-          .copyWith(user: user.copyWith(followed: newFollowed)));
+      final newUser = user.copyWith(followed: newFollowed);
+      GetIt.I<AccountBloc>().onUserChange(AccountState(user: newUser));
     }
   }
 }

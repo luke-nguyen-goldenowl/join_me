@@ -75,14 +75,13 @@ class PersonSearchWidget extends StatelessWidget {
                       onPressed: () {
                         context.read<PersonBloc>().onPressedFollowHost();
                       },
-                      child: Text(GetIt.I<AccountBloc>()
-                                  .state
-                                  .user
-                                  .followed
-                                  ?.contains(state.person.id) ??
-                              false
-                          ? "Following"
-                          : "Follow"),
+                      child: Text(
+                        state.person.followers?.contains(
+                                    GetIt.I<AccountBloc>().state.user.id) ??
+                                false
+                            ? "Following"
+                            : "Follow",
+                      ),
                     ),
                   )
                 ],

@@ -45,23 +45,28 @@ class DetailEventBloc extends Cubit<DetailEventState> {
   void onPressedFollowHost() async {
     try {
       List<String> newFollower = [...state.event?.host?.followers ?? []];
-      final MUser user = GetIt.I<AccountBloc>().state.user;
+      final user = GetIt.I<AccountBloc>().state.user.copyWith();
+      List<String> newFollowed = [...user.followed ?? []];
       final bool isFollowed;
       if (newFollower.contains(user.id)) {
         newFollower.remove(user.id);
+        newFollowed.remove(state.event?.host?.id ?? "");
         isFollowed = true;
       } else {
         newFollower.add(user.id);
+        newFollowed.add(state.event?.host?.id ?? "");
         isFollowed = false;
       }
-      final MUser newUser =
+      final MUser newHost =
           state.event?.host?.copyWith(followers: newFollower) ?? MUser.empty();
       final result =
-          await domain.user.updateFollowers(newUser, user, isFollowed);
+          await domain.user.updateFollowers(newHost, user, isFollowed);
       if (result.isSuccess) {
         final MEvent newEvent =
-            state.event?.copyWith(host: newUser) ?? MEvent();
+            state.event?.copyWith(host: newHost) ?? MEvent();
         emit(state.copyWith(event: newEvent));
+        final newUser = user.copyWith(followed: newFollowed);
+        GetIt.I<AccountBloc>().onUserChange(AccountState(user: newUser));
       }
     } catch (e) {
       print(e);
