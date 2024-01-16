@@ -157,8 +157,28 @@ class UserReference extends BaseCollectionReference<MUser> {
     String userId,
   ) async {
     try {
-      final result = await update(
-          userId, {'FCMToken': XFirebaseMessage.instance.currentToken});
+      final result = await update(userId, {
+        'fcmToken':
+            FieldValue.arrayUnion([XFirebaseMessage.instance.currentToken])
+      });
+      if (result.isError == false) {
+        return result;
+      } else {
+        return MResult.success(result.data);
+      }
+    } catch (e) {
+      return MResult.exception(e);
+    }
+  }
+
+  Future<MResult> removeFCMTokenUser(
+    String userId,
+  ) async {
+    try {
+      final token = XFirebaseMessage.instance.currentToken;
+      final result = await update(userId, {
+        'fcmToken': FieldValue.arrayRemove([token])
+      });
       if (result.isError == false) {
         return result;
       } else {

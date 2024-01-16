@@ -1,5 +1,7 @@
 // ignore_for_file: curly_braces_in_flow_control_structures
 
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:myapp/src/features/account/logic/account_bloc.dart';
@@ -114,21 +116,26 @@ class HomeBloc extends Cubit<HomeState> {
   }
 
   void goDetailEvent(int indexEvent, MEvent event) async {
-    final eventFromDetailEvent =
-        await AppCoordinator.showEventDetails(id: event.id ?? "") as MEvent;
-    if (event.followersId?.length != eventFromDetailEvent.followersId?.length) {
-      final newListFollowed = [...state.followed];
+    try {
+      final eventFromDetailEvent =
+          await AppCoordinator.showEventDetails(id: event.id ?? "") as MEvent?;
+      if (event.followersId?.length !=
+          eventFromDetailEvent?.followersId?.length) {
+        final newListFollowed = [...state.followed];
 
-      if (event.followersId != null &&
-          eventFromDetailEvent.followersId != null) {
-        if (event.followersId!.length >
-            eventFromDetailEvent.followersId!.length) {
-          newListFollowed.removeWhere((element) => element.id == event.id);
-        } else {
-          newListFollowed.add(eventFromDetailEvent);
+        if (event.followersId != null &&
+            eventFromDetailEvent?.followersId != null) {
+          if (event.followersId!.length >
+              eventFromDetailEvent!.followersId!.length) {
+            newListFollowed.removeWhere((element) => element.id == event.id);
+          } else {
+            newListFollowed.add(eventFromDetailEvent);
+          }
         }
+        emit(state.copyWith(followed: newListFollowed));
       }
-      emit(state.copyWith(followed: newListFollowed));
+    } catch (e) {
+      log(e.toString());
     }
   }
 

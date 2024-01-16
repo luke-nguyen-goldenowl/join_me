@@ -72,4 +72,10 @@ class UserRepositoryImpl extends UserRepository {
   ) async {
     return usersRef.updateFCMTokenUser(userId);
   }
+
+  Future<MResult> removeFCMTokenUser(
+    String userId,
+  ) async {
+    return usersRef.removeFCMTokenUser(userId);
+  }
 }

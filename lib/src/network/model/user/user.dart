@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:myapp/src/services/firebase_message.dart';
 import 'package:myapp/src/utils/utils.dart';
 
 class MUser {
@@ -9,7 +8,7 @@ class MUser {
   String? email;
   List<String>? followers;
   List<String>? followed;
-  String? fcmToken;
+  List<String> fcmToken;
   MUser({
     required this.id,
     this.name,
@@ -17,7 +16,7 @@ class MUser {
     this.email,
     this.followers,
     this.followed,
-    this.fcmToken,
+    this.fcmToken = const [],
   });
 
   factory MUser.empty() {
@@ -33,7 +32,7 @@ class MUser {
       'followers': followers ?? [],
       'followed': followed ?? [],
       'caseSearchName': _getCaseSearchName,
-      'fcmToken': XFirebaseMessage.instance.currentToken,
+      'fcmToken': fcmToken,
     };
   }
 
@@ -60,7 +59,8 @@ class MUser {
       email: map['email'],
       followers: List<String>.from((map['followers'])),
       followed: List<String>.from((map['followed'])),
-      fcmToken: map['fcmToken'],
+      fcmToken:
+          map['fcmToken'] != null ? List<String>.from((map['fcmToken'])) : [],
     );
   }
 
@@ -71,7 +71,7 @@ class MUser {
     String? email,
     List<String>? followers,
     List<String>? followed,
-    String? fcmToken,
+    List<String>? fcmToken,
   }) {
     return MUser(
       id: id ?? this.id,

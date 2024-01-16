@@ -55,7 +55,7 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
       final result = await add(notification);
       if (result.isSuccess) {
         final body = {
-          "to": event.host?.fcmToken ?? "",
+          "registration_ids": event.host?.fcmToken ?? [],
           "notification": {
             "title": 'Your event has a new follower',
             "body": '${user.name} has been followed ${event.name}',
@@ -86,7 +86,7 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
       final result = await add(notification);
       if (result.isSuccess) {
         final body = {
-          "to": event.host?.fcmToken ?? "",
+          "registration_ids": event.host?.fcmToken ?? [],
           "notification": {
             "title": 'Your event has a new favorite person',
             "body": '${user.name} has been liked ${event.name}',
@@ -118,7 +118,7 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
       final result = await add(notification);
       if (result.isSuccess) {
         final body = {
-          "to": host.fcmToken ?? "",
+          "registration_ids": host.fcmToken,
           "notification": {
             "title": 'You have a new follower',
             "body": '${follower.name} has been followed you',
@@ -157,20 +157,24 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
             .user
             .getUsersByIds(event.host?.followers ?? []);
         if (followers.isSuccess) {
-          List<Future<Response>> listNotification = followers.data!.map((e) {
-            final body = {
-              "to": e.fcmToken ?? "",
-              "notification": {
-                "title": 'The event you are following  ',
-                "body": '${event.name} has  has changed',
-                'image': event.images?[0] ?? ""
-              },
-            };
-            return pushNotification(body);
-          }).toList();
+          List<String> fcmTokens = [];
+          for (var element in followers.data!) {
+            fcmTokens.addAll(element.fcmToken);
+          }
 
-          await Future.wait(listNotification);
+          final body = {
+            "registration_ids": fcmTokens,
+            "notification": {
+              "title": '${event.host?.name ?? ""} added a new event',
+              "body":
+                  "${event.name} will take place on ${DateHelper.getFullDateTime(event.startDate)}",
+              'image': event.images?[0] ?? ""
+            },
+          };
+          final res = await pushNotification(body);
 
+          log('Response status: ${res.statusCode}');
+          log('Response body: ${res.body}');
           return MResult.success(result[0].data);
         }
       }
@@ -200,21 +204,24 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
             .user
             .getUsersByIds(event.host?.followers ?? []);
         if (followers.isSuccess) {
-          List<Future<Response>> listNotification = followers.data!.map((e) {
-            final body = {
-              "to": e.fcmToken ?? "",
-              "notification": {
-                "title": '${event.host?.name ?? ""} added a new event',
-                "body":
-                    "${event.name} will take place on ${DateHelper.getFullDateTime(event.startDate)}",
-                'image': event.images?[0] ?? ""
-              },
-            };
-            return pushNotification(body);
-          }).toList();
+          List<String> fcmTokens = [];
+          for (var element in followers.data!) {
+            fcmTokens.addAll(element.fcmToken);
+          }
 
-          await Future.wait(listNotification);
+          final body = {
+            "registration_ids": fcmTokens,
+            "notification": {
+              "title": '${event.host?.name ?? ""} added a new event',
+              "body":
+                  "${event.name} will take place on ${DateHelper.getFullDateTime(event.startDate)}",
+              'image': event.images?[0] ?? ""
+            },
+          };
+          final res = await pushNotification(body);
 
+          log('Response status: ${res.statusCode}');
+          log('Response body: ${res.body}');
           return MResult.success(result[0].data);
         }
       }
