@@ -64,6 +64,7 @@ class EventItemHome extends StatelessWidget {
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w900,
+              color: AppColors.text,
             ),
           ),
           Text(
@@ -93,6 +94,7 @@ class EventItemHome extends StatelessWidget {
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
+              color: AppColors.text,
             ),
           ),
           Text(
