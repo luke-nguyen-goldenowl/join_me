@@ -1,7 +1,9 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:myapp/src/_dev/dev_screen.dart';
+import 'package:myapp/src/features/account/logic/account_bloc.dart';
 import 'package:myapp/src/features/account/profile/view/edit_profile_view.dart';
 import 'package:myapp/src/features/add_event/view/add_event_view.dart';
 import 'package:myapp/src/features/dashboard/logic/navigation_bar_item.dart';
@@ -35,7 +37,9 @@ import 'route_name.dart';
 class AppRouter {
   late final router = GoRouter(
     navigatorKey: AppCoordinator.navigatorKey,
-    initialLocation: AppRouteNames.signIn.path,
+    initialLocation: (GetIt.I<AccountBloc>().state.isLogin)
+        ? AppRouteNames.home.path
+        : AppRouteNames.signIn.path,
     debugLogDiagnostics: kDebugMode,
     observers: [BotToastNavigatorObserver()],
     routes: <RouteBase>[
