@@ -101,7 +101,7 @@ class SigninView extends StatelessWidget {
             ),
           ),
           TextSpan(
-            text: "SeeJoy!",
+            text: "JoinUs!",
             style: TextStyle(
                 color: AppColors.rosyPink,
                 fontSize: 40,
