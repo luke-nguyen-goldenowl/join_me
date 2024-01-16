@@ -8,10 +8,12 @@ import 'package:myapp/src/locator.dart';
 import 'firebase_options/firebase_options_stg.dart';
 import 'src/app.dart';
 import 'package:flutter_config/flutter_config.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Required by FlutterConfig
   await FlutterConfig.loadEnvVariables();
+  await dotenv.load(fileName: ".env");
   await initializeApp(
       name: "staging", firebaseOptions: DefaultFirebaseOptions.currentPlatform);
   if (kIsWeb) {

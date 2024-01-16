@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/firebase/base_collection.dart';
 import 'package:myapp/src/network/model/common/pagination/pagination.dart';
 import 'package:myapp/src/network/model/common/pagination/pagination_response.dart';
@@ -28,7 +29,11 @@ class EventReference extends BaseCollectionReference<MEvent> {
           await firebaseStorage.uploadImages(event.images ?? [], "events");
       MEvent newEvent = event.copyWith(images: listImage);
       final MResult<MEvent> result = await add(newEvent);
-      return MResult.success(result.data);
+      if (result.isSuccess) {
+        await DomainManager().notification.sendNotificationNewEvent(newEvent);
+        return MResult.success(result.data);
+      }
+      return MResult.error('Add event fail');
     } catch (e) {
       return MResult.exception(e);
     }
@@ -73,19 +78,24 @@ class EventReference extends BaseCollectionReference<MEvent> {
   }
 
   Future<MResult> updateFollowEvent(
-    String eventId,
-    String userId,
+    MEvent event,
+    MUser user,
     bool isFollowed,
   ) async {
     try {
-      final result = await update(eventId, {
+      final result = await update(event.id, {
         'followersId': isFollowed
-            ? FieldValue.arrayRemove([userId])
-            : FieldValue.arrayUnion([userId]),
+            ? FieldValue.arrayRemove([user.id])
+            : FieldValue.arrayUnion([user.id]),
         'countFollowers':
             isFollowed ? FieldValue.increment(-1) : FieldValue.increment(1),
       });
       if (result.isError == false) {
+        if (!isFollowed) {
+          await DomainManager()
+              .notification
+              .sendNotificationFollowEvent(event, user);
+        }
         return result;
       } else {
         return MResult.success(result.data);
@@ -96,19 +106,24 @@ class EventReference extends BaseCollectionReference<MEvent> {
   }
 
   Future<MResult> updateFavoriteEvent(
-    String eventId,
-    String userId,
+    MEvent event,
+    MUser user,
     bool isFavorite,
   ) async {
     try {
-      final result = await update(eventId, {
+      final result = await update(event.id, {
         'favoritesId': isFavorite
-            ? FieldValue.arrayRemove([userId])
-            : FieldValue.arrayUnion([userId]),
+            ? FieldValue.arrayRemove([user.id])
+            : FieldValue.arrayUnion([user.id]),
         'countFavorites':
             isFavorite ? FieldValue.increment(-1) : FieldValue.increment(1),
       });
       if (result.isError == false) {
+        if (!isFavorite) {
+          await DomainManager()
+              .notification
+              .sendNotificationFavoriteEvent(event, user);
+        }
         return result;
       } else {
         return MResult.success(result.data);

@@ -5,22 +5,18 @@ import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 
 class MFollowEvent {
-  String id;
   MEvent event;
   MUser user;
   MFollowEvent({
-    required this.id,
     required this.event,
     required this.user,
   });
 
   MFollowEvent copyWith({
-    String? id,
     MEvent? event,
     MUser? user,
   }) {
     return MFollowEvent(
-      id: id ?? this.id,
       event: event ?? this.event,
       user: user ?? this.user,
     );
@@ -28,16 +24,16 @@ class MFollowEvent {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': id,
       'event': event.toMap(),
+      'eventId': event.id ?? "",
       'user': user.toMap(),
     };
   }
 
   factory MFollowEvent.fromMap(Map<String, dynamic> map) {
     return MFollowEvent(
-      id: map['id'] as String,
-      event: MEvent.fromMap(map['event'] as Map<String, dynamic>, ""),
+      event:
+          MEvent.fromMap(map['event'] as Map<String, dynamic>, map['eventId']),
       user: MUser.fromMap(map['user'] as Map<String, dynamic>),
     );
   }
@@ -51,9 +47,9 @@ class MFollowEvent {
   bool operator ==(covariant MFollowEvent other) {
     if (identical(this, other)) return true;
 
-    return other.id == id && other.event == event && other.user == user;
+    return other.event == event && other.user == user;
   }
 
   @override
-  int get hashCode => id.hashCode ^ event.hashCode ^ user.hashCode;
+  int get hashCode => event.hashCode ^ user.hashCode;
 }

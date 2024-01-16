@@ -35,6 +35,7 @@ class HostEvent extends StatelessWidget {
                       user.avatar!,
                       height: 50,
                       width: 50,
+                      fit: BoxFit.cover,
                     ),
                   ),
                 const SizedBox(width: 10),

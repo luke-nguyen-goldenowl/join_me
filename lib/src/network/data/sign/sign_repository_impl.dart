@@ -6,6 +6,7 @@ import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/model/common/error_code.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 import 'package:myapp/src/network/model/social_user/social_user.dart';
+import 'package:myapp/src/services/firebase_message.dart';
 import 'package:myapp/src/services/firebase_storage.dart';
 
 import '../../model/common/result.dart';
@@ -38,7 +39,18 @@ class SignRepositoryImpl extends SignRepository {
         followed: [],
       );
       final userResult = await DomainManager().user.getOrAddUser(newUser);
-
+      if (userResult.isSuccess) {
+        if (!userResult.data!.fcmToken
+            .contains(XFirebaseMessage.instance.currentToken)) {
+          await DomainManager().user.updateFCMTokenUser(newUser.id);
+          final List<String> newTokens = [
+            ...userResult.data!.fcmToken,
+            XFirebaseMessage.instance.currentToken ?? ""
+          ];
+          return MResult.success(
+              userResult.data!.copyWith(fcmToken: newTokens));
+        }
+      }
       return MResult.success(userResult.data ?? newUser);
     } catch (e) {
       return MResult.exception(e);
@@ -63,7 +75,20 @@ class SignRepositoryImpl extends SignRepository {
         followers: [],
         followed: [],
       );
+
       final userResult = await DomainManager().user.getOrAddUser(newUser);
+      if (userResult.isSuccess) {
+        if (!userResult.data!.fcmToken
+            .contains(XFirebaseMessage.instance.currentToken)) {
+          await DomainManager().user.updateFCMTokenUser(newUser.id);
+          final List<String> newTokens = [
+            ...userResult.data!.fcmToken,
+            XFirebaseMessage.instance.currentToken ?? ""
+          ];
+          return MResult.success(
+              userResult.data!.copyWith(fcmToken: newTokens));
+        }
+      }
 
       return MResult.success(userResult.data ?? newUser);
     } catch (e) {
@@ -80,6 +105,8 @@ class SignRepositoryImpl extends SignRepository {
   @override
   Future<MResult> logOut(MUser user) async {
     try {
+      await DomainManager().user.removeFCMTokenUser(user.id);
+      await XFirebaseMessage.instance.unregisterTokenFCM();
       await FirebaseAuth.instance.signOut();
       return MResult.success(user);
     } catch (e) {
@@ -111,6 +138,18 @@ class SignRepositoryImpl extends SignRepository {
         followed: [],
       );
       final userResult = await DomainManager().user.getOrAddUser(newUser);
+      if (userResult.isSuccess) {
+        if (!userResult.data!.fcmToken
+            .contains(XFirebaseMessage.instance.currentToken)) {
+          await DomainManager().user.updateFCMTokenUser(newUser.id);
+          final List<String> newTokens = [
+            ...userResult.data!.fcmToken,
+            XFirebaseMessage.instance.currentToken ?? ""
+          ];
+          return MResult.success(
+              userResult.data!.copyWith(fcmToken: newTokens));
+        }
+      }
       return MResult.success(userResult.data ?? newUser);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -193,6 +232,18 @@ class SignRepositoryImpl extends SignRepository {
         followed: [],
       );
       final userResult = await DomainManager().user.getOrAddUser(newUser);
+      if (userResult.isSuccess) {
+        if (!userResult.data!.fcmToken
+            .contains(XFirebaseMessage.instance.currentToken)) {
+          await DomainManager().user.updateFCMTokenUser(newUser.id);
+          final List<String> newTokens = [
+            ...userResult.data!.fcmToken,
+            XFirebaseMessage.instance.currentToken ?? ""
+          ];
+          return MResult.success(
+              userResult.data!.copyWith(fcmToken: newTokens));
+        }
+      }
       return MResult.success(userResult.data ?? newUser);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {

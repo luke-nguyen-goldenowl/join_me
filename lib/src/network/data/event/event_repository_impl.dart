@@ -2,6 +2,7 @@ import 'package:myapp/src/network/data/event/event_reference.dart';
 import 'package:myapp/src/network/model/common/pagination/pagination_response.dart';
 import 'package:myapp/src/network/model/common/result.dart';
 import 'package:myapp/src/network/model/event/event.dart';
+import 'package:myapp/src/network/model/user/user.dart';
 
 class EventRepositoryImpl {
   final EventReference eventReference = EventReference();
@@ -10,19 +11,19 @@ class EventRepositoryImpl {
   }
 
   Future<MResult> updateFollowEvent(
-    String eventId,
-    String userId,
+    MEvent event,
+    MUser user,
     bool isFollowed,
   ) {
-    return eventReference.updateFollowEvent(eventId, userId, isFollowed);
+    return eventReference.updateFollowEvent(event, user, isFollowed);
   }
 
   Future<MResult> updateFavoriteEvent(
-    String eventId,
-    String userId,
+    MEvent event,
+    MUser user,
     bool isFavorite,
   ) {
-    return eventReference.updateFavoriteEvent(eventId, userId, isFavorite);
+    return eventReference.updateFavoriteEvent(event, user, isFavorite);
   }
 
   Future<MResult<MEvent>> getEvent(String eventId) {

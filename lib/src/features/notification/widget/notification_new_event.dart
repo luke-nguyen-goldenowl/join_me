@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/src/network/model/notification/follow_user.dart';
+import 'package:myapp/src/network/model/notification/change_event.dart';
 import 'package:myapp/src/theme/colors.dart';
 import 'package:myapp/src/utils/date/date_helper.dart';
 import 'package:myapp/widgets/image/image_network.dart';
 
-class NotificationFollowUser extends StatelessWidget {
-  const NotificationFollowUser(
-      {super.key, required this.followUser, this.dateTime});
+class NotificationNewEvent extends StatelessWidget {
+  const NotificationNewEvent(
+      {super.key, required this.changeEvent, required this.dateTime});
+
+  final MChangeEvent changeEvent;
   final DateTime? dateTime;
-  final MFollowUser followUser;
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      padding: const EdgeInsets.only(top: 10),
       decoration: const BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -24,15 +24,32 @@ class NotificationFollowUser extends StatelessWidget {
             leading: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: XImageNetwork(
-                followUser.follower.avatar,
+                changeEvent.event.images?[0],
                 height: 50,
                 width: 50,
                 fit: BoxFit.cover,
               ),
             ),
-            title: Text(
-              '"${followUser.follower.name}"  has followed you',
-              style: const TextStyle(fontWeight: FontWeight.bold),
+            title: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    '${changeEvent.event.name}',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+            subtitle: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'has been created by ${changeEvent.host.name ?? ""}',
+                  ),
+                ),
+              ],
             ),
           ),
           Text(

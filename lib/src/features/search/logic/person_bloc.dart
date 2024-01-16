@@ -24,8 +24,8 @@ class PersonBloc extends Cubit<PersonState> {
         isFollowed = false;
       }
 
-      final result = await domain.user
-          .updateFollowers(state.person.id, user.id, isFollowed);
+      final result =
+          await domain.user.updateFollowers(state.person, user, isFollowed);
       if (result.isSuccess) {
         emit(state.copyWith(
             person: state.person.copyWith(followers: newFollower)));

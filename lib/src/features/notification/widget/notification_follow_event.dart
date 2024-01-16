@@ -1,36 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/src/network/model/notification/follow_event.dart';
+import 'package:myapp/src/theme/colors.dart';
+import 'package:myapp/src/utils/date/date_helper.dart';
+import 'package:myapp/widgets/image/image_network.dart';
 
 class NotificationFollowEvent extends StatelessWidget {
-  const NotificationFollowEvent({super.key, required this.followEvent});
-
+  const NotificationFollowEvent(
+      {super.key, required this.followEvent, this.dateTime});
+  final DateTime? dateTime;
   final MFollowEvent followEvent;
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(8.0),
-      child: ListTile(
-        leading: ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: Image.asset(
-            followEvent.user.avatar!,
-            height: 50,
-            width: 50,
-            fit: BoxFit.cover,
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: const BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      child: Column(
+        children: [
+          ListTile(
+            leading: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: XImageNetwork(
+                followEvent.user.avatar,
+                height: 50,
+                width: 50,
+                fit: BoxFit.cover,
+              ),
+            ),
+            title: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    '"${followEvent.user.name}"  has followed',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+            subtitle: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    followEvent.event.name ?? "",
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        title: Expanded(
-          child: Text(
-            ' "${followEvent.user.name}"  has followed your event (${followEvent.event.name})',
-            style: const TextStyle(fontWeight: FontWeight.bold),
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        onTap: () {
-          // Xử lý khi người dùng chọn một thông báo
-          print('Tapped on notification');
-        },
+          Text(
+            DateHelper.getFullDateTime(dateTime),
+            style: const TextStyle(
+              color: AppColors.grey,
+            ),
+          )
+        ],
       ),
     );
   }

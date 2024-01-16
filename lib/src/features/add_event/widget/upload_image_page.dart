@@ -83,8 +83,8 @@ class UploadImagePage extends StatelessWidget {
                       context.read<AddEventBloc>().selectMedias();
                     },
                     child: Container(
-                      height: 80,
-                      width: 80,
+                      height: 70,
+                      width: 70,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
                         border: Border.all(
@@ -121,7 +121,8 @@ class UploadImagePage extends StatelessWidget {
                     ),
                   );
                 }),
-              )
+              ),
+              const SizedBox(width: 10),
             ],
           ),
         );

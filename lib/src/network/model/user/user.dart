@@ -8,6 +8,7 @@ class MUser {
   String? email;
   List<String>? followers;
   List<String>? followed;
+  List<String> fcmToken;
   MUser({
     required this.id,
     this.name,
@@ -15,6 +16,7 @@ class MUser {
     this.email,
     this.followers,
     this.followed,
+    this.fcmToken = const [],
   });
 
   factory MUser.empty() {
@@ -30,6 +32,7 @@ class MUser {
       'followers': followers ?? [],
       'followed': followed ?? [],
       'caseSearchName': _getCaseSearchName,
+      'fcmToken': fcmToken,
     };
   }
 
@@ -56,6 +59,8 @@ class MUser {
       email: map['email'],
       followers: List<String>.from((map['followers'])),
       followed: List<String>.from((map['followed'])),
+      fcmToken:
+          map['fcmToken'] != null ? List<String>.from((map['fcmToken'])) : [],
     );
   }
 
@@ -66,6 +71,7 @@ class MUser {
     String? email,
     List<String>? followers,
     List<String>? followed,
+    List<String>? fcmToken,
   }) {
     return MUser(
       id: id ?? this.id,
@@ -74,6 +80,7 @@ class MUser {
       email: email ?? this.email,
       followers: followers ?? this.followers,
       followed: followed ?? this.followed,
+      fcmToken: fcmToken ?? this.fcmToken,
     );
   }
 }

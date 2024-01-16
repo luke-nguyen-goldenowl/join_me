@@ -29,11 +29,11 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   Future<MResult> updateFollowers(
-    String hostId,
-    String followerId,
+    MUser host,
+    MUser follower,
     bool isFollowed,
   ) async {
-    return usersRef.updateFollowers(hostId, followerId, isFollowed);
+    return usersRef.updateFollowers(host, follower, isFollowed);
   }
 
   @override
@@ -65,5 +65,17 @@ class UserRepositoryImpl extends UserRepository {
     String userId,
   ) async {
     return usersRef.getCountUsersBySearch(search, userId);
+  }
+
+  Future<MResult> updateFCMTokenUser(
+    String userId,
+  ) async {
+    return usersRef.updateFCMTokenUser(userId);
+  }
+
+  Future<MResult> removeFCMTokenUser(
+    String userId,
+  ) async {
+    return usersRef.removeFCMTokenUser(userId);
   }
 }

@@ -1,6 +1,6 @@
 import 'package:myapp/src/network/data/event/event_repository_impl.dart';
 import 'package:myapp/src/network/data/event/event_repository_mock.dart';
-import 'package:myapp/src/network/data/notification/notification_repository_mock.dart';
+import 'package:myapp/src/network/data/notification/notification_repository_impl.dart';
 import 'package:myapp/src/network/data/sign/sign_repository_impl.dart';
 import 'package:myapp/src/network/data/story/story_repository_impl.dart';
 import 'package:myapp/src/network/data/user/user_repository_mock.dart';
@@ -26,5 +26,5 @@ class DomainManager {
   final event = EventRepositoryImpl();
   final userMock = UserRepositoryMock();
   final userEvent = UserStoryRepositoryImpl();
-  final notification = NotificationRepositoryMock();
+  final notification = NotificationRepositoryImpl();
 }
