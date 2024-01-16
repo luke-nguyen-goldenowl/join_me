@@ -57,6 +57,7 @@ class ManageEventItem extends StatelessWidget {
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
+                            color: AppColors.text,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
