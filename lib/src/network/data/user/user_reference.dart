@@ -108,6 +108,7 @@ class UserReference extends BaseCollectionReference<MUser> {
       }
       if (name != null) {
         updateData['name'] = name;
+        updateData['caseSearchName'] = MUser.getCaseSearchName(name);
       }
       final result = await update(userId, updateData);
       if (result.isError == false) {
