@@ -14,6 +14,8 @@ jobs:
     name: Building and distributing app
     runs-on: ubuntu-latest
 
+    env: 
+      working-directory: android
 
     steps:
       - uses: actions/checkout@v3
@@ -26,8 +28,20 @@ jobs:
       - name: Add secret
         run: echo ${{secrets.FIREBASE_KEY}} | base64 -d > see-joy-3f334-ef61a3aeac47.json
 
-      - name: build release 
-        run: ./gradlew assembleRelease
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          dependency-graph: generate-and-submit
+          build-root-directory: ${{env.working-directory}}
+          cache-disabled: true
+          
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          cache: true  
+
+      - name: build release
+        run: flutter build apk --release
 
       - name: Upload Artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
