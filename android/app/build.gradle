@@ -66,12 +66,12 @@ android {
         production {
             dimension "flavor"
             applicationIdSuffix ""
-            manifestPlaceholders = [appName: "Template"]
+            manifestPlaceholders = [appName: "Join Us"]
         }
         staging {
             dimension "flavor"
             applicationIdSuffix ".stg"
-            manifestPlaceholders = [appName: "Template [STG]"]
+            manifestPlaceholders = [appName: "Join Us [STG]"]
         }
     }
 
