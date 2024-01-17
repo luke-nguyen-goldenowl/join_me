@@ -158,9 +158,9 @@ class UserReference extends BaseCollectionReference<MUser> {
     String userId,
   ) async {
     try {
+      final token = XFirebaseMessage.instance.currentToken;
       final result = await update(userId, {
-        'fcmToken':
-            FieldValue.arrayUnion([XFirebaseMessage.instance.currentToken])
+        'fcmToken': FieldValue.arrayUnion([token])
       });
       if (result.isError == false) {
         return result;
