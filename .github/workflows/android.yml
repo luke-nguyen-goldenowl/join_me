@@ -31,9 +31,9 @@ jobs:
       - name: Add env file
         run: echo ${{secrets.ENV_FILE}} | base64 -d > .env
 
-      - name: Add keystore
-        working-directory: ${{env.working-directory}}/app
-        run: echo ${{secrets.KEYSTORE}} | base64 -d > work_keystore.jks
+      # - name: Add keystore
+      #   working-directory: ${{env.working-directory}}/app
+      #   run: echo ${{secrets.KEYSTORE}} | base64 -d > work_keystore.jks
 
       - name: Add key properties
         working-directory: ${{env.working-directory}}
