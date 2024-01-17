@@ -13,6 +13,7 @@ import 'package:myapp/src/network/model/story/story.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 import 'package:myapp/src/network/model/user_story/user_story.dart';
 import 'package:myapp/src/router/coordinator.dart';
+import 'package:myapp/src/utils/utils.dart';
 
 class HomeBloc extends Cubit<HomeState> {
   HomeBloc() : super(HomeState.ds()) {
@@ -172,7 +173,8 @@ class HomeBloc extends Cubit<HomeState> {
     final MStory? story = await AppCoordinator.showAddStoryScreen();
     if (story != null) {
       final MUser user = GetIt.I<AccountBloc>().state.user;
-      if (state.userStory[0].user.id == user.id) {
+      if (!isNullOrEmpty(state.userStory) &&
+          state.userStory[0].user.id == user.id) {
         final newStoriesOfUser = [...state.userStory[0].stories, story];
         final MUserStory newMUserStory =
             MUserStory(user: user, stories: newStoriesOfUser);
