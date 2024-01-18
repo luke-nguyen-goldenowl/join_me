@@ -29,104 +29,81 @@ class AddStoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Scaffold(
-          body: Stack(
-            children: [
-              BlocBuilder<AddStoryBloc, AddStoryState>(
-                buildWhen: (previous, current) =>
-                    previous.image != current.image,
-                builder: ((context, state) {
-                  if (state.image != null) {
-                    return Expanded(
-                      child: Container(
-                        color: AppColors.black,
-                        alignment: Alignment.center,
-                        child: Image.file(
-                          File(state.image!.path),
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    );
-                  } else {
-                    return Container(
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(colors: AppColors.gradient),
-                      ),
-                    );
-                  }
-                }),
-              ),
-              AppBar(
-                backgroundColor: Colors.transparent,
-                foregroundColor: AppColors.white,
-                actions: [
-                  BlocBuilder<AddStoryBloc, AddStoryState>(
-                    buildWhen: (previous, current) =>
-                        previous.checkCondition() != current.checkCondition(),
-                    builder: ((context, state) {
-                      return Container(
-                        margin: const EdgeInsets.only(right: 10),
-                        child: ElevatedButton(
-                          onPressed: state.checkCondition()
-                              ? () {
-                                  context.read<AddStoryBloc>().onPressPost();
-                                }
-                              : null,
-                          style: ElevatedButton.styleFrom(
-                              minimumSize: const Size(100, 50)),
-                          child: const Text(
-                            "Post",
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
+    return Scaffold(
+      body: Stack(
+        children: [
+          BlocBuilder<AddStoryBloc, AddStoryState>(
+            buildWhen: (previous, current) => previous.image != current.image,
+            builder: ((context, state) {
+              if (state.image != null) {
+                return Expanded(
+                  child: Container(
+                    color: AppColors.black,
+                    alignment: Alignment.center,
+                    child: Image.file(
+                      File(state.image!.path),
+                      fit: BoxFit.contain,
+                    ),
                   ),
-                ],
-              ),
-              const Align(
-                alignment: Alignment.centerRight,
-                child: AddEventBar(),
-              ),
+                );
+              } else {
+                return Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(colors: AppColors.gradient),
+                  ),
+                );
+              }
+            }),
+          ),
+          AppBar(
+            backgroundColor: Colors.transparent,
+            foregroundColor: AppColors.white,
+            actions: [
               BlocBuilder<AddStoryBloc, AddStoryState>(
                 buildWhen: (previous, current) =>
-                    previous.event != current.event,
+                    previous.checkCondition() != current.checkCondition(),
                 builder: ((context, state) {
-                  if (state.event != null)
-                    return Align(
-                      alignment: Alignment.bottomCenter,
-                      child: EventItem(
-                          event: state.event!, handlePress: (MEvent event) {}),
-                    );
-                  return const SizedBox.shrink();
+                  return Container(
+                    margin: const EdgeInsets.only(right: 10),
+                    child: ElevatedButton(
+                      onPressed: state.checkCondition()
+                          ? () {
+                              context.read<AddStoryBloc>().onPressPost();
+                            }
+                          : null,
+                      style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(100, 50)),
+                      child: const Text(
+                        "Post",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  );
                 }),
               ),
             ],
           ),
-        ),
-        BlocBuilder<AddStoryBloc, AddStoryState>(
-          buildWhen: (previous, current) =>
-              previous.isPosting != current.isPosting,
-          builder: ((context, state) {
-            if (state.isPosting)
-              return Container(
-                color: AppColors.black.withOpacity(0.5),
-                height: double.infinity,
-                width: double.infinity,
-                alignment: Alignment.center,
-                child: const CircularProgressIndicator(
-                  color: AppColors.rosyPink,
-                ),
-              );
-            return const SizedBox.shrink();
-          }),
-        ),
-      ],
+          const Align(
+            alignment: Alignment.centerRight,
+            child: AddEventBar(),
+          ),
+          BlocBuilder<AddStoryBloc, AddStoryState>(
+            buildWhen: (previous, current) => previous.event != current.event,
+            builder: ((context, state) {
+              if (state.event != null)
+                return Align(
+                  alignment: Alignment.bottomCenter,
+                  child: EventItem(
+                      event: state.event!, handlePress: (MEvent event) {}),
+                );
+              return const SizedBox.shrink();
+            }),
+          ),
+        ],
+      ),
     );
   }
 }

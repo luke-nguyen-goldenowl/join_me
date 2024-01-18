@@ -173,15 +173,17 @@ class HomeBloc extends Cubit<HomeState> {
     final MStory? story = await AppCoordinator.showAddStoryScreen();
     if (story != null) {
       final MUser user = GetIt.I<AccountBloc>().state.user;
+      final MUserStory newMUserStory;
       if (!isNullOrEmpty(state.userStory) &&
           state.userStory[0].user.id == user.id) {
         final newStoriesOfUser = [...state.userStory[0].stories, story];
-        final MUserStory newMUserStory =
-            MUserStory(user: user, stories: newStoriesOfUser);
-        final newUserStory = [...state.userStory];
-        newUserStory[0] = newMUserStory;
-        emit(state.copyWith(userStory: newUserStory));
+        newMUserStory = MUserStory(user: user, stories: newStoriesOfUser);
+      } else {
+        newMUserStory = MUserStory(user: user, stories: [story]);
       }
+      final newUserStory = [...state.userStory];
+      newUserStory[0] = newMUserStory;
+      emit(state.copyWith(userStory: newUserStory));
     }
   }
 }
