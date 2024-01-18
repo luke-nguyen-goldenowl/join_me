@@ -1,0 +1,64 @@
+name: Build & upload to Firebase App Distribution 
+
+on: 
+  push:
+    branches: [ "develop" ]
+  pull_request:
+    branches: [ "develop" ]
+
+jobs:
+
+
+  build:
+
+    name: Building and distributing app
+    runs-on: ubuntu-latest
+
+    env: 
+      working-directory: android
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Add secret
+        run: echo ${{secrets.FIREBASE_KEY}} | base64 -d > see-joy-3f334-ef61a3aeac47.json
+
+      - name: Add env file
+        run: echo ${{secrets.ENV_FILE}} | base64 -d > .env
+
+      # - name: Add keystore
+      #   working-directory: ${{env.working-directory}}/app
+      #   run: echo ${{secrets.KEYSTORE}} | base64 -d > work_keystore.jks
+
+      - name: Add key properties
+        working-directory: ${{env.working-directory}}
+        run: echo ${{secrets.PROPERTIES_KEY}} | base64 -d > key.properties
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          dependency-graph: generate-and-submit
+          build-root-directory: ${{env.working-directory}}
+          cache-disabled: true
+          
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          cache: true  
+
+      - name: build release
+        run: flutter build apk  --flavor production --release --target lib/main.dart
+
+      - name: Upload Artifact to Firebase App Distribution 🚀
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: 1:826001615661:android:e75bc039e6e313c89d01a4
+          serviceCredentialsFile: see-joy-3f334-ef61a3aeac47.json
+          groups: testers
+          file: build/app/outputs/apk/production/release/app-production-release.apk
+    

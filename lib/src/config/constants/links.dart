@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:myapp/src/config/devices/app_Info.dart';
+import 'package:myapp/src/config/devices/app_info.dart';
 
 class XLink {
   static get playStore => 'market://details?id=${AppInfo.package.packageName}';
