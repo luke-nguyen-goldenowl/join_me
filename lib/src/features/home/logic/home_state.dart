@@ -21,17 +21,25 @@ class HomeState {
   List<MEvent> followed;
   List<MUserStory> userStory;
 
+  bool isLoading;
+
   HomeState({
     required this.popular,
     required this.upcoming,
     required this.people,
     required this.followed,
     required this.userStory,
+    required this.isLoading,
   });
 
   factory HomeState.ds() {
     return HomeState(
-        followed: [], upcoming: [], people: [], popular: [], userStory: []);
+        followed: [],
+        upcoming: [],
+        people: [],
+        popular: [],
+        userStory: [],
+        isLoading: false);
   }
 
   @override
@@ -42,7 +50,8 @@ class HomeState {
         listEquals(other.upcoming, upcoming) &&
         listEquals(other.people, people) &&
         listEquals(other.followed, followed) &&
-        listEquals(other.userStory, userStory);
+        listEquals(other.userStory, userStory) &&
+        other.isLoading == isLoading;
   }
 
   @override
@@ -51,7 +60,8 @@ class HomeState {
         upcoming.hashCode ^
         people.hashCode ^
         followed.hashCode ^
-        userStory.hashCode;
+        userStory.hashCode ^
+        isLoading.hashCode;
   }
 
   HomeState copyWith({
@@ -60,6 +70,7 @@ class HomeState {
     List<MEvent>? people,
     List<MEvent>? followed,
     List<MUserStory>? userStory,
+    bool? isLoading,
   }) {
     return HomeState(
       popular: popular ?? this.popular,
@@ -67,6 +78,7 @@ class HomeState {
       people: people ?? this.people,
       followed: followed ?? this.followed,
       userStory: userStory ?? this.userStory,
+      isLoading: isLoading ?? this.isLoading,
     );
   }
 }

@@ -4,7 +4,6 @@ import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:myapp/src/dialogs/toast_wrapper.dart';
 import 'package:myapp/src/features/account/logic/account_bloc.dart';
 import 'package:myapp/src/features/home/logic/home_state.dart';
 import 'package:myapp/src/router/extras/story_view_extra.dart';
@@ -23,7 +22,7 @@ class HomeBloc extends Cubit<HomeState> {
   DomainManager domain = DomainManager();
 
   void getDateHome() async {
-    XToast.showLoading();
+    if (!isClosed) emit(state.copyWith(isLoading: true));
     final MUser user = GetIt.I<AccountBloc>().state.user;
     await Future.wait([
       getUsersEvents(user),
@@ -33,7 +32,7 @@ class HomeBloc extends Cubit<HomeState> {
       getPeople(user),
     ]);
 
-    XToast.hideLoading();
+    if (!isClosed) emit(state.copyWith(isLoading: false));
   }
 
   void clearDateHome() {

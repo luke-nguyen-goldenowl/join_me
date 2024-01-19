@@ -12,6 +12,7 @@ import 'package:myapp/src/features/event/widget/map_page.dart';
 import 'package:myapp/src/theme/colors.dart';
 
 import 'package:myapp/widgets/appbar/app_bar_custom.dart';
+import 'package:myapp/widgets/state/state_loading_widget.dart';
 
 class EventHomeView extends StatelessWidget {
   const EventHomeView({super.key});
@@ -66,14 +67,19 @@ class EventHomePage extends StatelessWidget {
             BlocBuilder<EventViewBloc, EventViewState>(
               buildWhen: (previous, current) =>
                   !listEquals(previous.events, current.events) ||
-                  previous.typeShow != current.typeShow,
-              // previous.firstDate != current.firstDate ||
-              // previous.lastDate != current.lastDate,
+                  previous.typeShow != current.typeShow ||
+                  previous.isLoading != current.isLoading,
               builder: ((context, state) {
+                if (state.typeShow == TypeShow.list) {
+                  if (state.isLoading) {
+                    return const Center(
+                      child: XStateLoadingWidget(),
+                    );
+                  }
+                  return const Expanded(child: ListEventItemEventView());
+                }
                 return Expanded(
-                  child: state.typeShow == TypeShow.list
-                      ? const ListEventItemEventView()
-                      : MapPage(events: state.events),
+                  child: MapPage(events: state.events),
                 );
               }),
             )
