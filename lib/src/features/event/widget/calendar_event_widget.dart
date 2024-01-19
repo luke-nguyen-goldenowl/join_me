@@ -100,7 +100,7 @@ class CalendarEventWidget extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             color: index == 6
                                 ? AppColors.rosyPink
-                                : AppColors.black,
+                                : AppColors.text,
                           ),
                         ),
                         Text(

@@ -80,7 +80,7 @@ class HomePage extends StatelessWidget {
               Text(
                 "Hi, ${GetIt.I<AccountBloc>().state.user.name.toString()}!",
                 style: const TextStyle(
-                  color: AppColors.black,
+                  color: AppColors.text,
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
                 ),

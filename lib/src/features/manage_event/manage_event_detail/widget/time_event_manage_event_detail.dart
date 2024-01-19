@@ -27,7 +27,7 @@ class TimeEventMangeEventDetail extends StatelessWidget {
                 ),
                 child: const Icon(
                   Icons.access_time,
-                  color: AppColors.black,
+                  color: AppColors.text,
                 ),
               ),
               const SizedBox(width: 10),
@@ -38,7 +38,7 @@ class TimeEventMangeEventDetail extends StatelessWidget {
                     DateHelper.getFullDate(state.event.startDate),
                     style: const TextStyle(
                       fontSize: 15,
-                      color: AppColors.black,
+                      color: AppColors.text,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

@@ -91,7 +91,7 @@ class BottomTicket extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
-                color: AppColors.black,
+                color: AppColors.text,
               ),
             ),
           ],
@@ -112,7 +112,7 @@ class BottomTicket extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
-                color: AppColors.black,
+                color: AppColors.text,
               ),
             ),
           ],
@@ -143,11 +143,11 @@ class HeaderTicket extends StatelessWidget {
             )),
         const SizedBox(width: 10),
         SizedBox(
-          width: 250,
+          width: 200,
           child: Text(
             event.name ?? "",
             style: const TextStyle(
-              color: AppColors.black,
+              color: AppColors.text,
               fontWeight: FontWeight.bold,
               fontSize: 18,
             ),

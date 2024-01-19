@@ -27,7 +27,7 @@ class XFirebaseMessage {
 
     await setupNotification();
 
-    registerTokenFCM();
+    await registerTokenFCM();
 
     // NOTE: Request Permission doesn't necessarily implemented here.
     // You should follow the workflow of your project
@@ -114,10 +114,10 @@ class XFirebaseMessage {
     }
   }
 
-  void registerTokenFCM() async {
+  Future<void> registerTokenFCM() async {
     // If you want to get a token from the web, you can find the documentation
     // at https://firebase.flutter.dev/docs/messaging/usage/#web-tokens
-    messaging.getToken().then((setToken)).onError((error, stackTrace) {
+    await messaging.getToken().then((setToken)).onError((error, stackTrace) {
       xLog.e(error);
     });
 
@@ -128,6 +128,7 @@ class XFirebaseMessage {
     await messaging.deleteToken().catchError((error) {
       xLog.e(error);
     });
+    currentToken = null;
   }
 
   void setToken(String? token) {

@@ -18,7 +18,7 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
       titleTextStyle: const TextStyle(
         fontSize: 22,
         fontWeight: FontWeight.bold,
-        color: AppColors.black,
+        color: AppColors.text,
       ),
       centerTitle: true,
       leading: leading,

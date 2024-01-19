@@ -19,6 +19,7 @@ class AddressPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
+              color: AppColors.text,
             ),
           ),
           const SizedBox(height: 10),
