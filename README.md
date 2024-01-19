@@ -63,6 +63,7 @@
 flutter-app/
 |- .vscode/
   |- launch.json
+  |- settings.json
 |- android
   |- key.properties
 |- .env
