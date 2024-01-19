@@ -18,7 +18,7 @@ class ListStoryHome extends StatelessWidget {
         const TitleHome(title: "Stories"),
         BlocBuilder<HomeBloc, HomeState>(
           buildWhen: (previous, current) =>
-              previous.userStory.length != current.userStory.length,
+              !listEquals(previous.userStory, current.userStory),
           builder: ((context, state) {
             return Container(
               margin: const EdgeInsets.symmetric(vertical: 10),
