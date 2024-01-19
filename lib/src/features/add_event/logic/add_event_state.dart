@@ -7,7 +7,7 @@ import 'package:myapp/src/network/model/event/event.dart';
 
 class AddEventState {
   int currentPage;
-  bool isPosting;
+
   bool isLoadingCurrentLocation;
 
   MEvent event;
@@ -16,7 +16,6 @@ class AddEventState {
 
   AddEventState({
     required this.currentPage,
-    required this.isPosting,
     required this.medias,
     required this.time,
     required this.isLoadingCurrentLocation,
@@ -28,7 +27,6 @@ class AddEventState {
       currentPage: 0,
       medias: [],
       time: null,
-      isPosting: false,
       isLoadingCurrentLocation: true,
       event: MEvent(),
     );
@@ -66,7 +64,6 @@ class AddEventState {
   }) {
     return AddEventState(
       currentPage: currentPage ?? this.currentPage,
-      isPosting: isPosting ?? this.isPosting,
       isLoadingCurrentLocation:
           isLoadingCurrentLocation ?? this.isLoadingCurrentLocation,
       event: event ?? this.event,
@@ -80,7 +77,6 @@ class AddEventState {
     if (identical(this, other)) return true;
 
     return other.currentPage == currentPage &&
-        other.isPosting == isPosting &&
         other.isLoadingCurrentLocation == isLoadingCurrentLocation &&
         other.event == event &&
         listEquals(other.medias, medias) &&
@@ -90,7 +86,6 @@ class AddEventState {
   @override
   int get hashCode {
     return currentPage.hashCode ^
-        isPosting.hashCode ^
         isLoadingCurrentLocation.hashCode ^
         event.hashCode ^
         medias.hashCode ^

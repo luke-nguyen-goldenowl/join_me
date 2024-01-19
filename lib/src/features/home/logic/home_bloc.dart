@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:myapp/src/dialogs/toast_wrapper.dart';
 import 'package:myapp/src/features/account/logic/account_bloc.dart';
 import 'package:myapp/src/features/home/logic/home_state.dart';
 import 'package:myapp/src/router/extras/story_view_extra.dart';
@@ -20,20 +21,25 @@ class HomeBloc extends Cubit<HomeState> {
   }
   DomainManager domain = DomainManager();
 
-  void getDateHome() {
+  void getDateHome() async {
+    XToast.showLoading();
     final MUser user = GetIt.I<AccountBloc>().state.user;
-    getUsersEvents(user);
-    getPopular(user);
-    getUpcoming(user);
-    getFollowed(user);
-    getPeople(user);
+    await Future.wait([
+      getUsersEvents(user),
+      getPopular(user),
+      getUpcoming(user),
+      getFollowed(user),
+      getPeople(user),
+    ]);
+
+    XToast.hideLoading();
   }
 
   void clearDateHome() {
     emit(HomeState.ds());
   }
 
-  void getUsersEvents(MUser user) async {
+  Future<void> getUsersEvents(MUser user) async {
     try {
       final result =
           await domain.userEvent.getUserStoryByIds(user.followed ?? []);
@@ -45,7 +51,7 @@ class HomeBloc extends Cubit<HomeState> {
     }
   }
 
-  void getPopular(MUser user) async {
+  Future<void> getPopular(MUser user) async {
     try {
       final result = await domain.event.getEventsPopular(user.id);
       if (result.isSuccess) {
@@ -56,7 +62,7 @@ class HomeBloc extends Cubit<HomeState> {
     }
   }
 
-  void getUpcoming(MUser user) async {
+  Future<void> getUpcoming(MUser user) async {
     try {
       final result = await domain.event.getEventsUpcoming(user.id);
       if (result.isSuccess) {
@@ -67,7 +73,7 @@ class HomeBloc extends Cubit<HomeState> {
     }
   }
 
-  void getPeople(MUser user) async {
+  Future<void> getPeople(MUser user) async {
     try {
       if (user.followers != null && user.followed!.isEmpty) {
         return emit(state.copyWith(people: []));
@@ -81,7 +87,7 @@ class HomeBloc extends Cubit<HomeState> {
     }
   }
 
-  void getFollowed(MUser user) async {
+  Future<void> getFollowed(MUser user) async {
     try {
       final result = await domain.event.getEventsFollow(user.id);
       if (result.isSuccess) {

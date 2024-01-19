@@ -63,7 +63,7 @@ class EditEventBloc extends Cubit<EditEventState> {
   }
 
   void saveEvent() async {
-    if (!isClosed) emit(state.copyWith(isSaving: true));
+    XToast.showLoading();
 
     DateTime? startDate;
     if (state.event.startDate != null && state.time != null) {
@@ -81,18 +81,19 @@ class EditEventBloc extends Cubit<EditEventState> {
 
     final result = await domain.event.updateEvent(event);
 
-    if (!isClosed) emit(state.copyWith(isSaving: false));
+    XToast.hideLoading();
 
     if (result.isSuccess) {
       AppCoordinator.pop(event);
       XToast.success('Update event success');
     } else {
+      AppCoordinator.pop();
       XAlert.show(title: 'Update event fail', body: result.error);
     }
   }
 
   void backScreen() {
-    AppCoordinator.pop(null);
+    AppCoordinator.pop();
   }
 
   @override

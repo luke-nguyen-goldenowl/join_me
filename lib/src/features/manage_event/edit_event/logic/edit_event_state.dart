@@ -8,13 +8,11 @@ class EditEventState {
   MEvent event;
   int currentPage;
   TimeOfDay? time;
-  bool isSaving;
 
   EditEventState({
     required this.event,
     required this.currentPage,
     this.time,
-    required this.isSaving,
   });
 
   factory EditEventState.ds() {
@@ -22,7 +20,6 @@ class EditEventState {
       currentPage: 0,
       event: MEvent(id: '1', host: MUser.empty()),
       time: null,
-      isSaving: false,
     );
   }
 
@@ -30,13 +27,11 @@ class EditEventState {
     MEvent? event,
     int? currentPage,
     TimeOfDay? time,
-    bool? isSaving,
   }) {
     return EditEventState(
       event: event ?? this.event,
       currentPage: currentPage ?? this.currentPage,
       time: time ?? this.time,
-      isSaving: isSaving ?? this.isSaving,
     );
   }
 
@@ -66,15 +61,11 @@ class EditEventState {
 
     return other.event == event &&
         other.currentPage == currentPage &&
-        other.time == time &&
-        other.isSaving == isSaving;
+        other.time == time;
   }
 
   @override
   int get hashCode {
-    return event.hashCode ^
-        currentPage.hashCode ^
-        time.hashCode ^
-        isSaving.hashCode;
+    return event.hashCode ^ currentPage.hashCode ^ time.hashCode;
   }
 }

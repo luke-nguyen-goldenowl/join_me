@@ -31,77 +31,63 @@ class AddStoryPage extends StatelessWidget {
       buildWhen: (previous, current) =>
           previous.image != current.image || previous.event != current.event,
       builder: ((context, state) {
-        return Stack(
-          children: [
-            Scaffold(
-              body: Stack(
-                children: [
-                  if (state.image != null)
-                    Expanded(
-                      child: Container(
-                        color: AppColors.black,
-                        alignment: Alignment.center,
-                        child: Image.file(
-                          File(state.image!.path),
-                          fit: BoxFit.contain,
+        return Scaffold(
+          body: Stack(
+            children: [
+              if (state.image != null)
+                Expanded(
+                  child: Container(
+                    color: AppColors.black,
+                    alignment: Alignment.center,
+                    child: Image.file(
+                      File(state.image!.path),
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                )
+              else
+                Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(colors: AppColors.gradient),
+                  ),
+                ),
+              AppBar(
+                backgroundColor: Colors.transparent,
+                foregroundColor: AppColors.white,
+                actions: [
+                  Container(
+                    margin: const EdgeInsets.only(right: 10),
+                    child: ElevatedButton(
+                      onPressed: state.checkCondition()
+                          ? () {
+                              context.read<AddStoryBloc>().onPressPost();
+                            }
+                          : null,
+                      style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(100, 50)),
+                      child: const Text(
+                        "Post",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
                         ),
-                      ),
-                    )
-                  else
-                    Container(
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(colors: AppColors.gradient),
                       ),
                     ),
-                  AppBar(
-                    backgroundColor: Colors.transparent,
-                    foregroundColor: AppColors.white,
-                    actions: [
-                      Container(
-                        margin: const EdgeInsets.only(right: 10),
-                        child: ElevatedButton(
-                          onPressed: state.checkCondition()
-                              ? () {
-                                  context.read<AddStoryBloc>().onPressPost();
-                                }
-                              : null,
-                          style: ElevatedButton.styleFrom(
-                              minimumSize: const Size(100, 50)),
-                          child: const Text(
-                            "Post",
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  const Align(
-                    alignment: Alignment.centerRight,
-                    child: AddEventBar(),
-                  ),
-                  if (state.event != null)
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: EventItem(
-                          event: state.event!, handlePress: (MEvent event) {}),
-                    )
+                  )
                 ],
               ),
-            ),
-            if (state.isPosting)
-              Container(
-                color: AppColors.black.withOpacity(0.5),
-                height: double.infinity,
-                width: double.infinity,
-                alignment: Alignment.center,
-                child: const CircularProgressIndicator(
-                  color: AppColors.rosyPink,
-                ),
+              const Align(
+                alignment: Alignment.centerRight,
+                child: AddEventBar(),
               ),
-          ],
+              if (state.event != null)
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: EventItem(
+                      event: state.event!, handlePress: (MEvent event) {}),
+                )
+            ],
+          ),
         );
       }),
     );

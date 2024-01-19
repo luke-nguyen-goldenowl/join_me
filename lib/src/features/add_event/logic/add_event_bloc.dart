@@ -92,7 +92,7 @@ class AddEventBloc extends Cubit<AddEventState> {
   }
 
   void addEvent() async {
-    if (!isClosed) emit(state.copyWith(isPosting: true));
+    XToast.showLoading();
 
     late final List<String> images;
 
@@ -118,10 +118,10 @@ class AddEventBloc extends Cubit<AddEventState> {
 
     final result = await domain.event.addEvent(event);
 
-    if (!isClosed) emit(state.copyWith(isPosting: false));
+    XToast.hideLoading();
 
+    AppCoordinator.pop();
     if (result.isSuccess) {
-      AppCoordinator.pop();
       XToast.success('Create event success');
     } else {
       XAlert.show(title: 'Create event fail', body: result.error);

@@ -35,11 +35,11 @@ class ProfileBloc extends Cubit<ProfileState> {
   }
 
   void updateUser() async {
-    if (!isClosed) emit(state.copyWith(isSaving: true));
+    XToast.showLoading();
     final result = await DomainManager()
         .sign
         .updateProfile(state.avatar?.path, state.name);
-    if (!isClosed) emit(state.copyWith(isSaving: false));
+    XToast.hideLoading();
     if (result.isSuccess) {
       if (!isClosed) {
         GetIt.I<AccountBloc>().emit(
@@ -55,6 +55,7 @@ class ProfileBloc extends Cubit<ProfileState> {
       AppCoordinator.pop();
       XToast.success('Update user success');
     } else {
+      AppCoordinator.pop();
       XAlert.show(title: 'Update user fail', body: result.error);
     }
   }

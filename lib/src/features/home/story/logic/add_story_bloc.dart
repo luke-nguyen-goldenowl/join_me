@@ -61,28 +61,23 @@ class AddStoryBloc extends Cubit<AddStoryState> {
   }
 
   void onPressPost() async {
-    try {
-      if (!isClosed) emit(state.copyWith(isPosting: true));
+    XToast.showLoading();
+    final MStory story = MStory(
+      host: GetIt.I<AccountBloc>().state.user,
+      event: state.event!,
+      time: DateTime.now(),
+      image: state.image!.path,
+    );
+    final result = await domain.story.addStory(story);
 
-      final MStory story = MStory(
-        host: GetIt.I<AccountBloc>().state.user,
-        event: state.event!,
-        time: DateTime.now(),
-        image: state.image!.path,
-      );
-      final result = await domain.story.addStory(story);
-      if (!isClosed) emit(state.copyWith(isPosting: false));
+    XToast.hideLoading();
 
-      if (result.isSuccess) {
-        AppCoordinator.pop();
-        XToast.success('Create story success');
-      } else {
-        XAlert.show(title: 'Create story fail', body: result.error);
-      }
-    } catch (e) {
-      if (!isClosed) emit(state.copyWith(isPosting: false));
-      XAlert.show(title: 'Create story fail', body: e.toString());
-      print(e);
+    if (result.isSuccess) {
+      AppCoordinator.pop(result.data);
+      XToast.success('Create story success');
+    } else {
+      AppCoordinator.pop();
+      XAlert.show(title: 'Create story fail', body: result.error);
     }
   }
 }

@@ -83,26 +83,6 @@ class EditEventPage extends StatelessWidget {
             ],
           ),
         ),
-        BlocBuilder<EditEventBloc, EditEventState>(
-          buildWhen: (previous, current) =>
-              previous.currentPage != current.currentPage ||
-              previous.isSaving != current.isSaving,
-          builder: ((context, state) {
-            if (state.isSaving) {
-              return Container(
-                color: AppColors.black.withOpacity(0.5),
-                height: double.infinity,
-                width: double.infinity,
-                alignment: Alignment.center,
-                child: const CircularProgressIndicator(
-                  color: AppColors.rosyPink,
-                ),
-              );
-            } else {
-              return const SizedBox.shrink();
-            }
-          }),
-        ),
       ],
     );
   }
