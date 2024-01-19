@@ -30,7 +30,7 @@ class TimeEvent extends StatelessWidget {
                 ),
                 child: const Icon(
                   Icons.access_time,
-                  color: AppColors.black,
+                  color: AppColors.text,
                 ),
               ),
               const SizedBox(width: 10),
@@ -42,7 +42,7 @@ class TimeEvent extends StatelessWidget {
                       DateFormat("MMMM dd, yyyy").format(startDate!),
                       style: const TextStyle(
                         fontSize: 15,
-                        color: AppColors.black,
+                        color: AppColors.text,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

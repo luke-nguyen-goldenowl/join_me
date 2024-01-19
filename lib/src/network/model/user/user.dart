@@ -31,15 +31,15 @@ class MUser {
       'email': email,
       'followers': followers ?? [],
       'followed': followed ?? [],
-      'caseSearchName': _getCaseSearchName,
+      'caseSearchName': getCaseSearchName(name),
       'fcmToken': fcmToken,
     };
   }
 
-  List<String> get _getCaseSearchName {
+  static List<String> getCaseSearchName(String? name) {
     if (name == null || name == "") return [];
 
-    List<String> listWord = name!.split(' ');
+    List<String> listWord = name.split(' ');
     String word = listWord.removeLast();
     List<String> result = Utils.getCaseSearch(word);
 

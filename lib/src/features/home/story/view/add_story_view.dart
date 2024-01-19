@@ -1,3 +1,5 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,15 +29,14 @@ class AddStoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AddStoryBloc, AddStoryState>(
-      buildWhen: (previous, current) =>
-          previous.image != current.image || previous.event != current.event,
-      builder: ((context, state) {
-        return Scaffold(
-          body: Stack(
-            children: [
-              if (state.image != null)
-                Expanded(
+    return Scaffold(
+      body: Stack(
+        children: [
+          BlocBuilder<AddStoryBloc, AddStoryState>(
+            buildWhen: (previous, current) => previous.image != current.image,
+            builder: ((context, state) {
+              if (state.image != null) {
+                return Expanded(
                   child: Container(
                     color: AppColors.black,
                     alignment: Alignment.center,
@@ -44,18 +45,25 @@ class AddStoryPage extends StatelessWidget {
                       fit: BoxFit.contain,
                     ),
                   ),
-                )
-              else
-                Container(
+                );
+              } else {
+                return Container(
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(colors: AppColors.gradient),
                   ),
-                ),
-              AppBar(
-                backgroundColor: Colors.transparent,
-                foregroundColor: AppColors.white,
-                actions: [
-                  Container(
+                );
+              }
+            }),
+          ),
+          AppBar(
+            backgroundColor: Colors.transparent,
+            foregroundColor: AppColors.white,
+            actions: [
+              BlocBuilder<AddStoryBloc, AddStoryState>(
+                buildWhen: (previous, current) =>
+                    previous.checkCondition() != current.checkCondition(),
+                builder: ((context, state) {
+                  return Container(
                     margin: const EdgeInsets.only(right: 10),
                     child: ElevatedButton(
                       onPressed: state.checkCondition()
@@ -73,23 +81,29 @@ class AddStoryPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                  )
-                ],
+                  );
+                }),
               ),
-              const Align(
-                alignment: Alignment.centerRight,
-                child: AddEventBar(),
-              ),
+            ],
+          ),
+          const Align(
+            alignment: Alignment.centerRight,
+            child: AddEventBar(),
+          ),
+          BlocBuilder<AddStoryBloc, AddStoryState>(
+            buildWhen: (previous, current) => previous.event != current.event,
+            builder: ((context, state) {
               if (state.event != null)
-                Align(
+                return Align(
                   alignment: Alignment.bottomCenter,
                   child: EventItem(
                       event: state.event!, handlePress: (MEvent event) {}),
-                )
-            ],
+                );
+              return const SizedBox.shrink();
+            }),
           ),
-        );
-      }),
+        ],
+      ),
     );
   }
 }

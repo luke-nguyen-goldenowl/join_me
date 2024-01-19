@@ -14,6 +14,7 @@ import 'package:myapp/src/network/model/story/story.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 import 'package:myapp/src/network/model/user_story/user_story.dart';
 import 'package:myapp/src/router/coordinator.dart';
+import 'package:myapp/src/utils/utils.dart';
 
 class HomeBloc extends Cubit<HomeState> {
   HomeBloc() : super(HomeState.ds()) {
@@ -41,8 +42,8 @@ class HomeBloc extends Cubit<HomeState> {
 
   Future<void> getUsersEvents(MUser user) async {
     try {
-      final result =
-          await domain.userEvent.getUserStoryByIds(user.followed ?? []);
+      final result = await domain.userEvent
+          .getUserStoryByIds([user.id, ...user.followed ?? []]);
       if (result.isSuccess) {
         emit(state.copyWith(userStory: result.data));
       }
@@ -171,6 +172,24 @@ class HomeBloc extends Cubit<HomeState> {
       emit(state.copyWith(userStory: newUserStory));
     } catch (e) {
       print(e);
+    }
+  }
+
+  void goAddStoryScreen() async {
+    final MStory? story = await AppCoordinator.showAddStoryScreen();
+    if (story != null) {
+      final MUser user = GetIt.I<AccountBloc>().state.user;
+      final MUserStory newMUserStory;
+      if (!isNullOrEmpty(state.userStory) &&
+          state.userStory[0].user.id == user.id) {
+        final newStoriesOfUser = [...state.userStory[0].stories, story];
+        newMUserStory = MUserStory(user: user, stories: newStoriesOfUser);
+      } else {
+        newMUserStory = MUserStory(user: user, stories: [story]);
+      }
+      final newUserStory = [...state.userStory];
+      newUserStory[0] = newMUserStory;
+      emit(state.copyWith(userStory: newUserStory));
     }
   }
 }
