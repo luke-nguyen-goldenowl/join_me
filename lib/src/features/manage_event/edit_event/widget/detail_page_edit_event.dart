@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import 'package:myapp/src/features/manage_event/edit_event/logic/edit_event_bloc.dart';
 import 'package:myapp/src/features/manage_event/edit_event/logic/edit_event_state.dart';
+import 'package:myapp/src/theme/colors.dart';
 
 import 'package:myapp/widgets/forms/input.dart';
 
@@ -24,6 +25,7 @@ class DetailPageEditEvent extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
+                color: AppColors.text,
               ),
             ),
             Column(

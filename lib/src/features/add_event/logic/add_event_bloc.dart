@@ -183,7 +183,8 @@ class AddEventBloc extends Cubit<AddEventState> {
     return null;
   }
 
-  onSearchTextChanged(search, context) async {
+  void onSearchTextChanged(String search, context) async {
+    if (search.isEmpty) return;
     LatLng? coordinates = await _getCoordinatesFromAddress(search);
     if (coordinates != null) {
       handlePressMap(coordinates);

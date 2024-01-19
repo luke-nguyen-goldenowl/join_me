@@ -5,7 +5,6 @@ import 'package:myapp/src/features/home/logic/home_bloc.dart';
 import 'package:myapp/src/features/home/logic/home_state.dart';
 import 'package:myapp/src/features/home/widget/story_item.dart';
 import 'package:myapp/src/features/home/widget/title_home.dart';
-import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
 
 class ListStoryHome extends StatelessWidget {
@@ -33,7 +32,7 @@ class ListStoryHome extends StatelessWidget {
                       index == 0
                           ? IconButton(
                               onPressed: () {
-                                AppCoordinator.showAddStoryScreen();
+                                context.read<HomeBloc>().goAddStoryScreen();
                               },
                               icon: const Icon(
                                 Icons.add,

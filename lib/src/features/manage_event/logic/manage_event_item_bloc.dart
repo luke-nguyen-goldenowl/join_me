@@ -5,8 +5,8 @@ import 'package:myapp/src/router/coordinator.dart';
 class ManageEventItemBloc extends Cubit<MEvent> {
   ManageEventItemBloc(super.initialState);
   void goManageEventDetail() async {
-    final event =
+    final MEvent? event =
         await AppCoordinator.showManageEventDetails(id: state.id ?? "");
-    emit(event as MEvent);
+    emit(event ?? state);
   }
 }

@@ -36,14 +36,18 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
   static XFirebaseMessage firebaseMessage = XFirebaseMessage();
 
   Future<Response> pushNotification(body) async {
-    return await post(
-      Uri.parse(dotenv.get('URL_FCM')),
-      headers: {
-        HttpHeaders.contentTypeHeader: 'application/json',
-        HttpHeaders.authorizationHeader: 'key=${dotenv.get('HEADER_FCM_KEY')}'
-      },
-      body: jsonEncode(body),
-    );
+    try {
+      return await post(
+        Uri.parse(dotenv.get('URL_FCM')),
+        headers: {
+          HttpHeaders.contentTypeHeader: 'application/json',
+          HttpHeaders.authorizationHeader: 'key=${dotenv.get('HEADER_FCM_KEY')}'
+        },
+        body: jsonEncode(body),
+      );
+    } catch (e) {
+      return Response(e.toString(), 300);
+    }
   }
 
   Future<MResult<NotificationModel>> sendNotificationFollowEvent(

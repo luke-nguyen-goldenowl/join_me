@@ -1,3 +1,5 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +8,7 @@ import 'package:myapp/src/features/home/story/logic/add_story_state.dart';
 import 'package:myapp/src/features/home/story/widget/add_event_bar.dart';
 import 'package:myapp/src/features/home/story/widget/event_item_story.dart';
 import 'package:myapp/src/network/model/event/event.dart';
+import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
 
 class AddStoryView extends StatelessWidget {
@@ -27,83 +30,96 @@ class AddStoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AddStoryBloc, AddStoryState>(
-      buildWhen: (previous, current) =>
-          previous.image != current.image || previous.event != current.event,
-      builder: ((context, state) {
-        return Stack(
-          children: [
-            Scaffold(
-              body: Stack(
+    return Scaffold(
+      body: Stack(
+        children: [
+          BlocBuilder<AddStoryBloc, AddStoryState>(
+            buildWhen: (previous, current) => previous.image != current.image,
+            builder: ((context, state) {
+              if (state.image != null) {
+                return Expanded(
+                  child: Container(
+                    color: AppColors.black,
+                    alignment: Alignment.center,
+                    child: Image.file(
+                      File(state.image!.path),
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                );
+              } else {
+                return Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(colors: AppColors.gradient),
+                  ),
+                );
+              }
+            }),
+          ),
+          BlocBuilder<AddStoryBloc, AddStoryState>(
+            buildWhen: (previous, current) =>
+                previous.checkCondition() != current.checkCondition(),
+            builder: ((context, state) {
+              return Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  if (state.image != null)
-                    Expanded(
-                      child: Container(
-                        color: AppColors.black,
-                        alignment: Alignment.center,
-                        child: Image.file(
-                          File(state.image!.path),
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    )
-                  else
-                    Container(
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(colors: AppColors.gradient),
+                  Container(
+                    margin: const EdgeInsets.only(top: 40, left: 10),
+                    child: IconButton(
+                      onPressed: (() {
+                        AppCoordinator.pop();
+                      }),
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: AppColors.white,
                       ),
                     ),
-                  AppBar(
-                    backgroundColor: Colors.transparent,
-                    foregroundColor: AppColors.white,
-                    actions: [
-                      Container(
-                        margin: const EdgeInsets.only(right: 10),
-                        child: ElevatedButton(
-                          onPressed: state.checkCondition()
-                              ? () {
-                                  context.read<AddStoryBloc>().onPressPost();
-                                }
-                              : null,
-                          style: ElevatedButton.styleFrom(
-                              minimumSize: const Size(100, 50)),
-                          child: const Text(
-                            "Post",
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 40, right: 10),
+                    child: ElevatedButton(
+                      onPressed: state.checkCondition()
+                          ? () {
+                              context.read<AddStoryBloc>().onPressPost();
+                            }
+                          : null,
+                      style: ElevatedButton.styleFrom(
+                          disabledBackgroundColor:
+                              AppColors.grey.withOpacity(0.5),
+                          disabledForegroundColor:
+                              AppColors.grey4.withOpacity(0.7),
+                          minimumSize: const Size(100, 50)),
+                      child: const Text(
+                        "Post",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
                         ),
-                      )
-                    ],
-                  ),
-                  const Align(
-                    alignment: Alignment.centerRight,
-                    child: AddEventBar(),
-                  ),
-                  if (state.event != null)
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: EventItem(
-                          event: state.event!, handlePress: (MEvent event) {}),
-                    )
+                      ),
+                    ),
+                  )
                 ],
-              ),
-            ),
-            if (state.isPosting)
-              Container(
-                color: AppColors.black.withOpacity(0.5),
-                height: double.infinity,
-                width: double.infinity,
-                alignment: Alignment.center,
-                child: const CircularProgressIndicator(
-                  color: AppColors.rosyPink,
-                ),
-              ),
-          ],
-        );
-      }),
+              );
+            }),
+          ),
+          const Align(
+            alignment: Alignment.centerRight,
+            child: AddEventBar(),
+          ),
+          BlocBuilder<AddStoryBloc, AddStoryState>(
+              buildWhen: (previous, current) => previous.event != current.event,
+              builder: ((context, state) {
+                if (state.event != null)
+                  return Align(
+                    alignment: Alignment.bottomCenter,
+                    child: EventItem(
+                        event: state.event!, handlePress: (MEvent event) {}),
+                  );
+                return const SizedBox.shrink();
+              })),
+        ],
+      ),
     );
   }
 }

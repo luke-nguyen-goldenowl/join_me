@@ -126,7 +126,7 @@ class AddEventPage extends StatelessWidget {
                 width: 3,
               ),
               minimumSize: const Size(100, 50),
-              foregroundColor: AppColors.black,
+              foregroundColor: AppColors.text,
             ),
             child: const Text(
               "Back",

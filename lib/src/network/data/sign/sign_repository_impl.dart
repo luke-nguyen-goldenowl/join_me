@@ -40,8 +40,14 @@ class SignRepositoryImpl extends SignRepository {
       );
       final userResult = await DomainManager().user.getOrAddUser(newUser);
       if (userResult.isSuccess) {
+        if (XFirebaseMessage.instance.currentToken == null) {
+          XFirebaseMessage.instance.registerTokenFCM();
+        }
         if (!userResult.data!.fcmToken
             .contains(XFirebaseMessage.instance.currentToken)) {
+          if (XFirebaseMessage.instance.currentToken == null) {
+            await XFirebaseMessage.instance.registerTokenFCM();
+          }
           await DomainManager().user.updateFCMTokenUser(newUser.id);
           final List<String> newTokens = [
             ...userResult.data!.fcmToken,
@@ -78,6 +84,9 @@ class SignRepositoryImpl extends SignRepository {
 
       final userResult = await DomainManager().user.getOrAddUser(newUser);
       if (userResult.isSuccess) {
+        if (XFirebaseMessage.instance.currentToken == null) {
+          await XFirebaseMessage.instance.registerTokenFCM();
+        }
         if (!userResult.data!.fcmToken
             .contains(XFirebaseMessage.instance.currentToken)) {
           await DomainManager().user.updateFCMTokenUser(newUser.id);
@@ -137,6 +146,9 @@ class SignRepositoryImpl extends SignRepository {
       );
       final userResult = await DomainManager().user.getOrAddUser(newUser);
       if (userResult.isSuccess) {
+        if (XFirebaseMessage.instance.currentToken == null) {
+          await XFirebaseMessage.instance.registerTokenFCM();
+        }
         if (!userResult.data!.fcmToken
             .contains(XFirebaseMessage.instance.currentToken)) {
           await DomainManager().user.updateFCMTokenUser(newUser.id);

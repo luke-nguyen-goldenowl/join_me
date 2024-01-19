@@ -9,23 +9,7 @@ class UserRepositoryImpl extends UserRepository {
   final usersRef = UserReference();
   @override
   Future<MResult<MUser>> getUser(String id) async {
-    try {
-      final result = await usersRef.getUser(id);
-
-      if (result.isSuccess) {
-        final user = MUser(
-          id: result.data!.id,
-          email: result.data!.email,
-          name: result.data!.name,
-          avatar: result.data!.avatar,
-          followers: result.data!.followers,
-        );
-        return MResult.success(user);
-      }
-      return MResult.error('Not user login');
-    } catch (e) {
-      return MResult.exception(e);
-    }
+    return usersRef.getUser(id);
   }
 
   Future<MResult> updateFollowers(
