@@ -76,6 +76,7 @@ dependencies:
   flutter_config: ^2.0.2
   geolocator: ^10.1.0
   geocoding: ^2.1.1
+  flutter_launcher_icons: ^0.13.1
 
   # sign_in_with_apple: ^4.2.0
   # uni_links: ^0.5.1

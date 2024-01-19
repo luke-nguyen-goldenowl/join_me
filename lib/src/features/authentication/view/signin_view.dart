@@ -40,13 +40,17 @@ class SigninView extends StatelessWidget {
 
   Widget _builder(BuildContext context, SigninState state) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      // crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const SizedBox(height: 30),
-        Assets.images.images.logo2.image(
-          height: 150,
-          width: 150,
+        ClipRRect(
+          borderRadius: BorderRadius.circular(20.0),
+          child: Assets.images.images.logo.image(
+            fit: BoxFit.cover,
+            height: 150,
+            width: 150,
+          ),
         ),
         _buildTitle(context),
         const SizedBox(height: 24.0),
@@ -71,15 +75,18 @@ class SigninView extends StatelessWidget {
         const SizedBox(height: 8.0),
         _buildForgotPassword(context),
         const SizedBox(height: 8.0),
-        XButton(
-          key: const Key('loginForm_continue_raisedButton'),
-          busy:
-              state.status.isInProgress && state.loginType == MSocialType.email,
-          enabled: state.isValidated,
-          title: "Login", //S.of(context).common_next,
-          onPressed: () async {
-            context.read<SigninBloc>().loginWithEmail(context);
-          },
+        SizedBox(
+          width: double.infinity,
+          child: XButton(
+            key: const Key('loginForm_continue_raisedButton'),
+            busy: state.status.isInProgress &&
+                state.loginType == MSocialType.email,
+            enabled: state.isValidated,
+            title: "Login", //S.of(context).common_next,
+            onPressed: () async {
+              context.read<SigninBloc>().loginWithEmail(context);
+            },
+          ),
         ),
         const SizedBox(height: 32.0),
         const SocialListButton(),

@@ -41,12 +41,16 @@ class SignupView extends StatelessWidget {
 
   Widget _builder(BuildContext context, SignupState state) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      // crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Assets.images.images.logo2.image(
-          height: 100,
-          width: 100,
+        ClipRRect(
+          borderRadius: BorderRadius.circular(20.0),
+          child: Assets.images.images.logo.image(
+            fit: BoxFit.cover,
+            height: 100,
+            width: 100,
+          ),
         ),
         const Text(
           "SIGN UP",
@@ -54,6 +58,7 @@ class SignupView extends StatelessWidget {
           style: TextStyle(
             fontSize: 40,
             fontWeight: FontWeight.bold,
+            color: AppColors.text,
           ),
         ),
         const SizedBox(height: 24.0),
@@ -92,11 +97,15 @@ class SignupView extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 32.0),
-        XButton(
-          busy: state.status.isInProgress,
-          enabled: state.isValidated,
-          title: S.of(context).common_next,
-          onPressed: () => context.read<SignupBloc>().signupWithEmail(context),
+        SizedBox(
+          width: double.infinity,
+          child: XButton(
+            busy: state.status.isInProgress,
+            enabled: state.isValidated,
+            title: S.of(context).common_next,
+            onPressed: () =>
+                context.read<SignupBloc>().signupWithEmail(context),
+          ),
         ),
         const SizedBox(height: 16.0),
       ],
