@@ -56,7 +56,19 @@
     flutter pub run build_runner build --delete-conflicting-outputs
     ```
 
-- **Step 5:** Execute the following command to build app:
+- **Step 5:** Download the gitignore files [here](https://drive.google.com/drive/folders/1GbEW6A1SmxP5UmCMYMyMGcCVr-OzuabY?usp=sharing) and put them in the correct folder according to the structure below :
+
+
+```
+flutter-app/
+|- .vscode/
+  |- launch.json
+|- android
+  |- key.properties
+|- .env
+```
+
+- **Step 6:** Execute the following command to build app:
 
   ### Android:
 
@@ -126,13 +138,36 @@ lib/
   |- data/
   |- services/
   |- feature/
+    |- account/
+      |- profile/
+    |- add_event/
+    |- authentication/
+    |-common/
     |- dashboard/
       |- widget/
       |- logic/
       |- view/
         |-dashboard_screen.dart
+    |- detail_event/
+    |- event/
+    |- followed/
+      |- upcoming/
+      |- past/
+    |- force_update/
     |- home/
-    |- login/
+      |- widget/
+      |- logic/
+      |- view/
+        |-home_screen.dart
+      |-story
+    |- manage_event/
+      |- edit_event/
+      |- manage_event_detail/
+    |- notification/
+    |- photo_view/
+    |- profile_other_user/
+    |- sample/
+    |- search/ 
   |- plugins/
   |- router/
   |- network/
@@ -145,7 +180,10 @@ lib/
 |- modules
 ```
 
+## Architecture Diagram
+- [Link Architecture Diagram](https://drive.google.com/file/d/1r9fLoot6oQvR3tpKUcsg0VNcGM3y2MiK/view?usp=sharing)
 
+![image](./resources/images/architecture_diagram.png)
 ## Database diagram
 
 - [link db diagram](https://lucid.app/lucidchart/14b8934f-1502-484d-a683-614a6b4a430c/edit?viewport_loc=-1763%2C-423%2C2994%2C1423%2C66B0pHvHshgC&invitationId=inv_1346462e-329d-48c1-b451-7678c66a60b3)
