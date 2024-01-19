@@ -41,16 +41,12 @@ class SignupView extends StatelessWidget {
 
   Widget _builder(BuildContext context, SignupState state) {
     return Column(
-      // crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(20.0),
-          child: Assets.images.images.logo.image(
-            fit: BoxFit.cover,
-            height: 100,
-            width: 100,
-          ),
+        Assets.images.images.logo.image(
+          fit: BoxFit.cover,
+          height: 100,
+          width: 100,
         ),
         const Text(
           "SIGN UP",

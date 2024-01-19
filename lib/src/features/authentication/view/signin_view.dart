@@ -40,17 +40,13 @@ class SigninView extends StatelessWidget {
 
   Widget _builder(BuildContext context, SigninState state) {
     return Column(
-      // crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const SizedBox(height: 30),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(20.0),
-          child: Assets.images.images.logo.image(
-            fit: BoxFit.cover,
-            height: 150,
-            width: 150,
-          ),
+        Assets.images.images.logo.image(
+          fit: BoxFit.cover,
+          height: 150,
+          width: 150,
         ),
         _buildTitle(context),
         const SizedBox(height: 24.0),
