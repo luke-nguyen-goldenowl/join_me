@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:myapp/src/dialogs/alert_wrapper.dart';
 import 'package:myapp/src/dialogs/toast_wrapper.dart';
@@ -15,6 +18,7 @@ class EditEventBloc extends Cubit<EditEventState> {
 
   PageController controller = PageController(initialPage: 0);
   GoogleMapController? mapController;
+  TextEditingController textEditingController = TextEditingController();
   DomainManager domain = DomainManager();
 
   void onMapCreate(GoogleMapController controller) {
@@ -93,6 +97,42 @@ class EditEventBloc extends Cubit<EditEventState> {
 
   void backScreen() {
     AppCoordinator.pop(null);
+  }
+
+  Future<LatLng?> _getCoordinatesFromAddress(String address) async {
+    try {
+      List<Location> locations =
+          await locationFromAddress(address, localeIdentifier: 'vi_VN');
+      if (locations.isNotEmpty) {
+        Location location = locations.first;
+        return LatLng(location.latitude, location.longitude);
+      }
+    } catch (e) {
+      print("Error getting coordinates: $e");
+    }
+    return null;
+  }
+
+  void onSearchTextChanged(String search, context) async {
+    try {
+      if (search.isEmpty) return;
+      LatLng? coordinates = await _getCoordinatesFromAddress(search);
+      if (coordinates != null) {
+        handlePressMap(coordinates);
+        mapController?.animateCamera(
+          CameraUpdate.newLatLngZoom(coordinates, 16),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Address not found"),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      log(e.toString());
+    }
   }
 
   @override

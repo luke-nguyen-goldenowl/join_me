@@ -44,7 +44,7 @@ class EventItem extends StatelessWidget {
               style: const TextStyle(
                 wordSpacing: 0,
                 letterSpacing: 0,
-                color: AppColors.black,
+                color: AppColors.text,
                 fontSize: 20,
                 decoration: TextDecoration.none,
               ),
@@ -63,7 +63,7 @@ class EventItem extends StatelessWidget {
                 const TextSpan(
                   text: "Follower: ",
                   style: TextStyle(
-                    color: AppColors.black,
+                    color: AppColors.text,
                     fontSize: 15,
                     decoration: TextDecoration.none,
                   ),
