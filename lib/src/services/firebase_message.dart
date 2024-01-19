@@ -90,7 +90,6 @@ class XFirebaseMessage {
   Future<void> configOnMessageOpenApp() async {
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
       xLog.i("onMessageOpenedApp: ${json.encode(message.data)}");
-      //TODO: Implement handle notification when app is opening.
     });
   }
 
@@ -109,9 +108,7 @@ class XFirebaseMessage {
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
 
-    if (notification != null && android != null) {
-      //TODO: Implement show notification
-    }
+    if (notification != null && android != null) {}
   }
 
   void registerTokenFCM() async {

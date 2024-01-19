@@ -1,5 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart';
+
 import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/firebase/base_collection.dart';
 import 'package:myapp/src/network/model/common/pagination/pagination.dart';
@@ -12,9 +17,6 @@ import 'package:myapp/src/network/model/notification/follow_user.dart';
 import 'package:myapp/src/network/model/notification/notification_model.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 import 'package:myapp/src/services/firebase_message.dart';
-import 'package:http/http.dart';
-import 'dart:io';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:myapp/src/utils/date/date_helper.dart';
 
 class NotificationReference extends BaseCollectionReference<NotificationModel> {

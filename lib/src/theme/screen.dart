@@ -38,7 +38,7 @@ class AppScreens {
   }
 
   /// Scale factor for the text.
-  static double get textScaleFactor => mediaQuery.textScaleFactor;
+  static double get textScaleFactor => mediaQuery.textScaler.scale(1.0);
 
   /// Return a fixed font size according to text scale factor.
   static double fixedFontSize(double fontSize) => fontSize / textScaleFactor;
