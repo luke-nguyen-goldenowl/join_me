@@ -30,36 +30,57 @@ class UploadImagePage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              InkWell(
-                onTap: () {
-                  context.read<AddEventBloc>().selectMedias();
-                },
-                child: Container(
-                  height: 200,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(
-                      color: AppColors.iceBlue,
-                      width: 2,
-                      style: BorderStyle.solid,
-                    ),
+              Container(
+                height: 200,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(
+                    color: AppColors.iceBlue,
+                    width: 2,
+                    style: BorderStyle.solid,
                   ),
-                  child: state.medias.isNotEmpty && state.medias[0] != null
-                      ? InkWell(
-                          onTap: (() {
-                            context.read<AddEventBloc>().removeImage(0);
-                          }),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: Image.file(
+                ),
+                child: state.medias.isNotEmpty && state.medias[0] != null
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: Stack(
+                          children: [
+                            Image.file(
                               File(state.medias[0]!.path),
                               width: double.infinity,
                               height: double.infinity,
                               fit: BoxFit.cover,
                             ),
-                          ),
-                        )
-                      : const Center(
+                            Positioned(
+                              top: 5,
+                              right: 5,
+                              child: SizedBox(
+                                height: 30,
+                                width: 30,
+                                child: IconButton.outlined(
+                                  onPressed: (() {
+                                    context.read<AddEventBloc>().removeImage(0);
+                                  }),
+                                  icon: const Icon(
+                                    Icons.close,
+                                  ),
+                                  color: AppColors.white,
+                                  iconSize: 15,
+                                  style: IconButton.styleFrom(
+                                    backgroundColor:
+                                        AppColors.black.withOpacity(0.3),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    : InkWell(
+                        onTap: () {
+                          context.read<AddEventBloc>().selectMedias();
+                        },
+                        child: const Center(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -72,54 +93,76 @@ class UploadImagePage extends StatelessWidget {
                             ],
                           ),
                         ),
-                ),
+                      ),
               ),
               const SizedBox(height: 10),
               Row(
                 // textDirection: TextDirection.rtl,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: List.generate(4, (index) {
-                  return InkWell(
-                    onTap: () {
-                      context.read<AddEventBloc>().selectMedias();
-                    },
-                    child: Container(
-                      height: 70,
-                      width: 70,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        border: Border.all(
-                          color: AppColors.iceBlue,
-                          width: 2,
-                          style: BorderStyle.solid,
-                        ),
+                  return Container(
+                    height: 70,
+                    width: 70,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(
+                        color: AppColors.iceBlue,
+                        width: 2,
+                        style: BorderStyle.solid,
                       ),
-                      child: state.medias.length - 1 > index &&
-                              state.medias[index + 1] != null
-                          ? InkWell(
-                              onTap: () {
-                                context
-                                    .read<AddEventBloc>()
-                                    .removeImage(index + 1);
-                              },
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(15),
-                                child: Image.file(
+                    ),
+                    child: state.medias.length - 1 > index &&
+                            state.medias[index + 1] != null
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Stack(
+                              children: [
+                                Image.file(
                                   File(state.medias[index + 1]!.path),
                                   width: double.infinity,
                                   height: double.infinity,
                                   fit: BoxFit.cover,
                                 ),
-                              ),
-                            )
-                          : const Center(
+                                Positioned(
+                                  right: 3,
+                                  top: 3,
+                                  child: SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: IconButton.outlined(
+                                      onPressed: (() {
+                                        context
+                                            .read<AddEventBloc>()
+                                            .removeImage(index + 1);
+                                      }),
+                                      icon: const Icon(
+                                        Icons.close,
+                                        size: 10,
+                                      ),
+                                      color: AppColors.white,
+                                      style: IconButton.styleFrom(
+                                        backgroundColor:
+                                            AppColors.black.withOpacity(0.3),
+                                        padding: const EdgeInsets.all(5),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        : InkWell(
+                            onTap: () {
+                              context.read<AddEventBloc>().selectMedias();
+                            },
+                            child: const Center(
                               child: Icon(
                                 Icons.add,
                                 size: 30,
                                 color: AppColors.rosyPink,
                               ),
                             ),
-                    ),
+                          ),
                   );
                 }),
               ),
