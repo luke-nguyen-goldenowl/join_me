@@ -8,7 +8,11 @@ enum TypeEvent {
   sport("Sport", Icons.sports_basketball),
   game("Game", Icons.games_rounded),
   music("Music", Icons.music_note_rounded),
-  movie("Movie", Icons.movie_creation_outlined);
+  movie("Movie", Icons.movie_creation_outlined),
+  photo("Photo", Icons.photo),
+  travel("Travel", Icons.flight),
+  painting("Painting", Icons.format_paint_outlined),
+  education("Education", Icons.cast_for_education);
 
   final String text;
   final IconData icon;

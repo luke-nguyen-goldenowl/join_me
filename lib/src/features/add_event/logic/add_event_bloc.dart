@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -45,9 +47,14 @@ class AddEventBloc extends Cubit<AddEventState> {
     if (!isClosed) emit(state.copyWith(medias: newMedias));
   }
 
-  void handlePressMap(point) {
-    if (!isClosed) {
-      emit(state.copyWith(event: state.event.copyWith(location: point)));
+  void handlePressMap(LatLng point) async {
+    try {
+      await _getAddressFromCoordinates(point);
+      if (!isClosed) {
+        emit(state.copyWith(event: state.event.copyWith(location: point)));
+      }
+    } catch (e) {
+      log(e.toString());
     }
   }
 
@@ -88,6 +95,12 @@ class AddEventBloc extends Cubit<AddEventState> {
   void setType(TypeEvent type) {
     if (!isClosed) {
       emit(state.copyWith(event: state.event.copyWith(type: type)));
+    }
+  }
+
+  void setSearchAddress(String value) {
+    if (!isClosed) {
+      emit(state.copyWith(searchAddress: value));
     }
   }
 
@@ -166,11 +179,11 @@ class AddEventBloc extends Cubit<AddEventState> {
             'Location permissions are permanently denied, we cannot request permissions.');
       }
       currentLocation = await Geolocator.getCurrentPosition();
-
       final LatLng locationLatLng = LatLng(
         currentLocation.latitude,
         currentLocation.longitude,
       );
+      await _getAddressFromCoordinates(locationLatLng);
       if (!isClosed) {
         emit(
           state.copyWith(
@@ -199,9 +212,29 @@ class AddEventBloc extends Cubit<AddEventState> {
     return null;
   }
 
+  Future<void> _getAddressFromCoordinates(LatLng coordinates) async {
+    try {
+      if (!isClosed) emit(state.copyWith(isSearching: true));
+      List<Placemark> addresses = await placemarkFromCoordinates(
+          coordinates.latitude, coordinates.longitude,
+          localeIdentifier: 'vi_VN');
+      if (addresses.isNotEmpty) {
+        String address =
+            "${addresses.first.street}, ${addresses.first.subAdministrativeArea}, ${addresses.first.administrativeArea}, ${addresses.first.country}";
+        textEditingController.text = address;
+        setSearchAddress(address);
+      }
+    } catch (e) {
+      print("Error getting coordinates: $e");
+    }
+    if (!isClosed) emit(state.copyWith(isSearching: false));
+  }
+
   void onSearchTextChanged(String search, context) async {
     if (search.isEmpty) return;
+    if (!isClosed) emit(state.copyWith(isSearching: true));
     LatLng? coordinates = await _getCoordinatesFromAddress(search);
+    if (!isClosed) emit(state.copyWith(isSearching: false));
     if (coordinates != null) {
       handlePressMap(coordinates);
       mapController?.animateCamera(

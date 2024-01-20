@@ -10,6 +10,9 @@ class AddEventState {
   bool isPosting;
   bool isLoadingCurrentLocation;
 
+  bool isSearching;
+  String searchAddress;
+
   MEvent event;
   List<XFile?> medias;
   TimeOfDay? time;
@@ -17,10 +20,12 @@ class AddEventState {
   AddEventState({
     required this.currentPage,
     required this.isPosting,
+    required this.isLoadingCurrentLocation,
+    required this.isSearching,
+    required this.searchAddress,
+    required this.event,
     required this.medias,
     required this.time,
-    required this.isLoadingCurrentLocation,
-    required this.event,
   });
 
   factory AddEventState.ds() {
@@ -31,6 +36,8 @@ class AddEventState {
       isPosting: false,
       isLoadingCurrentLocation: true,
       event: MEvent(),
+      searchAddress: "",
+      isSearching: false,
     );
   }
 
@@ -38,7 +45,7 @@ class AddEventState {
     if (currentPage == 0 && medias.isEmpty) {
       return false;
     }
-    if (currentPage == 1 && event.location == null) {
+    if (currentPage == 1 && (event.location == null || searchAddress.isEmpty)) {
       return false;
     }
     if (currentPage == 2 &&
@@ -60,6 +67,8 @@ class AddEventState {
     int? currentPage,
     bool? isPosting,
     bool? isLoadingCurrentLocation,
+    bool? isSearching,
+    String? searchAddress,
     MEvent? event,
     List<XFile?>? medias,
     TimeOfDay? time,
@@ -69,6 +78,8 @@ class AddEventState {
       isPosting: isPosting ?? this.isPosting,
       isLoadingCurrentLocation:
           isLoadingCurrentLocation ?? this.isLoadingCurrentLocation,
+      isSearching: isSearching ?? this.isSearching,
+      searchAddress: searchAddress ?? this.searchAddress,
       event: event ?? this.event,
       medias: medias ?? this.medias,
       time: time ?? this.time,
@@ -82,6 +93,8 @@ class AddEventState {
     return other.currentPage == currentPage &&
         other.isPosting == isPosting &&
         other.isLoadingCurrentLocation == isLoadingCurrentLocation &&
+        other.isSearching == isSearching &&
+        other.searchAddress == searchAddress &&
         other.event == event &&
         listEquals(other.medias, medias) &&
         other.time == time;
@@ -92,6 +105,8 @@ class AddEventState {
     return currentPage.hashCode ^
         isPosting.hashCode ^
         isLoadingCurrentLocation.hashCode ^
+        isSearching.hashCode ^
+        searchAddress.hashCode ^
         event.hashCode ^
         medias.hashCode ^
         time.hashCode;

@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:myapp/src/features/add_event/logic/add_event_bloc.dart';
 import 'package:myapp/src/features/add_event/logic/add_event_state.dart';
 import 'package:myapp/src/theme/colors.dart';
+import 'package:myapp/widgets/state/state_loading_widget.dart';
 
 class AddressPage extends StatelessWidget {
   const AddressPage({super.key});
@@ -47,11 +48,9 @@ class AddressPage extends StatelessWidget {
                                           const LatLng(10.790159, 106.6557574),
                                       zoom: 16,
                                     ),
-                                    onTap: (argument) {
-                                      context
-                                          .read<AddEventBloc>()
-                                          .handlePressMap(argument);
-                                    },
+                                    onTap: context
+                                        .read<AddEventBloc>()
+                                        .handlePressMap,
                                     myLocationEnabled: true,
                                     markers: {
                                       Marker(
@@ -64,27 +63,46 @@ class AddressPage extends StatelessWidget {
                                 }),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: SearchBar(
-                                  controller: context
-                                      .read<AddEventBloc>()
-                                      .textEditingController,
-                                  leading: const Icon(Icons.search),
-                                  onSubmitted: (value) {
-                                    context
-                                        .read<AddEventBloc>()
-                                        .onSearchTextChanged(value, context);
-                                  },
-                                  trailing: [
-                                    IconButton(
-                                      icon: const Icon(Icons.clear),
-                                      onPressed: () {
+                              child: BlocBuilder<AddEventBloc, AddEventState>(
+                                  buildWhen: (previous, current) =>
+                                      previous.isSearching !=
+                                      current.isSearching,
+                                  builder: (context, state) {
+                                    return SearchBar(
+                                      controller: context
+                                          .read<AddEventBloc>()
+                                          .textEditingController,
+                                      leading: state.isSearching
+                                          ? const SizedBox(
+                                              height: 20,
+                                              width: 20,
+                                              child: XStateLoadingWidget())
+                                          : const Icon(Icons.search),
+                                      onChanged: context
+                                          .read<AddEventBloc>()
+                                          .setSearchAddress,
+                                      onSubmitted: (value) {
                                         context
                                             .read<AddEventBloc>()
-                                            .textEditingController
-                                            .clear();
+                                            .onSearchTextChanged(
+                                                value, context);
                                       },
-                                    )
-                                  ]),
+                                      trailing: [
+                                        IconButton(
+                                          icon: const Icon(Icons.clear),
+                                          onPressed: () {
+                                            context
+                                                .read<AddEventBloc>()
+                                                .textEditingController
+                                                .clear();
+                                            context
+                                                .read<AddEventBloc>()
+                                                .setSearchAddress("");
+                                          },
+                                        )
+                                      ],
+                                    );
+                                  }),
                             ),
                           ],
                         )
