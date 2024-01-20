@@ -31,7 +31,7 @@ class DetailEventBloc extends Cubit<DetailEventState> {
       final result = await domain.event.getEvent(eventId);
       if (result.isSuccess) {
         MEvent event = result.data!;
-        emit(state.copyWith(event: event));
+        if (!isClosed) emit(state.copyWith(event: event));
       }
     } catch (e) {
       print(e);
@@ -64,7 +64,7 @@ class DetailEventBloc extends Cubit<DetailEventState> {
       if (result.isSuccess) {
         final MEvent newEvent =
             state.event?.copyWith(host: newHost) ?? MEvent();
-        emit(state.copyWith(event: newEvent));
+        if (!isClosed) emit(state.copyWith(event: newEvent));
         final newUser = user.copyWith(followed: newFollowed);
         GetIt.I<AccountBloc>().onUserChange(AccountState(user: newUser));
       }
@@ -94,7 +94,7 @@ class DetailEventBloc extends Cubit<DetailEventState> {
         isFollowed,
       );
       if (result.isSuccess) {
-        emit(state.copyWith(event: newEvent));
+        if (!isClosed) emit(state.copyWith(event: newEvent));
       }
     } catch (e) {
       print(e);
@@ -122,7 +122,7 @@ class DetailEventBloc extends Cubit<DetailEventState> {
         isFavorite,
       );
       if (result.isSuccess) {
-        emit(state.copyWith(event: newEvent));
+        if (!isClosed) emit(state.copyWith(event: newEvent));
       }
     } catch (e) {
       print(e);

@@ -14,7 +14,7 @@ class ListFollowerBloc extends Cubit<ListFollowerState> {
   void getFollower() async {
     final result = await domain.user.getUsersByIds(user.followers ?? []);
     if (result.isSuccess) {
-      emit(state.copyWith(followers: result.data));
+      if (!isClosed) emit(state.copyWith(followers: result.data));
     }
   }
 }
