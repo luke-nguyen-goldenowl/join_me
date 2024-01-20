@@ -135,6 +135,11 @@ class AddEventBloc extends Cubit<AddEventState> {
     try {
       serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
+        if (!isClosed) {
+          emit(
+            state.copyWith(isLoadingCurrentLocation: false),
+          );
+        }
         return Future.error('Location services are disabled.');
       }
 
@@ -142,11 +147,21 @@ class AddEventBloc extends Cubit<AddEventState> {
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
+          if (!isClosed) {
+            emit(
+              state.copyWith(isLoadingCurrentLocation: false),
+            );
+          }
           return Future.error('Location permissions are denied');
         }
       }
 
       if (permission == LocationPermission.deniedForever) {
+        if (!isClosed) {
+          emit(
+            state.copyWith(isLoadingCurrentLocation: false),
+          );
+        }
         return Future.error(
             'Location permissions are permanently denied, we cannot request permissions.');
       }

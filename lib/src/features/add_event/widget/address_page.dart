@@ -56,7 +56,8 @@ class AddressPage extends StatelessWidget {
                                     markers: {
                                       Marker(
                                         markerId: const MarkerId('my location'),
-                                        position: state.event.location!,
+                                        position: state.event.location ??
+                                            const LatLng(0, 0),
                                       )
                                     },
                                   );

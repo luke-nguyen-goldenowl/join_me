@@ -114,28 +114,30 @@ class AddEventPage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          OutlinedButton(
-            onPressed: () {
-              controller.previousPage(
-                  duration: const Duration(milliseconds: 250),
-                  curve: Curves.easeInOut);
-            },
-            style: OutlinedButton.styleFrom(
-              side: const BorderSide(
-                color: AppColors.iceBlue,
-                width: 3,
-              ),
-              minimumSize: const Size(100, 50),
-              foregroundColor: AppColors.text,
-            ),
-            child: const Text(
-              "Back",
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
+          currentPage != 0
+              ? OutlinedButton(
+                  onPressed: () {
+                    controller.previousPage(
+                        duration: const Duration(milliseconds: 250),
+                        curve: Curves.easeInOut);
+                  },
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(
+                      color: AppColors.iceBlue,
+                      width: 3,
+                    ),
+                    minimumSize: const Size(100, 50),
+                    foregroundColor: AppColors.text,
+                  ),
+                  child: const Text(
+                    "Back",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                )
+              : const SizedBox.shrink(),
           ElevatedButton(
             onPressed: context.watch<AddEventBloc>().state.checkValidate()
                 ? () {
