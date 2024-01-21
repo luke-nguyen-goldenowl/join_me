@@ -100,6 +100,7 @@ class DetailEventPage extends StatelessWidget {
                           ),
                           const SizedBox(height: 20),
                           TimeEvent(
+                            endDate: state.event?.deadline,
                             startDate: state.event?.startDate,
                             followers: state.event?.followersId?.length ?? 0,
                           ),
