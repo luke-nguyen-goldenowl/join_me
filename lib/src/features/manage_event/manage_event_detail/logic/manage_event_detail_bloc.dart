@@ -29,7 +29,7 @@ class ManageEventDetailBloc extends Cubit<ManageEventDetailState> {
     final result = await domain.event.getEvent(eventId);
     if (result.isSuccess) {
       MEvent event = result.data!;
-      emit(state.copyWith(event: event));
+      if (!isClosed) emit(state.copyWith(event: event));
     }
   }
 
@@ -39,7 +39,7 @@ class ManageEventDetailBloc extends Cubit<ManageEventDetailState> {
     if (event != null) {
       await mapController?.moveCamera(
           CameraUpdate.newLatLng(event.location ?? const LatLng(0, 0)));
-      emit(state.copyWith(event: event));
+      if (!isClosed) emit(state.copyWith(event: event));
     }
   }
 
@@ -52,7 +52,7 @@ class ManageEventDetailBloc extends Cubit<ManageEventDetailState> {
         await domain.user.getUsersByIds(state.event.followersId ?? []);
     if (result.isSuccess) {
       final List<MUser> followers = result.data!;
-      emit(state.copyWith(followers: followers));
+      if (!isClosed) emit(state.copyWith(followers: followers));
     }
   }
 

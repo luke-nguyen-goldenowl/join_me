@@ -146,6 +146,10 @@ class AddEventBloc extends Cubit<AddEventState> {
     bool serviceEnabled;
     LocationPermission permission;
     try {
+      if (state.event.location != null) {
+        return;
+      }
+
       serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
         if (!isClosed) {
@@ -231,22 +235,26 @@ class AddEventBloc extends Cubit<AddEventState> {
   }
 
   void onSearchTextChanged(String search, context) async {
-    if (search.isEmpty) return;
-    if (!isClosed) emit(state.copyWith(isSearching: true));
-    LatLng? coordinates = await _getCoordinatesFromAddress(search);
-    if (!isClosed) emit(state.copyWith(isSearching: false));
-    if (coordinates != null) {
-      handlePressMap(coordinates);
-      mapController?.animateCamera(
-        CameraUpdate.newLatLngZoom(coordinates, 16),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Address not found"),
-          duration: Duration(seconds: 2),
-        ),
-      );
+    try {
+      if (search.isEmpty) return;
+      if (!isClosed) emit(state.copyWith(isSearching: true));
+      LatLng? coordinates = await _getCoordinatesFromAddress(search);
+      if (!isClosed) emit(state.copyWith(isSearching: false));
+      if (coordinates != null) {
+        handlePressMap(coordinates);
+        await mapController?.moveCamera(
+          CameraUpdate.newLatLngZoom(coordinates, 16),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Address not found"),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
