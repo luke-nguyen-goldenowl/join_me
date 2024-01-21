@@ -37,15 +37,19 @@ class AddStoryPage extends StatelessWidget {
             buildWhen: (previous, current) => previous.image != current.image,
             builder: ((context, state) {
               if (state.image != null) {
-                return Expanded(
-                  child: Container(
-                    color: AppColors.black,
-                    alignment: Alignment.center,
-                    child: Image.file(
-                      File(state.image!.path),
-                      fit: BoxFit.contain,
+                return Column(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        color: AppColors.black,
+                        alignment: Alignment.center,
+                        child: Image.file(
+                          File(state.image!.path),
+                          fit: BoxFit.contain,
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 );
               } else {
                 return Container(
