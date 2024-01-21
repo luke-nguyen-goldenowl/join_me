@@ -15,8 +15,8 @@ class SearchBloc extends Cubit<SearchState> {
       emit(state.copyWith(isLoading: true));
       switch (state.type) {
         case TypeSearch.event:
-          final result =
-              await domain.event.getEventsBySearch(state.searchValue, user.id);
+          final result = await domain.event
+              .getEventsBySearch(state.searchValue.toLowerCase(), user.id);
           if (result.isSuccess) {
             if (!isClosed) {
               emit(state.copyWith(
@@ -28,8 +28,8 @@ class SearchBloc extends Cubit<SearchState> {
 
           break;
         case TypeSearch.people:
-          final result =
-              await domain.user.getUsersBySearch(state.searchValue, user.id);
+          final result = await domain.user
+              .getUsersBySearch(state.searchValue.toLowerCase(), user.id);
           if (result.isSuccess) {
             if (!isClosed) {
               emit(state.copyWith(
