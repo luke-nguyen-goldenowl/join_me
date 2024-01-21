@@ -18,9 +18,9 @@ import 'package:myapp/src/features/event/view/event_view.dart';
 import 'package:myapp/src/features/followed/past/view/past_event_followed_view.dart';
 import 'package:myapp/src/features/followed/upcoming/view/upcoming_event_followed_view.dart';
 import 'package:myapp/src/features/followed/view/followed_view.dart';
+import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/router/extras/story_view_extra.dart';
 import 'package:myapp/src/features/home/view/home_view.dart';
-import 'package:myapp/src/features/manage_event/edit_event/view/edit_event_view.dart';
 import 'package:myapp/src/features/manage_event/manage_event_detail/view/manage_event_detail_view.dart';
 import 'package:myapp/src/features/manage_event/view/manage_event_view.dart';
 import 'package:myapp/src/features/notification/view/notification_view.dart';
@@ -165,13 +165,12 @@ class AppRouter {
               ),
               GoRoute(
                 parentNavigatorKey: AppCoordinator.navigatorKey,
-                path: AppRouteNames.editEvent.buildSubPathParam,
+                path: AppRouteNames.editEvent.subPath,
                 name: AppRouteNames.editEvent.name,
                 builder: (_, state) {
-                  final id =
-                      state.pathParameters[AppRouteNames.editEvent.paramName]!;
-                  return EditEvent(
-                    id: id,
+                  final event = state.extra as MEvent;
+                  return AddEventView(
+                    event: event,
                   );
                 },
               ),

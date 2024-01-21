@@ -113,7 +113,7 @@ class DetailPage extends StatelessWidget {
                         initialDate: state.event.startDate ??
                             state.event.deadline ??
                             DateTime.now(),
-                        firstDate: DateTime.now(),
+                        firstDate: state.event.startDate ?? DateTime.now(),
                         lastDate: state.event.deadline ?? DateTime(2101),
                       );
                       if (selectedDate != null &&
@@ -158,7 +158,7 @@ class DetailPage extends StatelessWidget {
                     readOnly: true,
                     value: DateHelper.getFullDateTypeVN(state.event.deadline),
                     decoration: const InputDecoration(
-                      labelText: "End date",
+                      labelText: "End day",
                     ),
                     onChanged: (value) {
                       if (value == "") addEventBloc.setDeadlineEvent(null);

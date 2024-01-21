@@ -16,10 +16,11 @@ import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:myapp/src/router/coordinator.dart';
+import 'package:myapp/src/services/firebase_storage.dart';
 import 'package:myapp/src/services/image_picker.dart';
 
 class AddEventBloc extends Cubit<AddEventState> {
-  AddEventBloc() : super(AddEventState.ds());
+  AddEventBloc({MEvent? event}) : super(AddEventState.ds(event));
 
   final DomainManager domain = DomainManager();
   PageController controller = PageController(initialPage: 0);
@@ -34,17 +35,30 @@ class AddEventBloc extends Cubit<AddEventState> {
   }
 
   void selectMedias() async {
-    List<XFile> pickMedias =
-        await XImagePicker().onPickMultiImage(limit: 5 - state.medias.length);
+    int lengthEventImages = (state.event.images?.length ?? 0);
+    List<XFile> pickMedias = await XImagePicker()
+        .onPickMultiImage(limit: 5 - state.medias.length - lengthEventImages);
     if (!isClosed) {
       emit(state.copyWith(medias: [...pickMedias, ...state.medias]));
     }
   }
 
   void removeImage(int index) {
+    if (state.medias.length - 1 < index) {
+      return removeEventImages(index - state.medias.length);
+    }
+
     final List<XFile?> newMedias = [...state.medias];
     newMedias.removeAt(index);
     if (!isClosed) emit(state.copyWith(medias: newMedias));
+  }
+
+  void removeEventImages(int index) {
+    final List<String> newImages = [...state.event.images ?? []];
+    newImages.removeAt(index);
+    if (!isClosed) {
+      emit(state.copyWith(event: state.event.copyWith(images: newImages)));
+    }
   }
 
   void handlePressMap(LatLng point) async {
@@ -104,6 +118,42 @@ class AddEventBloc extends Cubit<AddEventState> {
     }
   }
 
+  void editEvent() async {
+    if (!isClosed) emit(state.copyWith(isPosting: true));
+
+    List<String> listImage = [];
+    if (state.medias.isNotEmpty) {
+      final List<String> images = state.medias.map((e) => e!.path).toList();
+      listImage = await XFirebaseStorage().uploadImages(images, "events");
+    }
+
+    DateTime? startDate;
+    if (state.event.startDate != null && state.time != null) {
+      startDate = DateTime(
+        state.event.startDate!.year,
+        state.event.startDate!.month,
+        state.event.startDate!.day,
+        state.time!.hour,
+        state.time!.minute,
+      );
+    }
+    final MEvent event = state.event.copyWith(
+      images: [...listImage, ...state.event.images ?? []],
+      startDate: startDate,
+    );
+
+    final result = await domain.event.updateEvent(event);
+
+    if (!isClosed) emit(state.copyWith(isPosting: false));
+
+    if (result.isSuccess) {
+      AppCoordinator.pop(result.data);
+      XToast.success('Edit event success');
+    } else {
+      XAlert.show(title: 'Edit event fail', body: result.error);
+    }
+  }
+
   void addEvent() async {
     if (!isClosed) emit(state.copyWith(isPosting: true));
 
@@ -147,7 +197,10 @@ class AddEventBloc extends Cubit<AddEventState> {
     LocationPermission permission;
     try {
       if (state.event.location != null) {
-        return;
+        await _getAddressFromCoordinates(state.event.location!);
+        return emit(
+          state.copyWith(isLoadingCurrentLocation: false),
+        );
       }
 
       serviceEnabled = await Geolocator.isLocationServiceEnabled();

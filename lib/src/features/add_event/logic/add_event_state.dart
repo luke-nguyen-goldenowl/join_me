@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:myapp/src/network/model/event/event.dart';
+import 'package:myapp/src/utils/utils.dart';
 
 class AddEventState {
   int currentPage;
@@ -28,21 +29,23 @@ class AddEventState {
     required this.time,
   });
 
-  factory AddEventState.ds() {
+  factory AddEventState.ds([MEvent? event]) {
     return AddEventState(
       currentPage: 0,
       medias: [],
-      time: null,
+      time: (event != null && event.startDate != null)
+          ? TimeOfDay.fromDateTime(event.startDate!)
+          : null,
       isPosting: false,
       isLoadingCurrentLocation: true,
-      event: MEvent(),
+      event: event ?? MEvent.empty(),
       searchAddress: "",
       isSearching: false,
     );
   }
 
   bool checkValidate() {
-    if (currentPage == 0 && medias.isEmpty) {
+    if (currentPage == 0 && medias.isEmpty && isNullOrEmpty(event.images)) {
       return false;
     }
     if (currentPage == 1 && (event.location == null || searchAddress.isEmpty)) {
@@ -53,10 +56,8 @@ class AddEventState {
             event.deadline == null ||
             event.startDate == null ||
             event.type == null ||
-            event.description == null ||
-            (event.description?.isEmpty ?? true) ||
-            event.name == null ||
-            (event.name?.isEmpty ?? true))) {
+            isNullOrEmpty(event.description) ||
+            isNullOrEmpty(event.name))) {
       return false;
     }
 

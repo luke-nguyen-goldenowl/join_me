@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/src/features/add_event/logic/add_event_bloc.dart';
 import 'package:myapp/src/features/add_event/logic/add_event_state.dart';
 import 'package:myapp/src/theme/colors.dart';
+import 'package:myapp/widgets/image/image_network.dart';
 
 class UploadImagePage extends StatelessWidget {
   const UploadImagePage({super.key});
@@ -14,7 +15,8 @@ class UploadImagePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AddEventBloc, AddEventState>(
       buildWhen: (previous, current) =>
-          !listEquals(previous.medias, current.medias),
+          !listEquals(previous.medias, current.medias) ||
+          !listEquals(previous.event.images, current.event.images),
       builder: (context, state) {
         return Container(
           color: AppColors.white,
@@ -40,17 +42,25 @@ class UploadImagePage extends StatelessWidget {
                     style: BorderStyle.solid,
                   ),
                 ),
-                child: state.medias.isNotEmpty && state.medias[0] != null
+                child: (state.medias.isNotEmpty && state.medias[0] != null ||
+                        (state.event.images?.isNotEmpty ?? false))
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(15),
                         child: Stack(
                           children: [
-                            Image.file(
-                              File(state.medias[0]!.path),
-                              width: double.infinity,
-                              height: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
+                            state.medias.isNotEmpty
+                                ? Image.file(
+                                    File(state.medias[0]!.path),
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    fit: BoxFit.cover,
+                                  )
+                                : XImageNetwork(
+                                    state.event.images?[0],
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ),
                             Positioned(
                               top: 5,
                               right: 5,
@@ -111,18 +121,29 @@ class UploadImagePage extends StatelessWidget {
                         style: BorderStyle.solid,
                       ),
                     ),
-                    child: state.medias.length - 1 > index &&
-                            state.medias[index + 1] != null
+                    child: state.medias.length +
+                                (state.event.images?.length ?? 0) -
+                                1 >
+                            index
                         ? ClipRRect(
                             borderRadius: BorderRadius.circular(15),
                             child: Stack(
                               children: [
-                                Image.file(
-                                  File(state.medias[index + 1]!.path),
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                  fit: BoxFit.cover,
-                                ),
+                                (state.medias.length > index + 1 &&
+                                        state.medias[index + 1] != null)
+                                    ? Image.file(
+                                        File(state.medias[index + 1]!.path),
+                                        width: double.infinity,
+                                        height: double.infinity,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : XImageNetwork(
+                                        state.event.images?[
+                                            index + 1 - state.medias.length],
+                                        width: double.infinity,
+                                        height: double.infinity,
+                                        fit: BoxFit.cover,
+                                      ),
                                 Positioned(
                                   right: 3,
                                   top: 3,

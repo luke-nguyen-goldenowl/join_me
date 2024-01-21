@@ -30,8 +30,8 @@ enum AppRouteNames {
     paramName: 'id_manage_event',
   ),
   editEvent(
-    path: 'edit_event',
-    paramName: 'id_edit_event',
+    path: '/edit_event',
+    // paramName: 'event_data',
   ),
   notify(path: '/notify'),
   profileOtherUser(
