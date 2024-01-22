@@ -25,13 +25,16 @@ class ListFollower extends StatelessWidget {
               Expanded(
                 child: Container(
                   color: AppColors.white,
-                  child: ListView.builder(
-                    itemCount: state.followers.length,
-                    itemBuilder: ((context, index) {
-                      return PersonSearchWidget(
-                        person: state.followers[index],
-                      );
-                    }),
+                  child: RefreshIndicator(
+                    onRefresh: context.read<ListFollowerBloc>().refreshData,
+                    child: ListView.builder(
+                      itemCount: state.followers.length,
+                      itemBuilder: ((context, index) {
+                        return PersonSearchWidget(
+                          person: state.followers[index],
+                        );
+                      }),
+                    ),
                   ),
                 ),
               ),

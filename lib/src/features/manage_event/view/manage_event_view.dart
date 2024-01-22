@@ -25,23 +25,26 @@ class ManageEventView extends StatelessWidget {
             body: Column(
               children: [
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: state.data.data.length + 1,
-                    itemBuilder: ((context, index) {
-                      if (index == state.data.data.length) {
-                        return Container(
-                          margin: const EdgeInsets.symmetric(vertical: 20),
-                          alignment: Alignment.center,
-                          child: XStatePaginationWidget(
-                            page: state.data,
-                            loadMore: context.read<ManageEventBloc>().getData,
-                            autoLoad: true,
-                          ),
-                        );
-                      } else {
-                        return ManageEventItem(event: state.data.data[index]);
-                      }
-                    }),
+                  child: RefreshIndicator(
+                    onRefresh: context.read<ManageEventBloc>().refreshData,
+                    child: ListView.builder(
+                      itemCount: state.data.data.length + 1,
+                      itemBuilder: ((context, index) {
+                        if (index == state.data.data.length) {
+                          return Container(
+                            margin: const EdgeInsets.symmetric(vertical: 20),
+                            alignment: Alignment.center,
+                            child: XStatePaginationWidget(
+                              page: state.data,
+                              loadMore: context.read<ManageEventBloc>().getData,
+                              autoLoad: true,
+                            ),
+                          );
+                        } else {
+                          return ManageEventItem(event: state.data.data[index]);
+                        }
+                      }),
+                    ),
                   ),
                 ),
               ],

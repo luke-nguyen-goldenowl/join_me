@@ -58,4 +58,11 @@ class EventViewBloc extends Cubit<EventViewState> {
 
     getEvent();
   }
+
+  Future<void> refreshData() async {
+    if (!isClosed) {
+      emit(state.copyWith(events: []));
+    }
+    getEvent();
+  }
 }

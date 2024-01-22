@@ -20,6 +20,7 @@ class TabViewProfileUser extends StatelessWidget {
         buildWhen: (previous, current) => previous.data != current.data,
         builder: ((context, state) {
           return ListDataPaginationEvent(
+            onRefresh: context.read<AttendedBloc>().refreshData,
             data: state.data,
             getData: context.read<AttendedBloc>().getData,
           );
@@ -29,6 +30,7 @@ class TabViewProfileUser extends StatelessWidget {
         buildWhen: (previous, current) => previous.data != current.data,
         builder: ((context, state) {
           return ListDataPaginationEvent(
+            onRefresh: context.read<HostBloc>().refreshData,
             data: state.data,
             getData: context.read<HostBloc>().getData,
           );
@@ -38,6 +40,7 @@ class TabViewProfileUser extends StatelessWidget {
         buildWhen: (previous, current) => previous.data != current.data,
         builder: ((context, state) {
           return ListDataPaginationEvent(
+            onRefresh: context.read<FavoriteBloc>().refreshData,
             data: state.data,
             getData: context.read<FavoriteBloc>().getData,
           );

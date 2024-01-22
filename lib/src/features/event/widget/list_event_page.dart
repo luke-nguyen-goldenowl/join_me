@@ -16,21 +16,24 @@ class ListEventItemEventView extends StatelessWidget {
       buildWhen: (previous, current) =>
           !listEquals(previous.events, current.events),
       builder: ((context, state) {
-        return ListView.builder(
-          itemCount: state.events.length,
-          itemBuilder: ((context, index) {
-            return Column(
-              children: [
-                SizedBox(
-                  height: 250,
-                  child: EventItemEvent(
-                    event: state.events[index],
+        return RefreshIndicator(
+          onRefresh: context.read<EventViewBloc>().refreshData,
+          child: ListView.builder(
+            itemCount: state.events.length,
+            itemBuilder: ((context, index) {
+              return Column(
+                children: [
+                  SizedBox(
+                    height: 250,
+                    child: EventItemEvent(
+                      event: state.events[index],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 20),
-              ],
-            );
-          }),
+                  const SizedBox(height: 20),
+                ],
+              );
+            }),
+          ),
         );
       }),
     );

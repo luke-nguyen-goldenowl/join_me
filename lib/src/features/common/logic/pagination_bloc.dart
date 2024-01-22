@@ -32,7 +32,7 @@ abstract class PaginationBloc<T extends PaginationState> extends Cubit<T> {
     if (!isClosed) {
       emit(state.copyWith(data: MPagination()) as T);
     }
-    getData();
+    // await getData();
   }
 }
 
