@@ -41,11 +41,13 @@ class EventViewBloc extends Cubit<EventViewState> {
   }
 
   void getEvent() async {
+    if (!isClosed) emit(state.copyWith(isLoading: true));
     final result = await domain.event
         .getEventsByFilter(state.types, state.firstDate, state.lastDate);
     if (result.isSuccess) {
       emit(state.copyWith(events: result.data));
     }
+    if (!isClosed) emit(state.copyWith(isLoading: false));
   }
 
   void updateTypes(TypeEvent type) {

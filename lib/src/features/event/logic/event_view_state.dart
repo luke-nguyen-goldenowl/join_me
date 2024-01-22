@@ -12,6 +12,7 @@ class EventViewState {
   List<TypeEvent> types;
   TypeShow typeShow;
 
+  bool isLoading;
   List<MEvent> events;
 
   EventViewState({
@@ -20,6 +21,7 @@ class EventViewState {
     required this.weekDays,
     required this.types,
     this.typeShow = TypeShow.list,
+    required this.isLoading,
     required this.events,
   });
 
@@ -30,6 +32,7 @@ class EventViewState {
       events: [],
       firstDate: DateTime.now(),
       lastDate: DateTime.now(),
+      isLoading: false,
     );
   }
 
@@ -39,6 +42,7 @@ class EventViewState {
     List<DateTime>? weekDays,
     List<TypeEvent>? types,
     TypeShow? typeShow,
+    bool? isLoading,
     List<MEvent>? events,
   }) {
     return EventViewState(
@@ -47,6 +51,7 @@ class EventViewState {
       weekDays: weekDays ?? this.weekDays,
       types: types ?? this.types,
       typeShow: typeShow ?? this.typeShow,
+      isLoading: isLoading ?? this.isLoading,
       events: events ?? this.events,
     );
   }
@@ -60,6 +65,7 @@ class EventViewState {
         listEquals(other.weekDays, weekDays) &&
         listEquals(other.types, types) &&
         other.typeShow == typeShow &&
+        other.isLoading == isLoading &&
         listEquals(other.events, events);
   }
 
@@ -70,6 +76,7 @@ class EventViewState {
         weekDays.hashCode ^
         types.hashCode ^
         typeShow.hashCode ^
+        isLoading.hashCode ^
         events.hashCode;
   }
 }

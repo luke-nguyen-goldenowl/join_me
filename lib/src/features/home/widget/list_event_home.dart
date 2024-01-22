@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/src/features/home/logic/home_bloc.dart';
@@ -16,15 +17,15 @@ class ListEventHome extends StatelessWidget {
       buildWhen: (previous, current) {
         switch (type) {
           case TypeListEventHome.followed:
-            return previous.followed.length != current.followed.length;
+            return !listEquals(previous.followed, current.followed);
           case TypeListEventHome.popular:
-            return previous.popular.length != current.popular.length;
+            return !listEquals(previous.popular, current.popular);
           case TypeListEventHome.people:
-            return previous.people.length != current.people.length;
+            return !listEquals(previous.people, current.people);
           case TypeListEventHome.upcoming:
-            return previous.upcoming.length != current.upcoming.length;
+            return !listEquals(previous.upcoming, current.upcoming);
           default:
-            return previous.followed.length != current.followed.length;
+            return !listEquals(previous.followed, current.followed);
         }
       },
       builder: ((context, state) {
