@@ -118,7 +118,7 @@ class AddEventBloc extends Cubit<AddEventState> {
   }
 
   void editEvent() async {
-    if (!isClosed) emit(state.copyWith(isPosting: true));
+    XToast.showLoading();
 
     List<String> listImage = [];
     if (state.medias.isNotEmpty) {
@@ -143,7 +143,7 @@ class AddEventBloc extends Cubit<AddEventState> {
 
     final result = await domain.event.updateEvent(event);
 
-    if (!isClosed) emit(state.copyWith(isPosting: false));
+    XToast.hideLoading();
 
     if (result.isSuccess) {
       AppCoordinator.pop(result.data);

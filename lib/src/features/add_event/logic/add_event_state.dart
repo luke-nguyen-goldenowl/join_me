@@ -8,7 +8,6 @@ import 'package:myapp/src/utils/utils.dart';
 
 class AddEventState {
   int currentPage;
-  bool isPosting;
   bool isLoadingCurrentLocation;
 
   bool isSearching;
@@ -20,7 +19,6 @@ class AddEventState {
 
   AddEventState({
     required this.currentPage,
-    required this.isPosting,
     required this.isLoadingCurrentLocation,
     required this.isSearching,
     required this.searchAddress,
@@ -36,7 +34,6 @@ class AddEventState {
       time: (event != null && event.startDate != null)
           ? TimeOfDay.fromDateTime(event.startDate!)
           : null,
-      isPosting: false,
       isLoadingCurrentLocation: true,
       event: event ?? MEvent.empty(),
       searchAddress: "",
@@ -66,7 +63,6 @@ class AddEventState {
 
   AddEventState copyWith({
     int? currentPage,
-    bool? isPosting,
     bool? isLoadingCurrentLocation,
     bool? isSearching,
     String? searchAddress,
@@ -76,7 +72,6 @@ class AddEventState {
   }) {
     return AddEventState(
       currentPage: currentPage ?? this.currentPage,
-      isPosting: isPosting ?? this.isPosting,
       isLoadingCurrentLocation:
           isLoadingCurrentLocation ?? this.isLoadingCurrentLocation,
       isSearching: isSearching ?? this.isSearching,
@@ -92,7 +87,6 @@ class AddEventState {
     if (identical(this, other)) return true;
 
     return other.currentPage == currentPage &&
-        other.isPosting == isPosting &&
         other.isLoadingCurrentLocation == isLoadingCurrentLocation &&
         other.isSearching == isSearching &&
         other.searchAddress == searchAddress &&
@@ -104,7 +98,6 @@ class AddEventState {
   @override
   int get hashCode {
     return currentPage.hashCode ^
-        isPosting.hashCode ^
         isLoadingCurrentLocation.hashCode ^
         isSearching.hashCode ^
         searchAddress.hashCode ^

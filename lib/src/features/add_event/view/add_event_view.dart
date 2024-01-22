@@ -35,90 +35,65 @@ class AddEventPage extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return Stack(
-      children: [
-        Scaffold(
-          backgroundColor: AppColors.white,
-          appBar: AppBarCustom(
-            title: BlocBuilder<AddEventBloc, AddEventState>(
-              buildWhen: (previous, current) => previous.event != current.event,
-              builder: ((context, state) {
-                return Text(
-                  state.event.id?.isEmpty ?? true
-                      ? "Create New Event"
-                      : "Edit Event",
-                );
-              }),
-            ),
-          ),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              BlocBuilder<AddEventBloc, AddEventState>(
-                buildWhen: (previous, current) =>
-                    previous.currentPage != current.currentPage,
-                builder: ((context, state) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      3,
-                      (index) =>
-                          _buildIndicator(state.currentPage == index, size),
-                    ),
-                  );
-                }),
-              ),
-              const SizedBox(height: 15),
-              Expanded(
-                child: PageView(
-                  onPageChanged: (value) {
-                    context.read<AddEventBloc>().setCurrentPage(value);
-                  },
-                  physics: const NeverScrollableScrollPhysics(),
-                  controller: context.read<AddEventBloc>().controller,
-                  children: const [
-                    UploadImagePage(),
-                    AddressPage(),
-                    DetailPage(),
-                  ],
-                ),
-              ),
-              BlocBuilder<AddEventBloc, AddEventState>(
-                buildWhen: (previous, current) =>
-                    previous.currentPage != current.currentPage,
-                builder: ((context, state) {
-                  return _buildBottomEvent(
-                    context,
-                    context.read<AddEventBloc>().controller,
-                    state.currentPage,
-                    state.event,
-                  );
-                }),
-              ),
-            ],
-          ),
-        ),
-        BlocBuilder<AddEventBloc, AddEventState>(
-          buildWhen: (previous, current) =>
-              previous.currentPage != current.currentPage ||
-              previous.isPosting != current.isPosting,
+    return Scaffold(
+      backgroundColor: AppColors.white,
+      appBar: AppBarCustom(
+        title: BlocBuilder<AddEventBloc, AddEventState>(
+          buildWhen: (previous, current) => previous.event != current.event,
           builder: ((context, state) {
-            if (state.isPosting) {
-              return Container(
-                color: AppColors.black.withOpacity(0.5),
-                height: double.infinity,
-                width: double.infinity,
-                alignment: Alignment.center,
-                child: const CircularProgressIndicator(
-                  color: AppColors.rosyPink,
-                ),
-              );
-            } else {
-              return const SizedBox.shrink();
-            }
+            return Text(
+              state.event.id?.isEmpty ?? true
+                  ? "Create New Event"
+                  : "Edit Event",
+            );
           }),
         ),
-      ],
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          BlocBuilder<AddEventBloc, AddEventState>(
+            buildWhen: (previous, current) =>
+                previous.currentPage != current.currentPage,
+            builder: ((context, state) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  3,
+                  (index) => _buildIndicator(state.currentPage == index, size),
+                ),
+              );
+            }),
+          ),
+          const SizedBox(height: 15),
+          Expanded(
+            child: PageView(
+              onPageChanged: (value) {
+                context.read<AddEventBloc>().setCurrentPage(value);
+              },
+              physics: const NeverScrollableScrollPhysics(),
+              controller: context.read<AddEventBloc>().controller,
+              children: const [
+                UploadImagePage(),
+                AddressPage(),
+                DetailPage(),
+              ],
+            ),
+          ),
+          BlocBuilder<AddEventBloc, AddEventState>(
+            buildWhen: (previous, current) =>
+                previous.currentPage != current.currentPage,
+            builder: ((context, state) {
+              return _buildBottomEvent(
+                context,
+                context.read<AddEventBloc>().controller,
+                state.currentPage,
+                state.event,
+              );
+            }),
+          ),
+        ],
+      ),
     );
   }
 
