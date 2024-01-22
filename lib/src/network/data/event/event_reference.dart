@@ -30,7 +30,9 @@ class EventReference extends BaseCollectionReference<MEvent> {
       MEvent newEvent = event.copyWith(images: listImage);
       final MResult<MEvent> result = await add(newEvent);
       if (result.isSuccess) {
-        await DomainManager().notification.sendNotificationNewEvent(newEvent);
+        await DomainManager()
+            .notification
+            .sendNotificationNewEvent(result.data!);
         return MResult.success(result.data);
       }
       return MResult.error('Add event fail');

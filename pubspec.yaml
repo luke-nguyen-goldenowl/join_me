@@ -64,7 +64,7 @@ dependencies:
   firebase_remote_config: ^4.0.2
   firebase_messaging: ^14.7.3
   cloud_firestore: ^4.14.0
-  # flutter_local_notifications: ^12.0.4
+  flutter_local_notifications: ^12.0.4
   # flutter_app_badger: ^1.5.0
   # firebase_dynamic_links: ^5.0.8
   flutter_facebook_auth: ^5.0.6
@@ -76,6 +76,9 @@ dependencies:
   flutter_config: ^2.0.2
   geolocator: ^10.1.0
   geocoding: ^2.1.1
+  http: ^0.13.6
+  flutter_cache_manager: ^3.3.1
+  flutter_launcher_icons: ^0.13.1
 
   # sign_in_with_apple: ^4.2.0
   # uni_links: ^0.5.1

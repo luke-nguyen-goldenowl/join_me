@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,11 +39,11 @@ class SigninView extends StatelessWidget {
 
   Widget _builder(BuildContext context, SigninState state) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const SizedBox(height: 30),
-        Assets.images.images.logo2.image(
+        Assets.images.images.logo.image(
+          fit: BoxFit.cover,
           height: 150,
           width: 150,
         ),
@@ -71,15 +70,18 @@ class SigninView extends StatelessWidget {
         const SizedBox(height: 8.0),
         _buildForgotPassword(context),
         const SizedBox(height: 8.0),
-        XButton(
-          key: const Key('loginForm_continue_raisedButton'),
-          busy:
-              state.status.isInProgress && state.loginType == MSocialType.email,
-          enabled: state.isValidated,
-          title: "Login", //S.of(context).common_next,
-          onPressed: () async {
-            context.read<SigninBloc>().loginWithEmail(context);
-          },
+        SizedBox(
+          width: double.infinity,
+          child: XButton(
+            key: const Key('loginForm_continue_raisedButton'),
+            busy: state.status.isInProgress &&
+                state.loginType == MSocialType.email,
+            enabled: state.isValidated,
+            title: "Login", //S.of(context).common_next,
+            onPressed: () async {
+              context.read<SigninBloc>().loginWithEmail(context);
+            },
+          ),
         ),
         const SizedBox(height: 32.0),
         const SocialListButton(),
