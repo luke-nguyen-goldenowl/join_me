@@ -162,7 +162,7 @@ class XFirebaseMessage {
         priority: Priority.high,
         enableVibration: true,
         enableLights: true,
-        // icon: '@mipmap/launcher_icon',
+        icon: '@mipmap/launcher_icon',
         styleInformation: BigTextStyleInformation(
           body ?? '',
           summaryText: body,
