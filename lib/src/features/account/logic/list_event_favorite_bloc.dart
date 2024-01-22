@@ -7,16 +7,14 @@ import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/model/common/pagination/pagination.dart';
 import 'package:myapp/src/network/model/common/pagination/pagination_response.dart';
 import 'package:myapp/src/network/model/common/result.dart';
-import 'package:myapp/src/network/model/event/event.dart';
 
 class ListEventFavoriteBloc extends PaginationBloc<ListEventFavoriteState> {
-  ListEventFavoriteBloc()
-      : super(ListEventFavoriteState(data: MPagination<MEvent>()));
+  ListEventFavoriteBloc() : super(ListEventFavoriteState(data: MPagination()));
   DomainManager get domain => DomainManager();
   final user = GetIt.I<AccountBloc>().state.user;
 
   @override
-  Future<MResult<MPaginationResponse<MEvent>>> get getDataAPI async {
+  Future<MResult<MPaginationResponse>> get getDataAPI async {
     return await domain.event
         .getEventsFavoriteByUser(user.id, state.data.lastDoc);
   }

@@ -17,4 +17,11 @@ class ListFollowingBloc extends Cubit<ListFollowingState> {
       if (!isClosed) emit(state.copyWith(followings: result.data));
     }
   }
+
+  Future<void> refreshData() async {
+    if (!isClosed) {
+      emit(state.copyWith(followings: []));
+    }
+    getFollowing();
+  }
 }

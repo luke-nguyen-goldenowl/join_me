@@ -4,14 +4,13 @@ import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/model/common/pagination/pagination.dart';
 import 'package:myapp/src/network/model/common/pagination/pagination_response.dart';
 import 'package:myapp/src/network/model/common/result.dart';
-import 'package:myapp/src/network/model/event/event.dart';
 
 class HostBloc extends PaginationBloc<HostState> {
   HostBloc({required String userId})
-      : super(HostState(data: MPagination<MEvent>(), userId: userId));
+      : super(HostState(data: MPagination(), userId: userId));
   DomainManager get domain => DomainManager();
   @override
-  Future<MResult<MPaginationResponse<MEvent>>> get getDataAPI async {
+  Future<MResult<MPaginationResponse>> get getDataAPI async {
     return await domain.event
         .getEventsHostByUser(state.userId, state.data.lastDoc);
   }
