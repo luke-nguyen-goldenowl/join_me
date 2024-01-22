@@ -21,6 +21,7 @@ class XInput extends StatefulWidget {
     this.minLines,
     this.onTap,
     this.onEditingComplete,
+    this.textInputAction,
   });
   final String value;
   final TextInputType? keyboardType;
@@ -37,6 +38,9 @@ class XInput extends StatefulWidget {
   final InputDecoration? decoration;
   final int? maxLength;
   final bool autofocus;
+
+  final TextInputAction? textInputAction;
+
   // style
   final TextAlign textAlign;
   final TextStyle? style;
@@ -135,13 +139,14 @@ class _XInputState extends State<XInput> {
       scrollPhysics: const NeverScrollableScrollPhysics(),
       inputFormatters: widget.inputFormatters,
       onFieldSubmitted: widget.onFieldSubmitted,
+      textInputAction: widget.textInputAction,
       decoration: (widget.decoration ?? const InputDecoration()).copyWith(
         prefixIcon: widget.textAlign == TextAlign.center
             ? const SizedBox(width: 24)
             : null,
         labelStyle: const TextStyle(color: Color(0xCC50555C)),
         floatingLabelBehavior: FloatingLabelBehavior.auto,
-        filled: false,
+        // filled: false,
         errorStyle: const TextStyle(fontSize: 14, letterSpacing: 0.25),
         suffixIcon: buildActions(),
       ),

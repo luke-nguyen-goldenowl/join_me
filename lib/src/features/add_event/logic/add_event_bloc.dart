@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,10 +15,11 @@ import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:myapp/src/router/coordinator.dart';
+import 'package:myapp/src/services/firebase_storage.dart';
 import 'package:myapp/src/services/image_picker.dart';
 
 class AddEventBloc extends Cubit<AddEventState> {
-  AddEventBloc() : super(AddEventState.ds());
+  AddEventBloc({MEvent? event}) : super(AddEventState.ds(event));
 
   final DomainManager domain = DomainManager();
   PageController controller = PageController(initialPage: 0);
@@ -31,22 +34,40 @@ class AddEventBloc extends Cubit<AddEventState> {
   }
 
   void selectMedias() async {
-    List<XFile> pickMedias =
-        await XImagePicker().onPickMultiImage(limit: 5 - state.medias.length);
+    int lengthEventImages = (state.event.images?.length ?? 0);
+    List<XFile> pickMedias = await XImagePicker()
+        .onPickMultiImage(limit: 5 - state.medias.length - lengthEventImages);
     if (!isClosed) {
       emit(state.copyWith(medias: [...pickMedias, ...state.medias]));
     }
   }
 
   void removeImage(int index) {
+    if (state.medias.length - 1 < index) {
+      return removeEventImages(index - state.medias.length);
+    }
+
     final List<XFile?> newMedias = [...state.medias];
     newMedias.removeAt(index);
     if (!isClosed) emit(state.copyWith(medias: newMedias));
   }
 
-  void handlePressMap(point) {
+  void removeEventImages(int index) {
+    final List<String> newImages = [...state.event.images ?? []];
+    newImages.removeAt(index);
     if (!isClosed) {
-      emit(state.copyWith(event: state.event.copyWith(location: point)));
+      emit(state.copyWith(event: state.event.copyWith(images: newImages)));
+    }
+  }
+
+  void handlePressMap(LatLng point) async {
+    try {
+      await _getAddressFromCoordinates(point);
+      if (!isClosed) {
+        emit(state.copyWith(event: state.event.copyWith(location: point)));
+      }
+    } catch (e) {
+      log(e.toString());
     }
   }
 
@@ -87,6 +108,48 @@ class AddEventBloc extends Cubit<AddEventState> {
   void setType(TypeEvent type) {
     if (!isClosed) {
       emit(state.copyWith(event: state.event.copyWith(type: type)));
+    }
+  }
+
+  void setSearchAddress(String value) {
+    if (!isClosed) {
+      emit(state.copyWith(searchAddress: value));
+    }
+  }
+
+  void editEvent() async {
+    XToast.showLoading();
+
+    List<String> listImage = [];
+    if (state.medias.isNotEmpty) {
+      final List<String> images = state.medias.map((e) => e!.path).toList();
+      listImage = await XFirebaseStorage().uploadImages(images, "events");
+    }
+
+    DateTime? startDate;
+    if (state.event.startDate != null && state.time != null) {
+      startDate = DateTime(
+        state.event.startDate!.year,
+        state.event.startDate!.month,
+        state.event.startDate!.day,
+        state.time!.hour,
+        state.time!.minute,
+      );
+    }
+    final MEvent event = state.event.copyWith(
+      images: [...listImage, ...state.event.images ?? []],
+      startDate: startDate,
+    );
+
+    final result = await domain.event.updateEvent(event);
+
+    XToast.hideLoading();
+
+    if (result.isSuccess) {
+      AppCoordinator.pop(result.data);
+      XToast.success('Edit event success');
+    } else {
+      XAlert.show(title: 'Edit event fail', body: result.error);
     }
   }
 
@@ -132,8 +195,20 @@ class AddEventBloc extends Cubit<AddEventState> {
     bool serviceEnabled;
     LocationPermission permission;
     try {
+      if (state.event.location != null) {
+        await _getAddressFromCoordinates(state.event.location!);
+        return emit(
+          state.copyWith(isLoadingCurrentLocation: false),
+        );
+      }
+
       serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
+        if (!isClosed) {
+          emit(
+            state.copyWith(isLoadingCurrentLocation: false),
+          );
+        }
         return Future.error('Location services are disabled.');
       }
 
@@ -141,20 +216,30 @@ class AddEventBloc extends Cubit<AddEventState> {
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
+          if (!isClosed) {
+            emit(
+              state.copyWith(isLoadingCurrentLocation: false),
+            );
+          }
           return Future.error('Location permissions are denied');
         }
       }
 
       if (permission == LocationPermission.deniedForever) {
+        if (!isClosed) {
+          emit(
+            state.copyWith(isLoadingCurrentLocation: false),
+          );
+        }
         return Future.error(
             'Location permissions are permanently denied, we cannot request permissions.');
       }
       currentLocation = await Geolocator.getCurrentPosition();
-
       final LatLng locationLatLng = LatLng(
         currentLocation.latitude,
         currentLocation.longitude,
       );
+      await _getAddressFromCoordinates(locationLatLng);
       if (!isClosed) {
         emit(
           state.copyWith(
@@ -183,21 +268,45 @@ class AddEventBloc extends Cubit<AddEventState> {
     return null;
   }
 
+  Future<void> _getAddressFromCoordinates(LatLng coordinates) async {
+    try {
+      if (!isClosed) emit(state.copyWith(isSearching: true));
+      List<Placemark> addresses = await placemarkFromCoordinates(
+          coordinates.latitude, coordinates.longitude,
+          localeIdentifier: 'vi_VN');
+      if (addresses.isNotEmpty) {
+        String address =
+            "${addresses.first.street}, ${addresses.first.subAdministrativeArea}, ${addresses.first.administrativeArea}, ${addresses.first.country}";
+        textEditingController.text = address;
+        setSearchAddress(address);
+      }
+    } catch (e) {
+      print("Error getting coordinates: $e");
+    }
+    if (!isClosed) emit(state.copyWith(isSearching: false));
+  }
+
   void onSearchTextChanged(String search, context) async {
-    if (search.isEmpty) return;
-    LatLng? coordinates = await _getCoordinatesFromAddress(search);
-    if (coordinates != null) {
-      handlePressMap(coordinates);
-      mapController?.animateCamera(
-        CameraUpdate.newLatLngZoom(coordinates, 16),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Address not found"),
-          duration: Duration(seconds: 2),
-        ),
-      );
+    try {
+      if (search.isEmpty) return;
+      if (!isClosed) emit(state.copyWith(isSearching: true));
+      LatLng? coordinates = await _getCoordinatesFromAddress(search);
+      if (!isClosed) emit(state.copyWith(isSearching: false));
+      if (coordinates != null) {
+        handlePressMap(coordinates);
+        await mapController?.moveCamera(
+          CameraUpdate.newLatLngZoom(coordinates, 16),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Address not found"),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      print(e);
     }
   }
 

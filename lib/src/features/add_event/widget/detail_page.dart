@@ -94,28 +94,7 @@ class DetailPage extends StatelessWidget {
             const SizedBox(height: 10),
             BlocBuilder<AddEventBloc, AddEventState>(
                 buildWhen: (previous, current) =>
-                    previous.event.maxAttendee != current.event.maxAttendee,
-                builder: (context, state) {
-                  return XInput(
-                    key: const Key('addEvent_numberMemberEventInput_textField'),
-                    value: state.event.maxAttendee.toString(),
-                    onChanged: (value) {
-                      if (int.tryParse(value) != null) {
-                        addEventBloc.setNumberMemberEvent(int.tryParse(value));
-                      }
-                      if (value == "") {
-                        addEventBloc.setNumberMemberEvent(0);
-                      }
-                    },
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelText:
-                          "Number of people you expect to follow your event",
-                    ),
-                  );
-                }),
-            BlocBuilder<AddEventBloc, AddEventState>(
-                buildWhen: (previous, current) =>
+                    previous.event.deadline != current.event.deadline ||
                     previous.event.startDate != current.event.startDate,
                 builder: (context, state) {
                   return XInput(
@@ -131,9 +110,11 @@ class DetailPage extends StatelessWidget {
                     onTap: () async {
                       DateTime? selectedDate = await showDatePicker(
                         context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime.now(),
-                        lastDate: DateTime(2101),
+                        initialDate: state.event.startDate ??
+                            state.event.deadline ??
+                            DateTime.now(),
+                        firstDate: state.event.startDate ?? DateTime.now(),
+                        lastDate: state.event.deadline ?? DateTime(2101),
                       );
                       if (selectedDate != null &&
                           selectedDate != DateTime.now()) {
@@ -169,14 +150,15 @@ class DetailPage extends StatelessWidget {
                 }),
             BlocBuilder<AddEventBloc, AddEventState>(
                 buildWhen: (previous, current) =>
-                    previous.event.deadline != current.event.deadline,
+                    previous.event.deadline != current.event.deadline ||
+                    previous.event.startDate != current.event.startDate,
                 builder: (context, state) {
                   return XInput(
                     key: const Key('addEvent_deadlineEventInput_textField'),
                     readOnly: true,
                     value: DateHelper.getFullDateTypeVN(state.event.deadline),
                     decoration: const InputDecoration(
-                      labelText: "Registration expiration date",
+                      labelText: "End day",
                     ),
                     onChanged: (value) {
                       if (value == "") addEventBloc.setDeadlineEvent(null);
@@ -184,8 +166,10 @@ class DetailPage extends StatelessWidget {
                     onTap: () async {
                       DateTime? selectedDate = await showDatePicker(
                         context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime.now(),
+                        initialDate: state.event.deadline ??
+                            state.event.startDate ??
+                            DateTime.now(),
+                        firstDate: state.event.startDate ?? DateTime.now(),
                         lastDate: DateTime(2101),
                       );
                       if (selectedDate != null &&

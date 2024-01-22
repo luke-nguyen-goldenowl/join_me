@@ -199,8 +199,15 @@ class DateHelper {
     }
   }
 
+  /// MMM dd, yyyy - hh:mm a
   static String getFullDateTime(DateTime? date) {
     if (date != null) return DateFormat('MMM dd, yyyy - hh:mm a').format(date);
+    return "";
+  }
+
+  /// MMMM dd, yyyy - hh:mm a
+  static String getFullDateTimeFullMonth(DateTime? date) {
+    if (date != null) return DateFormat('MMMM dd, yyyy - hh:mm a').format(date);
     return "";
   }
 }

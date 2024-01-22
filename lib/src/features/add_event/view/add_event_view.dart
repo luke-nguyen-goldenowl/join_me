@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:myapp/src/features/add_event/logic/add_event_bloc.dart';
 import 'package:myapp/src/features/add_event/logic/add_event_state.dart';
 import 'package:myapp/src/features/add_event/widget/address_page.dart';
 import 'package:myapp/src/features/add_event/widget/detail_page.dart';
 import 'package:myapp/src/features/add_event/widget/upload_image_page.dart';
-
+import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/theme/colors.dart';
+import 'package:myapp/src/utils/utils.dart';
 import 'package:myapp/widgets/appbar/app_bar_custom.dart';
 
 class AddEventView extends StatelessWidget {
-  const AddEventView({super.key});
-
+  const AddEventView({
+    super.key,
+    this.event,
+  });
+  final MEvent? event;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => AddEventBloc(),
+      create: (_) => AddEventBloc(event: event),
       child: const AddEventPage(),
     );
   }
@@ -32,8 +37,17 @@ class AddEventPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: const AppBarCustom(
-        title: Text("Create New Event"),
+      appBar: AppBarCustom(
+        title: BlocBuilder<AddEventBloc, AddEventState>(
+          buildWhen: (previous, current) => previous.event != current.event,
+          builder: ((context, state) {
+            return Text(
+              state.event.id?.isEmpty ?? true
+                  ? "Create New Event"
+                  : "Edit Event",
+            );
+          }),
+        ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -70,8 +84,12 @@ class AddEventPage extends StatelessWidget {
             buildWhen: (previous, current) =>
                 previous.currentPage != current.currentPage,
             builder: ((context, state) {
-              return _buildBottomEvent(context,
-                  context.read<AddEventBloc>().controller, state.currentPage);
+              return _buildBottomEvent(
+                context,
+                context.read<AddEventBloc>().controller,
+                state.currentPage,
+                state.event,
+              );
             }),
           ),
         ],
@@ -79,36 +97,38 @@ class AddEventPage extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomEvent(
-      BuildContext context, PageController controller, int currentPage) {
+  Widget _buildBottomEvent(BuildContext context, PageController controller,
+      int currentPage, MEvent event) {
     return Container(
       padding: const EdgeInsets.all(20),
       color: AppColors.white,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          OutlinedButton(
-            onPressed: () {
-              controller.previousPage(
-                  duration: const Duration(milliseconds: 250),
-                  curve: Curves.easeInOut);
-            },
-            style: OutlinedButton.styleFrom(
-              side: const BorderSide(
-                color: AppColors.iceBlue,
-                width: 3,
-              ),
-              minimumSize: const Size(100, 50),
-              foregroundColor: AppColors.text,
-            ),
-            child: const Text(
-              "Back",
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
+          currentPage != 0
+              ? OutlinedButton(
+                  onPressed: () {
+                    controller.previousPage(
+                        duration: const Duration(milliseconds: 250),
+                        curve: Curves.easeInOut);
+                  },
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(
+                      color: AppColors.iceBlue,
+                      width: 3,
+                    ),
+                    minimumSize: const Size(100, 50),
+                    foregroundColor: AppColors.text,
+                  ),
+                  child: const Text(
+                    "Back",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                )
+              : const SizedBox.shrink(),
           ElevatedButton(
             onPressed: context.watch<AddEventBloc>().state.checkValidate()
                 ? () {
@@ -121,7 +141,11 @@ class AddEventPage extends StatelessWidget {
                         context.read<AddEventBloc>().getCurrentLocation();
                       }
                     } else {
-                      context.read<AddEventBloc>().addEvent();
+                      if (isNullOrEmpty(event.id)) {
+                        context.read<AddEventBloc>().addEvent();
+                      } else {
+                        context.read<AddEventBloc>().editEvent();
+                      }
                     }
                   }
                 : null,

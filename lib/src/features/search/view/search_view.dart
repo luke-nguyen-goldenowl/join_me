@@ -19,6 +19,7 @@ class SearchView extends StatelessWidget {
         return DefaultTabController(
           length: 2,
           child: Scaffold(
+            backgroundColor: const Color.fromARGB(255, 245, 245, 245),
             appBar: AppBarCustom(
               title: BlocBuilder<SearchBloc, SearchState>(
                   buildWhen: (previous, current) =>

@@ -8,7 +8,11 @@ enum TypeEvent {
   sport("Sport", Icons.sports_basketball),
   game("Game", Icons.games_rounded),
   music("Music", Icons.music_note_rounded),
-  movie("Movie", Icons.movie_creation_outlined);
+  movie("Movie", Icons.movie_creation_outlined),
+  photo("Photo", Icons.photo),
+  travel("Travel", Icons.flight),
+  painting("Painting", Icons.format_paint_outlined),
+  education("Education", Icons.cast_for_education);
 
   final String text;
   final IconData icon;
@@ -24,7 +28,6 @@ class MEvent {
   DateTime? deadline;
   LatLng? location;
   MUser? host;
-  int maxAttendee;
   List<String>? followersId;
   List<String>? favoritesId;
   TypeEvent? type;
@@ -41,7 +44,6 @@ class MEvent {
     this.followersId,
     this.favoritesId,
     this.type,
-    this.maxAttendee = 0,
   });
 
   MEvent copyWith({
@@ -67,10 +69,25 @@ class MEvent {
       deadline: deadline ?? this.deadline,
       location: location ?? this.location,
       host: host ?? this.host,
-      maxAttendee: maxAttendee ?? this.maxAttendee,
       followersId: followersId ?? this.followersId,
       favoritesId: favoritesId ?? this.favoritesId,
       type: type ?? this.type,
+    );
+  }
+
+  factory MEvent.empty() {
+    return MEvent(
+      id: "",
+      name: "",
+      description: "",
+      images: [],
+      favoritesId: [],
+      followersId: [],
+      host: MUser.empty(),
+      location: null,
+      type: null,
+      deadline: null,
+      startDate: null,
     );
   }
 
@@ -82,7 +99,6 @@ class MEvent {
           map['deadline'] != null ? DateTime.parse(map['deadline']) : null,
       description: map['description'],
       host: MUser(id: map['host']),
-      maxAttendee: map['maxAttendee'],
       images: List<String>.from(map['images']),
       followersId: List<String>.from(map['followersId']),
       favoritesId: List<String>.from(map['favoritesId']),
@@ -111,7 +127,6 @@ class MEvent {
           : null,
       'startDate': startDate?.toIso8601String(),
       'type': type?.name,
-      'maxAttendee': maxAttendee,
       'caseSearchName': _getCaseSearchName
     };
   }
@@ -139,7 +154,6 @@ class MEvent {
         other.deadline == deadline &&
         other.location == location &&
         other.host == host &&
-        other.maxAttendee == maxAttendee &&
         listEquals(other.followersId, followersId) &&
         listEquals(other.favoritesId, favoritesId) &&
         other.type == type;
@@ -155,7 +169,6 @@ class MEvent {
         deadline.hashCode ^
         location.hashCode ^
         host.hashCode ^
-        maxAttendee.hashCode ^
         followersId.hashCode ^
         favoritesId.hashCode ^
         type.hashCode;

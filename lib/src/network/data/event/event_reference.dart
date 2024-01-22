@@ -141,8 +141,8 @@ class EventReference extends BaseCollectionReference<MEvent> {
 
       final QuerySnapshot<MEvent> querySnapshot = await ref
           .where('host', isEqualTo: userId)
-          .where('deadline', isGreaterThan: currentDate.toIso8601String())
-          .orderBy('deadline')
+          .where('startDate', isGreaterThan: currentDate.toIso8601String())
+          .orderBy('startDate')
           .get()
           .timeout(const Duration(seconds: 10));
       final docs = querySnapshot.docs.map((e) => e.data()).toList();
@@ -182,8 +182,8 @@ class EventReference extends BaseCollectionReference<MEvent> {
       DateTime currentDate = DateTime.now();
 
       final QuerySnapshot<MEvent> querySnapshot = await ref
-          .where('deadline', isGreaterThan: currentDate.toIso8601String())
-          .orderBy('deadline')
+          .where('startDate', isGreaterThan: currentDate.toIso8601String())
+          .orderBy('startDate')
           .orderBy('countFollowers', descending: true)
           .limit(15)
           .get()
@@ -203,9 +203,9 @@ class EventReference extends BaseCollectionReference<MEvent> {
       DateTime oneWeekFromNow = currentDate.add(const Duration(days: 7));
 
       final QuerySnapshot<MEvent> querySnapshot = await ref
-          .where('deadline', isGreaterThan: currentDate.toIso8601String())
-          .where('deadline', isLessThan: oneWeekFromNow.toIso8601String())
-          .orderBy('deadline')
+          .where('startDate', isGreaterThan: currentDate.toIso8601String())
+          .where('startDate', isLessThan: oneWeekFromNow.toIso8601String())
+          .orderBy('startDate')
           .orderBy('countFollowers', descending: true)
           .limit(15)
           .get()
@@ -226,8 +226,8 @@ class EventReference extends BaseCollectionReference<MEvent> {
 
       final QuerySnapshot<MEvent> querySnapshot = await ref
           .where('host', whereIn: people)
-          .where('deadline', isGreaterThan: currentDate.toIso8601String())
-          .orderBy('deadline')
+          .where('startDate', isGreaterThan: currentDate.toIso8601String())
+          .orderBy('startDate')
           .orderBy('countFollowers', descending: true)
           .limit(15)
           .get()
@@ -245,8 +245,8 @@ class EventReference extends BaseCollectionReference<MEvent> {
 
       final QuerySnapshot<MEvent> querySnapshot = await ref
           .where('followersId', arrayContains: userId)
-          .where('deadline', isGreaterThan: currentDate.toIso8601String())
-          .orderBy('deadline')
+          .where('startDate', isGreaterThan: currentDate.toIso8601String())
+          .orderBy('startDate')
           .orderBy('countFollowers', descending: true)
           .limit(15)
           .get()
@@ -290,7 +290,6 @@ class EventReference extends BaseCollectionReference<MEvent> {
       final AggregateQuerySnapshot querySnapshot = await ref
           .where('host', isEqualTo: userId)
           .orderBy('startDate')
-          .orderBy('deadline')
           .count()
           .get()
           .timeout(const Duration(seconds: 10));
@@ -520,47 +519,6 @@ class EventReference extends BaseCollectionReference<MEvent> {
       return MResult.exception(e);
     }
   }
-
-  // Future<MResult<List<MEvent>>> getEventsHostByUser(String userId,
-  //     [MEvent? lastEvent]) async {
-  //   try {
-  //     final QuerySnapshot<MEvent> querySnapshot = await ref
-  //         .where('host', isEqualTo: userId)
-  //         .orderBy('startDate')
-  //         .orderBy('deadline')
-  //         .startAfter(lastEvent != null
-  //             ? [
-  //                 lastEvent.startDate?.toIso8601String(),
-  //                 lastEvent.deadline?.toIso8601String()
-  //               ]
-  //             : [0])
-  //         .limit(MPagination.defaultPageLimit)
-  //         .get()
-  //         .timeout(const Duration(seconds: 10));
-  //     final docs = querySnapshot.docs.map((e) => e.data()).toList();
-  //     return MResult.success(docs);
-  //   } catch (e) {
-  //     return MResult.exception(e);
-  //   }
-  // }
-
-  // Future<MResult<int>> getCountEventsHostByUser(
-  //   String userId,
-  // ) async {
-  //   try {
-  //     final AggregateQuerySnapshot querySnapshot = await ref
-  //         .where('host', isEqualTo: userId)
-  //         .orderBy('startDate')
-  //         .orderBy('deadline')
-  //         .count()
-  //         .get()
-  //         .timeout(const Duration(seconds: 10));
-  //     final result = querySnapshot.count;
-  //     return MResult.success(result);
-  //   } catch (e) {
-  //     return MResult.exception(e);
-  //   }
-  // }
 
   Future<MResult<int>> getCountEventsByFilter(
     List<TypeEvent> types,

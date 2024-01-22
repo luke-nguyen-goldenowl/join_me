@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/router/route_name.dart';
 import 'package:myapp/src/router/router.dart';
 
@@ -90,10 +91,10 @@ class AppCoordinator {
       );
 
   static Future<T?> showEditEventScreen<T extends Object?>(
-          {required String id}) =>
+          {required MEvent event}) =>
       context.pushNamed<T>(
         AppRouteNames.editEvent.name,
-        pathParameters: {AppRouteNames.editEvent.paramName!: id},
+        extra: event,
       );
 
   static Future<T?> showManageEventDetails<T extends Object?>(

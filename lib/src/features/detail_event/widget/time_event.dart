@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:myapp/src/theme/colors.dart';
+import 'package:myapp/src/utils/date/date_helper.dart';
 
 class TimeEvent extends StatelessWidget {
   const TimeEvent({
     super.key,
     required this.startDate,
     required this.followers,
+    required this.endDate,
   });
 
   final DateTime? startDate;
+  final DateTime? endDate;
   final int followers;
 
   @override
@@ -39,7 +41,7 @@ class TimeEvent extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      DateFormat("MMMM dd, yyyy").format(startDate!),
+                      "From ${DateHelper.getFullDate(startDate)}",
                       style: const TextStyle(
                         fontSize: 15,
                         color: AppColors.text,
@@ -47,12 +49,22 @@ class TimeEvent extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'At ${DateFormat("HH:MM a").format(startDate!)}',
+                      "At ${DateHelper.getTime(startDate)}",
                       style: const TextStyle(
-                        fontSize: 12,
-                        color: AppColors.grey,
+                        fontSize: 13,
+                        color: AppColors.text,
+                        fontWeight: FontWeight.bold,
                       ),
-                    )
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      "To ${DateHelper.getFullDate(endDate)}",
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: AppColors.grey,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ],
                 )
             ],

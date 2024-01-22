@@ -4,6 +4,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:myapp/src/features/add_event/logic/add_event_bloc.dart';
 import 'package:myapp/src/features/add_event/logic/add_event_state.dart';
 import 'package:myapp/src/theme/colors.dart';
+import 'package:myapp/widgets/forms/input.dart';
+import 'package:myapp/widgets/state/state_loading_widget.dart';
 
 class AddressPage extends StatelessWidget {
   const AddressPage({super.key});
@@ -47,43 +49,75 @@ class AddressPage extends StatelessWidget {
                                           const LatLng(10.790159, 106.6557574),
                                       zoom: 16,
                                     ),
-                                    onTap: (argument) {
-                                      context
-                                          .read<AddEventBloc>()
-                                          .handlePressMap(argument);
-                                    },
+                                    onTap: context
+                                        .read<AddEventBloc>()
+                                        .handlePressMap,
                                     myLocationEnabled: true,
                                     markers: {
                                       Marker(
                                         markerId: const MarkerId('my location'),
-                                        position: state.event.location!,
+                                        position: state.event.location ??
+                                            const LatLng(0, 0),
                                       )
                                     },
                                   );
                                 }),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: SearchBar(
-                                  controller: context
-                                      .read<AddEventBloc>()
-                                      .textEditingController,
-                                  leading: const Icon(Icons.search),
-                                  onSubmitted: (value) {
-                                    context
-                                        .read<AddEventBloc>()
-                                        .onSearchTextChanged(value, context);
-                                  },
-                                  trailing: [
-                                    IconButton(
-                                      icon: const Icon(Icons.clear),
-                                      onPressed: () {
-                                        context
-                                            .read<AddEventBloc>()
-                                            .textEditingController
-                                            .clear();
-                                      },
-                                    )
-                                  ]),
+                              child: BlocBuilder<AddEventBloc, AddEventState>(
+                                  buildWhen: (previous, current) =>
+                                      previous.isSearching !=
+                                          current.isSearching ||
+                                      previous.searchAddress !=
+                                          current.searchAddress,
+                                  builder: (context, state) {
+                                    return Align(
+                                      alignment: Alignment.topCenter,
+                                      child: XInput(
+                                        value: state.searchAddress,
+                                        onChanged: (value) {
+                                          context
+                                              .read<AddEventBloc>()
+                                              .setSearchAddress(value);
+                                        },
+                                        textInputAction: TextInputAction.search,
+                                        decoration: InputDecoration(
+                                            hintText: "Search address",
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
+                                            ),
+                                            fillColor: AppColors.white,
+                                            filled: true,
+                                            contentPadding:
+                                                const EdgeInsets.only(
+                                              left: 50.0,
+                                              bottom: 8.0,
+                                              top: 8.0,
+                                            ),
+                                            prefixIcon: Padding(
+                                              padding: const EdgeInsets.all(10),
+                                              child: state.isSearching
+                                                  ? const SizedBox(
+                                                      height: 10,
+                                                      width: 10,
+                                                      child:
+                                                          XStateLoadingWidget())
+                                                  : const Icon(Icons.search),
+                                            )),
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        onFieldSubmitted: ((value) {
+                                          context
+                                              .read<AddEventBloc>()
+                                              .onSearchTextChanged(
+                                                  value, context);
+                                        }),
+                                      ),
+                                    );
+                                  }),
                             ),
                           ],
                         )

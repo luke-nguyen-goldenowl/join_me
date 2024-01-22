@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/src/features/add_event/logic/add_event_bloc.dart';
 import 'package:myapp/src/features/add_event/logic/add_event_state.dart';
 import 'package:myapp/src/theme/colors.dart';
+import 'package:myapp/widgets/image/image_network.dart';
 
 class UploadImagePage extends StatelessWidget {
   const UploadImagePage({super.key});
@@ -14,7 +15,8 @@ class UploadImagePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AddEventBloc, AddEventState>(
       buildWhen: (previous, current) =>
-          !listEquals(previous.medias, current.medias),
+          !listEquals(previous.medias, current.medias) ||
+          !listEquals(previous.event.images, current.event.images),
       builder: (context, state) {
         return Container(
           color: AppColors.white,
@@ -30,36 +32,65 @@ class UploadImagePage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              InkWell(
-                onTap: () {
-                  context.read<AddEventBloc>().selectMedias();
-                },
-                child: Container(
-                  height: 200,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(
-                      color: AppColors.iceBlue,
-                      width: 2,
-                      style: BorderStyle.solid,
-                    ),
+              Container(
+                height: 200,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(
+                    color: AppColors.iceBlue,
+                    width: 2,
+                    style: BorderStyle.solid,
                   ),
-                  child: state.medias.isNotEmpty && state.medias[0] != null
-                      ? InkWell(
-                          onTap: (() {
-                            context.read<AddEventBloc>().removeImage(0);
-                          }),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: Image.file(
-                              File(state.medias[0]!.path),
-                              width: double.infinity,
-                              height: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        )
-                      : const Center(
+                ),
+                child: (state.medias.isNotEmpty && state.medias[0] != null ||
+                        (state.event.images?.isNotEmpty ?? false))
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: Stack(
+                          children: [
+                            state.medias.isNotEmpty
+                                ? Image.file(
+                                    File(state.medias[0]!.path),
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    fit: BoxFit.cover,
+                                  )
+                                : XImageNetwork(
+                                    state.event.images?[0],
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ),
+                            Positioned(
+                              top: 5,
+                              right: 5,
+                              child: SizedBox(
+                                height: 30,
+                                width: 30,
+                                child: IconButton.outlined(
+                                  onPressed: (() {
+                                    context.read<AddEventBloc>().removeImage(0);
+                                  }),
+                                  icon: const Icon(
+                                    Icons.close,
+                                  ),
+                                  color: AppColors.white,
+                                  iconSize: 15,
+                                  style: IconButton.styleFrom(
+                                    backgroundColor:
+                                        AppColors.black.withOpacity(0.3),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    : InkWell(
+                        onTap: () {
+                          context.read<AddEventBloc>().selectMedias();
+                        },
+                        child: const Center(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -72,54 +103,87 @@ class UploadImagePage extends StatelessWidget {
                             ],
                           ),
                         ),
-                ),
+                      ),
               ),
               const SizedBox(height: 10),
               Row(
                 // textDirection: TextDirection.rtl,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: List.generate(4, (index) {
-                  return InkWell(
-                    onTap: () {
-                      context.read<AddEventBloc>().selectMedias();
-                    },
-                    child: Container(
-                      height: 70,
-                      width: 70,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        border: Border.all(
-                          color: AppColors.iceBlue,
-                          width: 2,
-                          style: BorderStyle.solid,
-                        ),
+                  return Container(
+                    height: 70,
+                    width: 70,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(
+                        color: AppColors.iceBlue,
+                        width: 2,
+                        style: BorderStyle.solid,
                       ),
-                      child: state.medias.length - 1 > index &&
-                              state.medias[index + 1] != null
-                          ? InkWell(
-                              onTap: () {
-                                context
-                                    .read<AddEventBloc>()
-                                    .removeImage(index + 1);
-                              },
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(15),
-                                child: Image.file(
-                                  File(state.medias[index + 1]!.path),
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            )
-                          : const Center(
+                    ),
+                    child: state.medias.length +
+                                (state.event.images?.length ?? 0) -
+                                1 >
+                            index
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Stack(
+                              children: [
+                                (state.medias.length > index + 1 &&
+                                        state.medias[index + 1] != null)
+                                    ? Image.file(
+                                        File(state.medias[index + 1]!.path),
+                                        width: double.infinity,
+                                        height: double.infinity,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : XImageNetwork(
+                                        state.event.images?[
+                                            index + 1 - state.medias.length],
+                                        width: double.infinity,
+                                        height: double.infinity,
+                                        fit: BoxFit.cover,
+                                      ),
+                                Positioned(
+                                  right: 3,
+                                  top: 3,
+                                  child: SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: IconButton.outlined(
+                                      onPressed: (() {
+                                        context
+                                            .read<AddEventBloc>()
+                                            .removeImage(index + 1);
+                                      }),
+                                      icon: const Icon(
+                                        Icons.close,
+                                        size: 10,
+                                      ),
+                                      color: AppColors.white,
+                                      style: IconButton.styleFrom(
+                                        backgroundColor:
+                                            AppColors.black.withOpacity(0.3),
+                                        padding: const EdgeInsets.all(5),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        : InkWell(
+                            onTap: () {
+                              context.read<AddEventBloc>().selectMedias();
+                            },
+                            child: const Center(
                               child: Icon(
                                 Icons.add,
                                 size: 30,
                                 color: AppColors.rosyPink,
                               ),
                             ),
-                    ),
+                          ),
                   );
                 }),
               ),

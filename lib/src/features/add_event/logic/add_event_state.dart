@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:myapp/src/network/model/event/event.dart';
+import 'package:myapp/src/utils/utils.dart';
 
 class AddEventState {
   int currentPage;
-
   bool isLoadingCurrentLocation;
+
+  bool isSearching;
+  String searchAddress;
 
   MEvent event;
   List<XFile?> medias;
@@ -16,27 +19,33 @@ class AddEventState {
 
   AddEventState({
     required this.currentPage,
+    required this.isLoadingCurrentLocation,
+    required this.isSearching,
+    required this.searchAddress,
+    required this.event,
     required this.medias,
     required this.time,
-    required this.isLoadingCurrentLocation,
-    required this.event,
   });
 
-  factory AddEventState.ds() {
+  factory AddEventState.ds([MEvent? event]) {
     return AddEventState(
       currentPage: 0,
       medias: [],
-      time: null,
+      time: (event != null && event.startDate != null)
+          ? TimeOfDay.fromDateTime(event.startDate!)
+          : null,
       isLoadingCurrentLocation: true,
-      event: MEvent(),
+      event: event ?? MEvent.empty(),
+      searchAddress: "",
+      isSearching: false,
     );
   }
 
   bool checkValidate() {
-    if (currentPage == 0 && medias.isEmpty) {
+    if (currentPage == 0 && medias.isEmpty && isNullOrEmpty(event.images)) {
       return false;
     }
-    if (currentPage == 1 && event.location == null) {
+    if (currentPage == 1 && (event.location == null || searchAddress.isEmpty)) {
       return false;
     }
     if (currentPage == 2 &&
@@ -44,10 +53,8 @@ class AddEventState {
             event.deadline == null ||
             event.startDate == null ||
             event.type == null ||
-            event.description == null ||
-            (event.description?.isEmpty ?? true) ||
-            event.name == null ||
-            (event.name?.isEmpty ?? true))) {
+            isNullOrEmpty(event.description) ||
+            isNullOrEmpty(event.name))) {
       return false;
     }
 
@@ -56,8 +63,9 @@ class AddEventState {
 
   AddEventState copyWith({
     int? currentPage,
-    bool? isPosting,
     bool? isLoadingCurrentLocation,
+    bool? isSearching,
+    String? searchAddress,
     MEvent? event,
     List<XFile?>? medias,
     TimeOfDay? time,
@@ -66,6 +74,8 @@ class AddEventState {
       currentPage: currentPage ?? this.currentPage,
       isLoadingCurrentLocation:
           isLoadingCurrentLocation ?? this.isLoadingCurrentLocation,
+      isSearching: isSearching ?? this.isSearching,
+      searchAddress: searchAddress ?? this.searchAddress,
       event: event ?? this.event,
       medias: medias ?? this.medias,
       time: time ?? this.time,
@@ -78,6 +88,8 @@ class AddEventState {
 
     return other.currentPage == currentPage &&
         other.isLoadingCurrentLocation == isLoadingCurrentLocation &&
+        other.isSearching == isSearching &&
+        other.searchAddress == searchAddress &&
         other.event == event &&
         listEquals(other.medias, medias) &&
         other.time == time;
@@ -87,6 +99,8 @@ class AddEventState {
   int get hashCode {
     return currentPage.hashCode ^
         isLoadingCurrentLocation.hashCode ^
+        isSearching.hashCode ^
+        searchAddress.hashCode ^
         event.hashCode ^
         medias.hashCode ^
         time.hashCode;
