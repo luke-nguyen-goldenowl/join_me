@@ -15,72 +15,49 @@ class EditProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => ProfileBloc(),
-      child: Stack(
-        children: [
-          Scaffold(
-            backgroundColor: AppColors.white,
-            appBar: const AppBarCustom(
-              title: Text("Edit Profile"),
-            ),
-            body: SingleChildScrollView(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const ChangeImage(),
-                    const ShowEmail(),
-                    const ChangeNameWidget(),
-                    const SizedBox(height: 50),
-                    BlocBuilder<ProfileBloc, ProfileState>(
-                      buildWhen: (previous, current) =>
-                          previous.name != current.name,
-                      builder: ((context, state) {
-                        return ElevatedButton(
-                          onPressed: state.name.isNotEmpty
-                              ? () {
-                                  context.read<ProfileBloc>().updateUser();
-                                }
-                              : null,
-                          style: ElevatedButton.styleFrom(
-                            minimumSize: const Size(double.infinity, 50),
-                            backgroundColor: AppColors.rosyPink,
-                            foregroundColor: AppColors.white,
-                          ),
-                          child: const Text(
-                            "Save",
-                            style: TextStyle(
-                              fontSize: 18,
-                            ),
-                          ),
-                        );
-                      }),
-                    ),
-                  ],
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        appBar: const AppBarCustom(
+          title: Text("Edit Profile"),
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const ChangeImage(),
+                const ShowEmail(),
+                const ChangeNameWidget(),
+                const SizedBox(height: 50),
+                BlocBuilder<ProfileBloc, ProfileState>(
+                  buildWhen: (previous, current) =>
+                      previous.name != current.name,
+                  builder: ((context, state) {
+                    return ElevatedButton(
+                      onPressed: state.name.isNotEmpty
+                          ? () {
+                              context.read<ProfileBloc>().updateUser();
+                            }
+                          : null,
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(double.infinity, 50),
+                        backgroundColor: AppColors.rosyPink,
+                        foregroundColor: AppColors.white,
+                      ),
+                      child: const Text(
+                        "Save",
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                    );
+                  }),
                 ),
-              ),
+              ],
             ),
           ),
-          BlocBuilder<ProfileBloc, ProfileState>(
-            buildWhen: (previous, current) =>
-                previous.isSaving != current.isSaving,
-            builder: ((context, state) {
-              if (state.isSaving) {
-                return Container(
-                  color: AppColors.black.withOpacity(0.5),
-                  height: double.infinity,
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  child: const CircularProgressIndicator(
-                    color: AppColors.rosyPink,
-                  ),
-                );
-              }
-              return const SizedBox.shrink();
-            }),
-          ),
-        ],
+        ),
       ),
     );
   }

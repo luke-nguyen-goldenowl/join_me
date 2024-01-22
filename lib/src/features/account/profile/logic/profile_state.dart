@@ -2,12 +2,10 @@
 import 'package:image_picker/image_picker.dart';
 
 class ProfileState {
-  bool isSaving;
   String name;
   String email;
   XFile? avatar;
   ProfileState({
-    this.isSaving = false,
     this.name = "",
     this.email = "undefine",
     this.avatar,
@@ -20,7 +18,6 @@ class ProfileState {
     XFile? avatar,
   }) {
     return ProfileState(
-      isSaving: isSaving ?? this.isSaving,
       name: name ?? this.name,
       email: email ?? this.email,
       avatar: avatar ?? this.avatar,
@@ -31,14 +28,11 @@ class ProfileState {
   bool operator ==(covariant ProfileState other) {
     if (identical(this, other)) return true;
 
-    return other.isSaving == isSaving &&
-        other.name == name &&
-        other.email == email &&
-        other.avatar == avatar;
+    return other.name == name && other.email == email && other.avatar == avatar;
   }
 
   @override
   int get hashCode {
-    return isSaving.hashCode ^ name.hashCode ^ email.hashCode ^ avatar.hashCode;
+    return name.hashCode ^ email.hashCode ^ avatar.hashCode;
   }
 }

@@ -21,20 +21,25 @@ class HomeBloc extends Cubit<HomeState> {
   }
   DomainManager domain = DomainManager();
 
-  void getDateHome() {
+  void getDateHome() async {
+    if (!isClosed) emit(state.copyWith(isLoading: true));
     final MUser user = GetIt.I<AccountBloc>().state.user;
-    getUsersStories(user);
-    getPopular(user);
-    getUpcoming(user);
-    getFollowed(user);
-    getPeople(user);
+    await Future.wait([
+      getUsersEvents(user),
+      getPopular(user),
+      getUpcoming(user),
+      getFollowed(user),
+      getPeople(user),
+    ]);
+
+    if (!isClosed) emit(state.copyWith(isLoading: false));
   }
 
   void clearDateHome() {
     emit(HomeState.ds());
   }
 
-  void getUsersStories(MUser user) async {
+  Future<void> getUsersEvents(MUser user) async {
     try {
       final result = await domain.userEvent
           .getUserStoryByIds([user.id, ...user.followed ?? []]);
@@ -46,7 +51,7 @@ class HomeBloc extends Cubit<HomeState> {
     }
   }
 
-  void getPopular(MUser user) async {
+  Future<void> getPopular(MUser user) async {
     try {
       final result = await domain.event.getEventsPopular(user.id);
       if (result.isSuccess) {
@@ -57,7 +62,7 @@ class HomeBloc extends Cubit<HomeState> {
     }
   }
 
-  void getUpcoming(MUser user) async {
+  Future<void> getUpcoming(MUser user) async {
     try {
       final result = await domain.event.getEventsUpcoming(user.id);
       if (result.isSuccess) {
@@ -68,7 +73,7 @@ class HomeBloc extends Cubit<HomeState> {
     }
   }
 
-  void getPeople(MUser user) async {
+  Future<void> getPeople(MUser user) async {
     try {
       if (user.followers != null && user.followed!.isEmpty) {
         return emit(state.copyWith(people: []));
@@ -82,7 +87,7 @@ class HomeBloc extends Cubit<HomeState> {
     }
   }
 
-  void getFollowed(MUser user) async {
+  Future<void> getFollowed(MUser user) async {
     try {
       final result = await domain.event.getEventsFollow(user.id);
       if (result.isSuccess) {
