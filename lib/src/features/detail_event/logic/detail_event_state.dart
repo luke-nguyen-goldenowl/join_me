@@ -23,7 +23,7 @@ class DetailEventState {
 
   bool isExpiredRegisterEvent() {
     if (event == null) return true;
-    if (event!.deadline?.isBefore(DateTime.now()) ?? false) return true;
+    if (event!.startDate?.isBefore(DateTime.now()) ?? false) return true;
     return false;
   }
 

@@ -41,9 +41,17 @@ class TimeEvent extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "From ${DateHelper.getFullDateTimeFullMonth(startDate)}",
+                      "From ${DateHelper.getFullDate(startDate)}",
                       style: const TextStyle(
                         fontSize: 15,
+                        color: AppColors.text,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      "At ${DateHelper.getTime(startDate)}",
+                      style: const TextStyle(
+                        fontSize: 13,
                         color: AppColors.text,
                         fontWeight: FontWeight.bold,
                       ),
