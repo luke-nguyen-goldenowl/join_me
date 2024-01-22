@@ -1,5 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart';
+
 import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/firebase/base_collection.dart';
 import 'package:myapp/src/network/model/common/pagination/pagination.dart';
@@ -12,9 +17,6 @@ import 'package:myapp/src/network/model/notification/follow_user.dart';
 import 'package:myapp/src/network/model/notification/notification_model.dart';
 import 'package:myapp/src/network/model/user/user.dart';
 import 'package:myapp/src/services/firebase_message.dart';
-import 'package:http/http.dart';
-import 'dart:io';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:myapp/src/utils/date/date_helper.dart';
 
 class NotificationReference extends BaseCollectionReference<NotificationModel> {
@@ -63,8 +65,11 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
           "notification": {
             "title": 'Your event has a new follower',
             "body": '${user.name} has been followed ${event.name}',
-            'image': user.avatar ?? ""
+            'image': user.avatar ?? "",
+            "android_channel_id": "high_importance_channel",
+            "priority": "high"
           },
+          "data": notification.toMap()
         };
 
         final res = await pushNotification(body);
@@ -94,8 +99,11 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
           "notification": {
             "title": 'Your event has a new favorite person',
             "body": '${user.name} has been liked ${event.name}',
-            'image': user.avatar ?? ""
+            'image': user.avatar ?? "",
+            "android_channel_id": "high_importance_channel",
+            "priority": "high"
           },
+          "data": notification.toMap()
         };
 
         final res = await pushNotification(body);
@@ -126,8 +134,11 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
           "notification": {
             "title": 'You have a new follower',
             "body": '${follower.name} has been followed you',
-            'image': follower.avatar ?? ""
+            'image': follower.avatar ?? "",
+            "android_channel_id": "high_importance_channel",
+            "priority": "high"
           },
+          "data": notification.toMap()
         };
         final res = await pushNotification(body);
 
@@ -165,15 +176,17 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
           for (var element in followers.data!) {
             fcmTokens.addAll(element.fcmToken);
           }
-
           final body = {
             "registration_ids": fcmTokens,
             "notification": {
               "title": '${event.host?.name ?? ""} added a new event',
               "body":
                   "${event.name} will take place on ${DateHelper.getFullDateTime(event.startDate)}",
-              'image': event.images?[0] ?? ""
+              'image': event.images?[0] ?? "",
+              "android_channel_id": "high_importance_channel",
+              "priority": "high"
             },
+            "data": result[0].data?.toMap()
           };
           final res = await pushNotification(body);
 
@@ -219,8 +232,11 @@ class NotificationReference extends BaseCollectionReference<NotificationModel> {
               "title": '${event.host?.name ?? ""} added a new event',
               "body":
                   "${event.name} will take place on ${DateHelper.getFullDateTime(event.startDate)}",
-              'image': event.images?[0] ?? ""
+              'image': event.images?[0] ?? "",
+              "android_channel_id": "high_importance_channel",
+              "priority": "high"
             },
+            "data": result[0].data?.toMap()
           };
           final res = await pushNotification(body);
 

@@ -7,7 +7,7 @@ import 'package:myapp/src/features/event/logic/map_page_state.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 
 class MapPage extends StatelessWidget {
-  MapPage({
+  const MapPage({
     super.key,
     required this.events,
   });

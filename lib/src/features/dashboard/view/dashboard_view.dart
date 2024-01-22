@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:myapp/src/features/dashboard/logic/navigation_bar_item.dart';
+
 import 'package:myapp/src/features/common/logic/lifecycle_mixin.dart';
-import 'package:myapp/src/features/dashboard/widget/bottom_navigation_bar.dart';
 import 'package:myapp/src/features/dashboard/logic/dashboard_bloc.dart';
+import 'package:myapp/src/features/dashboard/logic/navigation_bar_item.dart';
+import 'package:myapp/src/features/dashboard/widget/bottom_navigation_bar.dart';
 import 'package:myapp/src/features/dashboard/widget/floating_action_button.dart';
-// import 'package:myapp/src/router/coordinator.dart';
-// import 'package:myapp/src/theme/colors.dart';
 
 class DashBoardScreen extends StatefulWidget {
   const DashBoardScreen({
@@ -29,10 +28,10 @@ class _DashBoardScreenState extends State<DashBoardScreen> with LifecycleMixin {
       create: (context) => DashboardBloc(widget.currentItem),
       child: BlocBuilder<DashboardBloc, XNavigationBarItems>(
         builder: (context, state) {
-          return WillPopScope(
-            onWillPop: () async {
+          return PopScope(
+            canPop: false,
+            onPopInvoked: (isPop) async {
               context.read<DashboardBloc>().goHome();
-              return false;
             },
             child: Scaffold(
               body: widget.body,

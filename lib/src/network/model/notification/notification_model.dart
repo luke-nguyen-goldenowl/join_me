@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 import 'package:myapp/src/network/model/notification/change_event.dart';
 import 'package:myapp/src/network/model/notification/follow_event.dart';
 import 'package:myapp/src/network/model/notification/follow_user.dart';
@@ -95,7 +97,8 @@ class NotificationModel {
         type: TypeNotify.getTypeNotifyFromString(map['type']),
         data: map['data'] != null
             ? TypeNotify.getModelNotify(
-                map['data'] as Map<String, dynamic>, map['type'])
+                map['data'] is String ? json.decode(map['data']) : map['data'],
+                map['type'])
             : null,
         dateTime: DateTime.parse(map['dateTime']));
   }

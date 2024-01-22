@@ -34,20 +34,16 @@ class XFirebaseStorage {
 
         String imageName = 'image_${now.microsecondsSinceEpoch}.jpg';
 
-        // Tạo một tham chiếu đến ảnh trong Firebase Storage
         Reference ref = _storage.ref(folderName).child(imageName);
 
-        // Tải ảnh lên Firebase Storage và lưu trữ Future của URL
         Future<String> uploadTask =
             ref.putFile(File(imagePath)).then((taskSnapshot) async {
           return await taskSnapshot.ref.getDownloadURL();
         });
 
-        // Thêm Future của URL vào danh sách các tác vụ tải lên
         uploadTasks.add(uploadTask);
       }
 
-      // Chờ tất cả các tác vụ tải lên hoàn thành và lấy danh sách URL
       List<String> downloadUrls = await Future.wait(uploadTasks);
 
       return downloadUrls;

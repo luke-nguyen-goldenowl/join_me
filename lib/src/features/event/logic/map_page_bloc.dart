@@ -1,19 +1,19 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import 'package:myapp/src/features/event/logic/map_page_state.dart';
 import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/utils/date/date_helper.dart';
-import 'dart:typed_data';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class MapPageBloc extends Cubit<MapPageState> {
   MapPageBloc({required List<MEvent> events})

@@ -6,7 +6,7 @@ import 'package:myapp/src/localization/localization_utils.dart';
 
 class XImagePicker {
   Future<XFile?> onPickImage() async {
-    final ImagePicker _picker = ImagePicker();
+    final ImagePicker picker = ImagePicker();
     final result = await XAlert.show(
       body: S.text.camera_choose_option_take_image,
       actions: [
@@ -34,12 +34,11 @@ class XImagePicker {
     );
     if (result != null) {
       if (result == "camera") {
-        final XFile? photo =
-            await _picker.pickImage(source: ImageSource.camera);
+        final XFile? photo = await picker.pickImage(source: ImageSource.camera);
         return photo;
       } else {
         final XFile? photo =
-            await _picker.pickImage(source: ImageSource.gallery);
+            await picker.pickImage(source: ImageSource.gallery);
         return photo;
       }
       // return photo;
@@ -48,8 +47,8 @@ class XImagePicker {
   }
 
   Future<List<XFile>> onPickMultiImage({int limit = 6}) async {
-    final ImagePicker _picker = ImagePicker();
-    final List<XFile> photo = await _picker.pickMultiImage();
+    final ImagePicker picker = ImagePicker();
+    final List<XFile> photo = await picker.pickMultiImage();
     return photo.take(limit).toList();
   }
 }
