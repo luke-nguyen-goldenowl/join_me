@@ -187,10 +187,10 @@ lib/
 ![image](./resources/images/architecture_diagram.png)
 ## Database diagram
 
-- [link db diagram](https://lucid.app/lucidchart/14b8934f-1502-484d-a683-614a6b4a430c/edit?viewport_loc=-1763%2C-423%2C2994%2C1423%2C66B0pHvHshgC&invitationId=inv_1346462e-329d-48c1-b451-7678c66a60b3)
+- [link db diagram](https://www.mermaidchart.com/raw/24090596-233c-45b9-874c-ea799eb720a4?theme=light&version=v0.1&format=svg)
 
 
-![image](https://github.com/luke-nguyen-goldenowl/join_me/assets/152830147/c2cc1887-2c5a-48ae-bc48-7f753e631e4c)
+![image](./resources/images/db_diagram.png)
 
 ## Screenshot
 
