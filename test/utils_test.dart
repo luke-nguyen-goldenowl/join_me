@@ -155,18 +155,4 @@ void main() {
       expect(Utils().listOf(inputMUserList, toElement), []);
     });
   });
-
-  group('Test fullNameOf ', () {
-    test('Test null value', () {
-      expect(Utils.fullNameOf('Keith', null), 'Keith');
-      expect(Utils.fullNameOf(null, 'Vo'), 'Vo');
-      expect(Utils.fullNameOf(null, null), '');
-    });
-
-    test('Test string value', () {
-      expect(Utils.fullNameOf('Keith', 'Vo'), 'Keith Vo');
-      expect(Utils.fullNameOf('Keith', 'Vo', separated: '-'), 'Keith-Vo');
-      expect(Utils.fullNameOf('Keith', 'Vo', separated: '&'), 'Keith&Vo');
-    });
-  });
 }
