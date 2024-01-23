@@ -53,5 +53,7 @@
   "chat_reply_to": "Reply to {value}",
   "chat_replied_to": "Replied to {value}",
   "chat_replied_yourself": "yourself",
-  "last_line": ""
+  "last_line": "",
+  "please_log_in_as_crew_to_view_event_detail": "Please log in as crew to view event detail",
+  "error_no_content_to_show": "Error no content to show"
 }
