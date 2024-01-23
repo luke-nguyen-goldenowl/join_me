@@ -7,6 +7,6 @@ class ManageEventItemBloc extends Cubit<MEvent> {
   void goManageEventDetail() async {
     final MEvent? event =
         await AppCoordinator.showManageEventDetails(id: state.id ?? "");
-    emit(event ?? state);
+    if (!isClosed) emit(event ?? state);
   }
 }

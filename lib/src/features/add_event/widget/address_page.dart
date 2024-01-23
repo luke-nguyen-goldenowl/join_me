@@ -54,11 +54,16 @@ class AddressPage extends StatelessWidget {
                                         .handlePressMap,
                                     myLocationEnabled: true,
                                     markers: {
-                                      Marker(
-                                        markerId: const MarkerId('my location'),
-                                        position: state.event.location ??
-                                            const LatLng(0, 0),
-                                      )
+                                      state.event.location != null
+                                          ? Marker(
+                                              markerId:
+                                                  const MarkerId('my location'),
+                                              position: state.event.location!,
+                                            )
+                                          : const Marker(
+                                              markerId: MarkerId('default'),
+                                              position: LatLng(0, 0),
+                                            ),
                                     },
                                   );
                                 }),

@@ -22,7 +22,7 @@ class ManageEventDetailBloc extends Cubit<ManageEventDetailState> {
   }
 
   void onMapCreate(GoogleMapController controller) {
-    mapController ??= controller;
+    mapController = controller;
   }
 
   Future<void> getEvent(String eventId) async {
@@ -39,10 +39,10 @@ class ManageEventDetailBloc extends Cubit<ManageEventDetailState> {
           await AppCoordinator.showEditEventScreen(event: state.event);
       if (event != null) {
         if (event.location != state.event.location) {
-          await mapController?.moveCamera(CameraUpdate.newLatLngZoom(
+          await mapController?.animateCamera(CameraUpdate.newLatLngZoom(
               event.location ?? const LatLng(0, 0), 16));
         }
-        if (!isClosed) emit(state.copyWith(event: event));
+        if (!isClosed) emit(state.copyWith(event: event, indexPageImage: 0));
       }
     } catch (e) {
       print(e);

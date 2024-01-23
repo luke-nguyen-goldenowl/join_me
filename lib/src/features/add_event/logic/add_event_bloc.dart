@@ -197,9 +197,12 @@ class AddEventBloc extends Cubit<AddEventState> {
     try {
       if (state.event.location != null) {
         await _getAddressFromCoordinates(state.event.location!);
-        return emit(
-          state.copyWith(isLoadingCurrentLocation: false),
-        );
+        if (!isClosed) {
+          emit(
+            state.copyWith(isLoadingCurrentLocation: false),
+          );
+        }
+        return;
       }
 
       serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -239,6 +242,25 @@ class AddEventBloc extends Cubit<AddEventState> {
         currentLocation.latitude,
         currentLocation.longitude,
       );
+
+      // if (state.event.location != null) {
+      //   await _getAddressFromCoordinates(state.event.location!);
+      //   if (!isClosed) {
+      //     emit(
+      //       state.copyWith(isLoadingCurrentLocation: false),
+      //     );
+      //   }
+      // } else {
+      //   await _getAddressFromCoordinates(locationLatLng);
+      //   if (!isClosed) {
+      //     emit(
+      //       state.copyWith(
+      //           event: state.event.copyWith(location: locationLatLng),
+      //           isLoadingCurrentLocation: false),
+      //     );
+      //   }
+      // }
+
       await _getAddressFromCoordinates(locationLatLng);
       if (!isClosed) {
         emit(
@@ -293,8 +315,11 @@ class AddEventBloc extends Cubit<AddEventState> {
       LatLng? coordinates = await _getCoordinatesFromAddress(search);
       if (!isClosed) emit(state.copyWith(isSearching: false));
       if (coordinates != null) {
-        handlePressMap(coordinates);
-        await mapController?.moveCamera(
+        if (!isClosed) {
+          emit(state.copyWith(
+              event: state.event.copyWith(location: coordinates)));
+        }
+        await mapController?.animateCamera(
           CameraUpdate.newLatLngZoom(coordinates, 16),
         );
       } else {
