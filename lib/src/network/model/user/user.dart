@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/foundation.dart';
+
 import 'package:myapp/src/utils/utils.dart';
 
 class MUser {
@@ -82,5 +84,29 @@ class MUser {
       followed: followed ?? this.followed,
       fcmToken: fcmToken ?? this.fcmToken,
     );
+  }
+
+  @override
+  bool operator ==(covariant MUser other) {
+    if (identical(this, other)) return true;
+
+    return other.id == id &&
+        other.name == name &&
+        other.avatar == avatar &&
+        other.email == email &&
+        listEquals(other.followers, followers) &&
+        listEquals(other.followed, followed) &&
+        listEquals(other.fcmToken, fcmToken);
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        name.hashCode ^
+        avatar.hashCode ^
+        email.hashCode ^
+        followers.hashCode ^
+        followed.hashCode ^
+        fcmToken.hashCode;
   }
 }
