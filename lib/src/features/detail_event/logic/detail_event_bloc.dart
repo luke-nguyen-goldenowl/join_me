@@ -1,9 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:share_plus/share_plus.dart';
+
 import 'package:myapp/src/features/account/logic/account_bloc.dart';
 import 'package:myapp/src/features/detail_event/logic/detail_event_state.dart';
-import 'package:flutter/material.dart';
 import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/network/model/event/event.dart';
 import 'package:myapp/src/network/model/user/user.dart';
@@ -127,6 +129,13 @@ class DetailEventBloc extends Cubit<DetailEventState> {
     } catch (e) {
       print(e);
     }
+  }
+
+  void onPressedShare() async {
+    if (state.event == null) return;
+
+    await Share.share(
+        'https://keith.joinus.com/events/?event-id=${state.event?.id}');
   }
 
   @override

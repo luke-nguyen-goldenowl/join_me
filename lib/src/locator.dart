@@ -8,6 +8,7 @@ import 'package:myapp/src/features/account/logic/account_bloc.dart';
 import 'package:myapp/src/features/home/logic/home_bloc.dart';
 import 'package:myapp/src/network/domain_manager.dart';
 import 'package:myapp/src/router/router.dart';
+import 'package:myapp/src/services/deep_link.dart';
 import 'package:myapp/src/services/remote_config/remote_config_service.dart';
 import 'package:myapp/src/services/user_prefs.dart';
 
@@ -24,7 +25,8 @@ Future initializeApp({String? name, FirebaseOptions? firebaseOptions}) async {
   await Future.wait([
     AppInfo.initialize(),
     UserPrefs.instance.initialize(),
-    XFirebaseMessage.instance.initialize()
+    XFirebaseMessage.instance.initialize(),
+    XDeepLinks.init()
   ]);
   await RemoteConfigService.getRemoteConfig();
 

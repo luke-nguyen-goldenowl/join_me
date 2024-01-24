@@ -78,6 +78,14 @@ class DetailEventPage extends StatelessWidget {
                                         color: AppColors.rosyPink,
                                       )
                                     : const Icon(Icons.favorite_border),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  context
+                                      .read<DetailEventBloc>()
+                                      .onPressedShare();
+                                },
+                                icon: const Icon(Icons.share),
                               )
                             ],
                           );
