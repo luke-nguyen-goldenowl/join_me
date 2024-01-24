@@ -81,7 +81,7 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   
   # sign_in_with_apple: ^4.2.0
-  # uni_links: ^0.5.1
+  uni_links: ^0.5.1
 
 dev_dependencies:
   flutter_test:

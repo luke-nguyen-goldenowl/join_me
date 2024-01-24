@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:myapp/src/services/dynamic_link.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'package:myapp/src/features/account/logic/account_bloc.dart';
@@ -134,9 +133,11 @@ class DetailEventBloc extends Cubit<DetailEventState> {
 
   void onPressedShare() async {
     if (state.event == null) return;
-    final shareContent =
-        await XDynamicLinks.buildShareEventLink(event: state.event!);
-    await Share.share(shareContent);
+    // final shareContent =
+    //     await XDynamicLinks.buildShareEventLink(event: state.event!);
+
+    await Share.share(
+        'https://keith.joinus.com/events/?event-id=${state.event?.id}');
   }
 
   @override
