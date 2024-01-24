@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,7 +10,6 @@ import 'package:myapp/src/network/model/social_type.dart';
 import 'package:myapp/src/router/coordinator.dart';
 import 'package:myapp/src/theme/colors.dart';
 import 'package:myapp/widgets/button/button.dart';
-import 'package:myapp/widgets/button/text_button.dart';
 import 'package:myapp/widgets/forms/input.dart';
 
 class SigninView extends StatelessWidget {
@@ -29,7 +29,7 @@ class SigninView extends StatelessWidget {
         body: Container(
           padding: const EdgeInsets.fromLTRB(24, 0, 24, 20),
           child: SingleChildScrollView(
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
             child: BlocBuilder<SigninBloc, SigninState>(builder: _builder),
           ),
         ),
@@ -42,10 +42,15 @@ class SigninView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const SizedBox(height: 30),
-        Assets.images.images.logo.image(
-          fit: BoxFit.cover,
-          height: 150,
-          width: 150,
+        InkWell(
+          onLongPress: () {
+            FirebaseCrashlytics.instance.crash();
+          },
+          child: Assets.images.images.logo.image(
+            fit: BoxFit.cover,
+            height: 150,
+            width: 150,
+          ),
         ),
         _buildTitle(context),
         const SizedBox(height: 24.0),
@@ -67,9 +72,7 @@ class SigninView extends StatelessWidget {
               labelText: 'Password',
               errorText: state.password.errorOf(context)),
         ),
-        const SizedBox(height: 8.0),
-        _buildForgotPassword(context),
-        const SizedBox(height: 8.0),
+        const SizedBox(height: 30.0),
         SizedBox(
           width: double.infinity,
           child: XButton(
@@ -138,16 +141,6 @@ class SigninView extends StatelessWidget {
               ..onTap = AppCoordinator.showSignUpScreen,
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildForgotPassword(BuildContext context) {
-    return const Align(
-      alignment: Alignment.centerLeft,
-      child: XTextButton(
-        title: 'Forgot password?',
-        onPressed: AppCoordinator.showForgotPasswordScreen,
       ),
     );
   }
