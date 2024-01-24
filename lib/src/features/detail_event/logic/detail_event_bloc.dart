@@ -133,8 +133,6 @@ class DetailEventBloc extends Cubit<DetailEventState> {
 
   void onPressedShare() async {
     if (state.event == null) return;
-    // final shareContent =
-    //     await XDynamicLinks.buildShareEventLink(event: state.event!);
 
     await Share.share(
         'https://keith.joinus.com/events/?event-id=${state.event?.id}');
