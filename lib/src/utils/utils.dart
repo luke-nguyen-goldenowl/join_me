@@ -29,7 +29,7 @@ class Utils {
     return false;
   }
 
-  static String fullnameOf(String? first, String? last,
+  static String fullNameOf(String? first, String? last,
       {String separated = ' '}) {
     if (first?.isNotEmpty != true) {
       return last ?? '';
