@@ -243,24 +243,6 @@ class AddEventBloc extends Cubit<AddEventState> {
         currentLocation.longitude,
       );
 
-      // if (state.event.location != null) {
-      //   await _getAddressFromCoordinates(state.event.location!);
-      //   if (!isClosed) {
-      //     emit(
-      //       state.copyWith(isLoadingCurrentLocation: false),
-      //     );
-      //   }
-      // } else {
-      //   await _getAddressFromCoordinates(locationLatLng);
-      //   if (!isClosed) {
-      //     emit(
-      //       state.copyWith(
-      //           event: state.event.copyWith(location: locationLatLng),
-      //           isLoadingCurrentLocation: false),
-      //     );
-      //   }
-      // }
-
       await _getAddressFromCoordinates(locationLatLng);
       if (!isClosed) {
         emit(
