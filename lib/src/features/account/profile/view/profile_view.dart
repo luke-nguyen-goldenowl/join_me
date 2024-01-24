@@ -48,23 +48,6 @@ class ProfileView extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
-            InkWell(
-              onTap: () async {
-                final result =
-                    await context.read<AccountBloc>().onRemoveAccount(context);
-                if (result == true) {
-                  // ignore: use_build_context_synchronously
-                  AppCoordinator.pop();
-                }
-              },
-              child: const XCard(
-                child: Text(
-                  'Remove Account',
-                  style: TextStyle(color: Color(0xFFC94A28)),
-                ),
-              ),
-            ),
           ],
         ),
       ),
