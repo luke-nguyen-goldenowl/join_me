@@ -15,6 +15,7 @@ class ManageEventItem extends StatelessWidget {
     return BlocProvider(
       create: (_) => ManageEventItemBloc(event),
       child: BlocBuilder<ManageEventItemBloc, MEvent>(
+        buildWhen: (previous, current) => previous != current,
         builder: (context, state) {
           return GestureDetector(
             onTap: () {

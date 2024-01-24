@@ -36,6 +36,7 @@ class AddEventPage extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: AppColors.white,
       appBar: AppBarCustom(
         title: BlocBuilder<AddEventBloc, AddEventState>(
